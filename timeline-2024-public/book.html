@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>book</title>
+    <link rel="stylesheet" href="css/colors.css">
+    <link rel="stylesheet" href="css/book.css">
+    <link rel="stylesheet" href="css/ios-button.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <script src="../js/timeline/ios-button-2024.js"></script>
+    <script src="../js/timeline/navbar.js"></script>
+</head>
+
+<body>
+    <style id="online">
+        .index-wrapper>.item>.cover::before {
+            background-color: rgba(6, 84, 3, .75);
+        }
+    </style>
+    <div class="center">
+        <div class="top-bar-wrapper">
+            <a href="index.html" style="position: absolute;">return</a>
+            <div class="top-bar">
+                <a id="raw-link"></a>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="container">
+            <div class="index-wrapper" id="index-list"></div>
+            <div class="reader-wrapper">
+                <div class="reader">
+                    <div class="cover" onclick="openFile()"></div>
+                    <iframe></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/vendor/param.js"></script>
+    <script src="../js/timeline/books-index.js"></script>
+    <script src="../js/timeline/book.js"></script>
+</body>
+
+</html>

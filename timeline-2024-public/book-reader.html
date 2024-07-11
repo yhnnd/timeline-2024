@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>reader</title>
+    <link rel="stylesheet" href="css/colors.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/book-reader.css">
+    <link rel="stylesheet" href="css/search.css">
+    <link rel="stylesheet" href="css/ios-button.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <script src="../js/timeline/ios-button-2024.js"></script>
+    <script src="../js/timeline/navbar.js"></script>
+    <link rel="stylesheet" href="css/leaflet.css">
+    <link rel="stylesheet" href="css/at-sign-map.css">
+</head>
+<body>
+    <div class="search-bar">
+        <div></div>
+        <div class="search-keyword"></div>
+        <button class="close-button" onclick="closeSearch(this)">close</button>
+    </div>
+    <div class="search-backdrop">
+        <div class="search">
+            <div class="search-result"></div>
+        </div>
+    </div>
+    <div style="display: flex; width: 100%; gap: 20px;">
+        <div class="left" style="display: flex; width: 100%; justify-content: end;">
+            <div class="container container-1">
+                <pre></pre>
+            </div>
+        </div>
+        <div class="right hidden" style="display: flex; width: 100%; justify-content: start;">
+            <div class="container container-2">
+                <pre></pre>
+            </div>
+        </div>
+    </div>
+    <div id="inspectImageWrapper" class="inspect-image-wrapper"></div>
+    <script src="../js/vendor/param.js"></script>
+    <script src="../js/timeline/names.js"></script>
+    <script src="../js/timeline/books-index.js"></script>
+    <script src="../js/timeline/ajax.js"></script>
+    <script src="../js/vendor/leaflet.js"></script>
+    <script src="../js/timeline/at-sign-map.js"></script>
+    <script src="../js/timeline/book-reader.js"></script>
+    <script src="../js/timeline/search.js"></script>
+</body>
+</html>
