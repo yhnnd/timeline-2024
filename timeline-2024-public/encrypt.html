@@ -41,7 +41,7 @@ Ignore Tokens: <input id="tokens">
       let tempZh = "", tempAlphaOrDigit = "";
       let isInZh = false, isInAlphaOrDigit = false;
       for (i = 0; i < fragment.length; ++ i) {
-        if (isAlpha(fragment[i]) || isDigit(fragment[i]) || ['-', '.'].includes(fragment[i])) {
+        if (isAlpha(fragment[i]) || isDigit(fragment[i]) || ['-', '.', '(', ')'].includes(fragment[i])) {
           if (isInZh) {
             isInZh = false;
             isInAlphaOrDigit = true;

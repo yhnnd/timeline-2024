@@ -15,6 +15,7 @@ window.books[2].indexList = [
 window.books[3] = {};
 window.books[3].indexList = [
     "../yhnnd.wordpress.com/3-diary-2024-07-2024-12-出路5/2024.07.11.txt",
+    "../yhnnd.wordpress.com/3-diary-2024-07-2024-12-出路5/2024.07.15.txt",
 ];
 
 // [{
