@@ -61,11 +61,20 @@ function renderArticle(src, containerClassName, container2ClassName) {
         }(responseText);
 
         const imgs = [];
+        let maxImgSize = 128;
+        let isAbortLoadingImgs = false;
 
         if (localStorage.getItem("enable-img-recognition") === "true" || responseText.includes("@command(\"enable-image-recognition\")")) {
             responseText = responseText.split("\n").map(line => {
-                if (line.startsWith("<img ") && line.endsWith(">")) {
+                if (line.startsWith("<img ") && line.endsWith(">") && !isAbortLoadingImgs) {
                     imgs.push(line);
+                    if (imgs.length > maxImgSize) {
+                        if (confirm('Too many images (more than ' + maxImgSize + '). Continue to load images?')) {
+                            maxImgSize *= 2;
+                        } else {
+                            isAbortLoadingImgs = true;
+                        }
+                    }
                     return "@image " + line;
                 }
                 if (line.startsWith("<div") && line.endsWith(">")) {
@@ -166,12 +175,17 @@ function renderArticle(src, containerClassName, container2ClassName) {
 
         if (localStorage.getItem("enable-at-sign-video") === "true") {
             responseText = responseText.split("\n").map(line => {
-                if (line.startsWith("@video")) { // @video resources/35_1713060169.mp4
-                    const src = line.split(" ")[1]; // resources/35_1713060169.mp4
+                if (line.startsWith("@video")) { // @video resources/35_1713060169.mp4 loop
+                    const parameters = line.split(" ");
+                    parameters.shift();
+                    const src = parameters.shift(); // resources/35_1713060169.mp4
                     const fileType = src.split(".").pop(); // mp4
+                    if (!parameters.includes("loop") && !parameters.includes("controls")) {
+                        parameters.push("controls");
+                    }
                     const wrapperOpen = '<div class="video-wrapper">';
                     const covers = '<div class="backdrop-filter blur"></div><div class="backdrop-filter white"></div><div class="cover">' + line + '</div>';
-                    const videoOpen = '<video width="100%" controls="" style="width: 100%;">';
+                    const videoOpen = '<video width="100%" ' + parameters.join(" ") + ' style="width: 100%;">';
                     const source = '<source src="' + src + '" type="video/' + fileType + '">'; // <source src="resources/35_1713060169.mp4" type="video/mp4">
                     const videoClose = '</video>';
                     const wrapperClose = '</div>';
@@ -412,7 +426,9 @@ function renderArticle(src, containerClassName, container2ClassName) {
                 imgWrapper.style.maxHeight = height;
                 return imgWrapper;
             }
+            let index = 0;
             container1.querySelectorAll("img").forEach(img => {
+                img.alt = imgs[index++];
                 img.onload = function () {
                     const imgWrapper = getImageWrapper(img);
                     imgWrapper.setAttribute("onclick", "inspectImage(\"" + img.src + "\")");
@@ -424,8 +440,10 @@ function renderArticle(src, containerClassName, container2ClassName) {
                     img.replaceWith(imgWrapper);
                 }
             });
+            index = 0;
             container2.querySelectorAll("img").forEach(img => {
                 const randomId = img.getAttribute("random-id");
+                img.alt = imgs[index++];
                 img.onload = function () {
                     const img = container2.querySelector("[random-id=\"" + randomId + "\"]");
                     const imgWrapper = getImageWrapper(img);
@@ -437,7 +455,7 @@ function renderArticle(src, containerClassName, container2ClassName) {
                     const backdropWhite = document.createElement("div");
                     backdropWhite.classList = "backdrop-filter white";
                     const content = document.createElement("div");
-                    content.innerText = imgs.shift();
+                    content.innerText = img.alt;
                     content.classList = "content";
                     imgWrapper.append(background);
                     imgWrapper.append(backdropWhite);
