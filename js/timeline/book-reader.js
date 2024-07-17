@@ -61,13 +61,16 @@ function renderArticle(src, containerClassName, container2ClassName) {
         }(responseText);
 
         const imgs = [];
-        let maxImgSize = 128;
+        let maxImgSize = 512;
         let isAbortLoadingImgs = false;
 
         if (localStorage.getItem("enable-img-recognition") === "true" || responseText.includes("@command(\"enable-image-recognition\")")) {
             responseText = responseText.split("\n").map(line => {
                 if (line.startsWith("<img ") && line.endsWith(">") && !isAbortLoadingImgs) {
                     imgs.push(line);
+                    if (imgs.length >= 8 && getParameter("is-iframe") === "true") {
+                        isAbortLoadingImgs = true;
+                    }
                     if (imgs.length > maxImgSize) {
                         if (confirm('Too many images (more than ' + maxImgSize + '). Continue to load images?')) {
                             maxImgSize *= 2;
