@@ -64,6 +64,7 @@
     height: fit-content;
     overflow-x: hidden;
     background: rgba(244,244,244,.5);
+    padding: 0 10px;
 }
 
 .search>.search-result {
@@ -71,6 +72,18 @@
     width: 512px;
     max-width: 100%;
     padding-bottom: 320px;
+}
+
+body[data-value-of-enable-line-width-560px="true"] .search>.search-result {
+    width: 560px;
+}
+
+body[data-value-of-enable-line-width-560px="true"][data-value-of-enable-line-width-608px="true"] .search>.search-result {
+    width: 608px;
+}
+
+body[data-value-of-enable-line-width-560px="true"][data-value-of-enable-line-width-608px="true"][data-value-of-enable-line-width-656px="true"] .search>.search-result {
+    width: 656px;
 }
 
 .search>.search-result>.link {
