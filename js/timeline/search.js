@@ -11,6 +11,82 @@ const searchInfo = {
     keywords: []
 };
 
+function decode(fragment) {
+    if (fragment.startsWith("@utf(\"") && fragment.endsWith("\");")) {
+        fragment = fragment.replaceAll("&lt;", "<");
+        fragment = fragment.substr("@utf(\"".length, fragment.length - "@utf(\"".length - "\");".length);
+        const segments = [];
+        let tempZh = "", tempEn = "", isInZh = false, isInEn = false;
+        for (let i = 0; i < fragment.length; ++i) {
+            const ch = fragment[i];
+            if (ch === "<") {
+                if (isInZh) {
+                    segments.push({
+                        text: tempZh,
+                        isZh: true
+                    });
+                    tempZh = "";
+                }
+                isInEn = true;
+                isInZh = false;
+                tempEn = "";
+            } else if (ch === ">") {
+                if (isInEn) {
+                    segments.push({
+                        text: tempEn,
+                        isEn: true
+                    });
+                    tempEn = "";
+                }
+                isInEn = false;
+                isInZh = true;
+                tempZh = "";
+            } else {
+                if (!isInEn && !isInZh) {
+                    isInZh = true;
+                    tempZh = ch;
+                } else if (isInZh) {
+                    tempZh += ch;
+                } else if (isInEn) {
+                    tempEn += ch;
+                }
+            }
+        }
+        if (tempZh.length) {
+            segments.push({
+                text: tempZh,
+                isZh: true
+            });
+        }
+        let result = "";
+        for (const segment of segments) {
+            if (segment.isEn) {
+                result += segment.text;
+            } else if (segment.isZh) {
+                result += (function (segment) {
+                    const encodedZh = segment.text;
+                    let handle = "";
+                    for (let i = 0; i < encodedZh.length; ++i) {
+                        if (i % 2 === 0) {
+                            handle += "%";
+                        }
+                        handle += encodedZh[i];
+                    }
+                    let decodedZh = "";
+                    try {
+                        decodedZh = decodeURIComponent(handle);
+                    } catch {
+                        return encodedZh;
+                    }
+                    return decodedZh;
+                })(segment);
+            }
+        }
+        return result;
+    }
+    return fragment;
+}
+
 function initSearch(resultWrapper, configs) {
     if (articles.length == 0) {
         for (const book of window.books) {
@@ -79,6 +155,9 @@ function searchKeywords(keywords, configs) {
     if (searchInfo.isReady) {
         resultWrapper.innerHTML = "";
         for (const item of articles) {
+            item.text = item.text.split("\n").map(line => {
+                return line.split(" ").map(decode).join(" ");
+            }).join("\n");
             let times = 0;
             let isMatched = false;
             for (const keyword of keywords) {
@@ -119,10 +198,21 @@ function searchKeywords(keywords, configs) {
                 const folder = (configs && configs.type === "folder") ? highlight(item.folder, keywords, configs) : item.folder;
                 const filename = (configs && configs.type === "filename") ? highlight(item.filename, keywords, configs) : item.filename;
                 const textContent = (!configs || !configs.type || ["text", "image"].includes(configs.type)) ? highlight(item.text, keywords, configs) : item.text;
+                const lines = textContent.split("\n");
+                const imgs = [], maxSizeOfImgs = 8;
+                for (let i = 0; i < lines.length; ++i) {
+                    if (lines[i].startsWith('<img ')) {
+                        if (imgs.length < maxSizeOfImgs) {
+                            imgs.push(lines[i]);
+                        } else {
+                            lines[i] = lines[i].replace("<", "&lt;");
+                        }
+                    }
+                }
                 link.innerHTML = "<a target='_self' href='book-reader.html?src=" + item.url + "'>"
                     + "<span class='folder'>" + folder + "</span> / <span>" + filename + "</span></a>"
                     + "<div class='cover-wrapper'><div class='cover' onclick=\"window.open('book-reader.html?src=" + item.url + "','_self');\"></div></div>"
-                    + "<div class='text'><pre>" + textContent + "</pre></div>";
+                    + "<div class='text'><pre>" + lines.join("\n") + "</pre></div>";
                 resultWrapper.appendChild(link);
             }
         }

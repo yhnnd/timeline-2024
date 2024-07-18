@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/tailwind.css">
     <script src="../js/timeline/navbar.js"></script>
     <script src="../js/timeline/ios-button-2024.js"></script>
-    <script src="../js/vendor/alpine.js"></script>
+    <script src="../js/vendor/alpine.js" defer></script>
 </head>
 <body style="margin: 0; min-height: 100vh;">
     <div x-data="{tab: 'home'}" style="min-height: calc(100vh - 420px);">
@@ -284,11 +284,7 @@ function quitInspectImage() {
     <script src="../js/timeline/book.js"></script>
     <script src='../js/vendor/full-calendar.min.js'></script>
     <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const tab = localStorage.getItem('tab');
-    if (tab) {
-        document.querySelector("[onclick=\"localStorage.setItem('tab', '" + tab + "')\"").click();
-    }
+function renderCalendar() {
     const calendarEl = document.getElementsByClassName('calendar')[0];
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
@@ -301,6 +297,14 @@ document.addEventListener("DOMContentLoaded", function() {
         events: window.calendarEvents || []
     });
     calendar.render();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const tab = localStorage.getItem('tab');
+    if (tab) {
+        document.querySelector("[onclick=\"localStorage.setItem('tab', '" + tab + "')\"").click();
+    }
+    renderCalendar();
 });
     </script>
     <style>
