@@ -13,33 +13,32 @@
     <link rel="stylesheet" href="css/tailwind.css">
     <script src="../js/timeline/navbar.js"></script>
     <script src="../js/timeline/ios-button-2024.js"></script>
-    <script src="../js/vendor/alpine.js" defer></script>
 </head>
 <body style="margin: 0; min-height: 100vh;">
-    <div x-data="{tab: 'home'}" style="min-height: calc(100vh - 420px);">
+    <div style="min-height: calc(100vh - 420px);">
         <div class="flex flex-row px-6 bg-gray-800">
-            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" x-on:click="tab = 'home'" onclick="localStorage.setItem('tab', 'home')">
-                Home
+            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'calendar')">
+                Calendar
             </div>
-            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" x-on:click="tab = 'books'" onclick="localStorage.setItem('tab', 'books')">
+            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'books')">
                 Books
             </div>
-            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" x-on:click="tab = 'index'" onclick="localStorage.setItem('tab', 'index')">
+            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'index')">
                 Index
             </div>
-            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" x-on:click="tab = 'tools'" onclick="localStorage.setItem('tab', 'tools')">
+            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'tools')">
                 Tools
             </div>
-            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" x-on:click="tab = 'about'" onclick="localStorage.setItem('tab', 'about')">
+            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'about')">
                 About
             </div>
         </div>
 
 
 
-        <div x-show="tab == 'home'">
+        <div class="tab" id="tab-calendar" style="display: none;">
             <div class="px-24 py-16 bg-gradient-to-r from-sky-900 via-sky-700 to-sky-400">
-                <div class="text-white text-6xl">Timeline 2024</div>
+                <div class="text-white text-6xl">Calendar</div>
                 <p class="text-gray-300 text-2xl mt-2">On this site we share everything about Web3 and blockchain technology.</p>
             </div>
             <div class="calendar-wrapper">
@@ -47,7 +46,7 @@
             </div>
         </div>
 
-        <div x-show="tab == 'books'">
+        <div class="tab" id="tab-books" style="display: none;">
             <div class="px-24 py-16 bg-gradient-to-r from-sky-700 via-sky-400 to-blue-800">
                 <div class="text-white text-6xl">Books</div>
                 <p class="text-gray-300 text-2xl mt-2">On this site we share everything about Web3 and blockchain technology.</p>
@@ -143,7 +142,7 @@
             </div>
         </div>
 
-        <div x-show="tab == 'index'">
+        <div class="tab" id="tab-index" style="display: none;">
             <div class="px-24 py-16 bg-gradient-to-r from-sky-400 via-blue-800 to-indigo-700">
                 <div class="text-white text-6xl">Index</div>
                 <p class="text-gray-300 text-2xl mt-2">On this site we share everything about Web3 and blockchain technology.</p>
@@ -168,7 +167,7 @@
             </div>
         </div>
 
-        <div x-show="tab == 'tools'">
+        <div class="tab" id="tab-tools" style="display: none;">
             <div class="px-24 py-16 bg-gradient-to-r from-blue-800 via-indigo-700 to-indigo-400">
                 <div class="text-white text-6xl pl-8">Tools</div>
                 <p class="text-gray-300 text-2xl mt-2 pl-8">On this site we share everything about Web3 and blockchain technology.</p>
@@ -189,7 +188,7 @@
             </div>
         </div>
 
-        <div x-show="tab == 'about'">
+        <div class="tab" id="tab-about" style="display: none;">
             <div class="px-24 py-16 bg-gradient-to-r from-indigo-700 via-indigo-400 to-sky-900">
                 <div class="text-white text-6xl">About Us</div>
                 <p class="text-gray-300 text-2xl mt-2">On this site we share everything about Web3 and blockchain technology.</p>
@@ -284,6 +283,20 @@ function quitInspectImage() {
     <script src="../js/timeline/book.js"></script>
     <script src='../js/vendor/full-calendar.min.js'></script>
     <script>
+function clicked(type, target) {
+    localStorage.setItem(type, target);
+    document.querySelectorAll("." + type).forEach(elem => {
+        if (elem.id !== type + "-" + target) {
+            elem.style.display = "none";
+        } else {
+            elem.style.display = null;
+            if (type === 'tab' && target === 'calendar') {
+                renderCalendar();
+            }
+        }
+    })
+}
+
 function renderCalendar() {
     const calendarEl = document.getElementsByClassName('calendar')[0];
     const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -302,9 +315,10 @@ function renderCalendar() {
 document.addEventListener("DOMContentLoaded", function() {
     const tab = localStorage.getItem('tab');
     if (tab) {
-        document.querySelector("[onclick=\"localStorage.setItem('tab', '" + tab + "')\"").click();
+        clicked('tab', tab);
+    } else {
+        clicked('tab', 'books');
     }
-    renderCalendar();
 });
     </script>
     <style>
