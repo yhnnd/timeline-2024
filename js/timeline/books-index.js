@@ -4,6 +4,7 @@ window.books = [];
 window.books[1] = {};
 window.books[1].indexList = [
     "../yhnnd.wordpress.com/1-letters-to-patrick-wang-致王震書/2024.07.11.txt", /* 1 */
+    "../yhnnd.wordpress.com/1-letters-to-patrick-wang-致王震書/2024.07.17.txt", /* 2 */
 ];
 
 // 2《王震來信》

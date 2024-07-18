@@ -596,10 +596,13 @@ display: none;
 }
 
 function showSettings(btn) {
-    btn.innerText = "Exit Settings";
-    btn.setAttribute("onclick", "hideSettings(this)");
     document.querySelector(".settings-2").parentElement.style.display = "flex";
     document.body.classList.add("modal-open");
+    if (btn === undefined) {
+        btn = document.querySelector(".btn-settings");
+    }
+    btn.innerText = "Exit Settings";
+    btn.setAttribute("onclick", "hideSettings(this)");
 }
 
 function hideSettings(btn) {

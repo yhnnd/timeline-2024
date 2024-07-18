@@ -33,6 +33,7 @@ function ios_button_init(scope) {
             button_off(elem);
         }
         elem.addEventListener("click", function (event) {
+            event.stopPropagation();
             if (getButtonValue(elem) === true) {
                 button_off(elem);
             } else {
