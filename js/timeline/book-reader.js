@@ -43,8 +43,88 @@ function hideOuterHTML(target) {
     target.setAttribute("onclick", "revealOuterHTML(this)");
 }
 
+function decode(fragment) {
+    if (fragment.startsWith("@utf(\"") && fragment.endsWith("\");")) {
+        fragment = fragment.replaceAll("&lt;", "<");
+        fragment = fragment.substr("@utf(\"".length, fragment.length - "@utf(\"".length - "\");".length);
+        const segments = [];
+        let tempZh = "", tempEn = "", isInZh = false, isInEn = false;
+        for (let i = 0; i < fragment.length; ++i) {
+            const ch = fragment[i];
+            if (ch === "<") {
+                if (isInZh) {
+                    segments.push({
+                        text: tempZh,
+                        isZh: true
+                    });
+                    tempZh = "";
+                }
+                isInEn = true;
+                isInZh = false;
+                tempEn = "";
+            } else if (ch === ">") {
+                if (isInEn) {
+                    segments.push({
+                        text: tempEn,
+                        isEn: true
+                    });
+                    tempEn = "";
+                }
+                isInEn = false;
+                isInZh = true;
+                tempZh = "";
+            } else {
+                if (!isInEn && !isInZh) {
+                    isInZh = true;
+                    tempZh = ch;
+                } else if (isInZh) {
+                    tempZh += ch;
+                } else if (isInEn) {
+                    tempEn += ch;
+                }
+            }
+        }
+        if (tempZh.length) {
+            segments.push({
+                text: tempZh,
+                isZh: true
+            });
+        }
+        let result = "";
+        for (const segment of segments) {
+            if (segment.isEn) {
+                result += segment.text;
+            } else if (segment.isZh) {
+                result += (function (segment) {
+                    const encodedZh = segment.text;
+                    let handle = "";
+                    for (let i = 0; i < encodedZh.length; ++i) {
+                        if (i % 2 === 0) {
+                            handle += "%";
+                        }
+                        handle += encodedZh[i];
+                    }
+                    let decodedZh = "";
+                    try {
+                        decodedZh = decodeURIComponent(handle);
+                    } catch {
+                        return encodedZh;
+                    }
+                    return decodedZh;
+                })(segment);
+            }
+        }
+        return result;
+    }
+    return fragment;
+}
+
 function renderArticle(src, containerClassName, container2ClassName) {
     ajax(src, undefined, function (responseText) {
+        responseText = responseText.split("\n").map(line => {
+            return line.split(" ").map(decode).join(" ");
+        }).join("\n");
+
         responseText = function (responseText) {
             return responseText.split("\n").map((line) => {
                 if (line.trim().startsWith("{{") && line.trim().endsWith("}}") && localStorage.getItem("enable-delete-line") === "true") {
@@ -239,86 +319,6 @@ function renderArticle(src, containerClassName, container2ClassName) {
                 return line;
             }).join("\n");
         }
-
-        function decode(fragment) {
-            if (fragment.startsWith("@utf(\"") && fragment.endsWith("\");")) {
-                fragment = fragment.replaceAll("&lt;", "<");
-                fragment = fragment.substr("@utf(\"".length, fragment.length - "@utf(\"".length - "\");".length);
-                const segments = [];
-                let tempZh = "", tempEn = "", isInZh = false, isInEn = false;
-                for (let i = 0; i < fragment.length; ++i) {
-                    const ch = fragment[i];
-                    if (ch === "<") {
-                        if (isInZh) {
-                            segments.push({
-                                text: tempZh,
-                                isZh: true
-                            });
-                            tempZh = "";
-                        }
-                        isInEn = true;
-                        isInZh = false;
-                        tempEn = "";
-                    } else if (ch === ">") {
-                        if (isInEn) {
-                            segments.push({
-                                text: tempEn,
-                                isEn: true
-                            });
-                            tempEn = "";
-                        }
-                        isInEn = false;
-                        isInZh = true;
-                        tempZh = "";
-                    } else {
-                        if (!isInEn && !isInZh) {
-                            isInZh = true;
-                            tempZh = ch;
-                        } else if (isInZh) {
-                            tempZh += ch;
-                        } else if (isInEn) {
-                            tempEn += ch;
-                        }
-                    }
-                }
-                if (tempZh.length) {
-                    segments.push({
-                        text: tempZh,
-                        isZh: true
-                    });
-                }
-                let result = "";
-                for (const segment of segments) {
-                    if (segment.isEn) {
-                        result += segment.text;
-                    } else if (segment.isZh) {
-                        result += (function (segment) {
-                            const encodedZh = segment.text;
-                            let handle = "";
-                            for (let i = 0; i < encodedZh.length; ++i) {
-                                if (i % 2 === 0) {
-                                    handle += "%";
-                                }
-                                handle += encodedZh[i];
-                            }
-                            let decodedZh = "";
-                            try {
-                                decodedZh = decodeURIComponent(handle);
-                            } catch {
-                                return encodedZh;
-                            }
-                            return decodedZh;
-                        })(segment);
-                    }
-                }
-                return result;
-            }
-            return fragment;
-        }
-
-        responseText = responseText.split("\n").map(line => {
-            return line.split(" ").map(decode).join(" ");
-        }).join("\n");
 
         const lines1 = responseText.split("\n");
         let lines2 = lines1;
