@@ -26,7 +26,7 @@
             <div class="search-result"></div>
         </div>
     </div>
-    <div style="display: flex; width: 100%; gap: 20px;">
+    <div class="desktop" style="display: flex; width: 100%; gap: 20px;">
         <div class="left" style="display: flex; width: 100%; justify-content: end;">
             <div class="container container-1">
                 <pre></pre>
@@ -38,8 +38,34 @@
             </div>
         </div>
     </div>
+    <div class="footer">
+        <div class="col" id="skyside-shield-image"
+        style="border: none; margin-bottom: 20px; display: none; justify-content: center; background-color: black; align-items: center;">
+            <img src="../yhnnd.wordpress.com/3-diary-2024-07-2024-12-出路5/pics-2024-07-11-diary-pics/11101720695588_.pic_hd.jpg" alt=""
+            style="min-width: 355.55px; max-width: 355.55px; width: 355.55px; min-height: 200px; max-height: 200px; height: 200px;">
+        </div>
+        <div class="col" id="skyside-shield-animation"
+        style="border: none; margin-bottom: 20px; display: none; justify-content: center; background-color: black; align-items: center; height: 200px; overflow: hidden;">
+            <video src="../yhnnd.wordpress.com/3-diary-2024-07-2024-12-出路5/pics-2024-07-15-diary-pics/animation-v2.mp4"
+            autoplay muted loop
+            style="min-width: 355.55px; max-width: 355.55px; width: 355.55px; transform: scale(1.21);"
+            ></video>
+        </div>
+    </div>
     <div id="inspectImageWrapper" class="inspect-image-wrapper"></div>
     <script src="../js/vendor/param.js"></script>
+    <script>
+if (getParameter("is-iframe") === "true") {
+    document.querySelector(".footer").remove();
+} else {
+    document.querySelector(".desktop").style.minHeight = "calc(100vh - 420px)";
+    if (window.location.href.startsWith("file://")) {
+        document.querySelector('#skyside-shield-image').style.display = 'flex';
+    } else {
+        document.querySelector('#skyside-shield-animation').style.display = 'flex';
+    }
+}
+    </script>
     <script src="../js/timeline/names.js"></script>
     <script src="../js/timeline/books-index.js"></script>
     <script src="../js/timeline/ajax.js"></script>
