@@ -538,9 +538,13 @@ body[data-value-of-enable-hover-highlight-img="true"]:has([random-id="${randomId
         document.querySelector(".desktop").style.display = "flex";
         document.querySelector(".footer").style.display = null;
         const loading = document.querySelector(".loading");
-        loading.style.opacity = "1";
-        loading.style.transition = "opacity 1s";
-        loading.style.opacity = "0";
+        runSyncFunctions(function () {
+            loading.style.opacity = "1";
+        }, function () {
+            loading.style.transition = "opacity 1s";
+        }, function () {
+            loading.style.opacity = "0";
+        });
         setTimeout(() => {
             loading.style.display = "none";
             loading.style.transition = null;
