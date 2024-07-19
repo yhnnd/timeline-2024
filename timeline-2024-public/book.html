@@ -50,6 +50,66 @@
     <script src="../js/vendor/param.js"></script>
     <script src="../js/timeline/books-index.js"></script>
     <script src="../js/timeline/books.js"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const bookNumber = getParameter("book");
+    const rawLink = document.getElementById("raw-link");
+    if (rawLink != undefined) {
+        rawLink.href = "raw-" + bookNumber + ".html";
+        rawLink.innerText = "pics of book " + bookNumber + "《" + bookNames[bookNumber] + "》";
+    }
+    const indexWrapper = document.getElementById("index-list");
+    if (indexWrapper != undefined) {
+        const list = books[bookNumber]["indexList"];
+        let html = "";
+        let counter = 1;
+        for (const {fakeUrl, realUrl} of list) {
+            let link = realUrl;
+            const nameSplit = fakeUrl.split("/");
+            const filename = nameSplit.pop();
+            const folder = nameSplit.pop();
+            const folderAbbr = folder.split("-").shift() + ' ' + folder.split("-").pop();
+            let iframeSrc = realUrl, previewSrc = realUrl;
+            if (window.location.href.startsWith("file://")) {
+            } else {
+                link = "book-reader.html?src=" + link + "&fakeUrl=" + fakeUrl;
+                iframeSrc = link + "&is-iframe=true";
+                previewSrc = link + "&is-iframe=true&is-preview=true";
+            }
+            html += "<div class=\"item\" id=\"item-" + counter + "\" onmouseover=\"previewFile('" + link + "','" + previewSrc + "')\" onclick=\"openFile('" + link + "')\">";
+            html += "<div class=\"cover\" data-folder=\"" + folderAbbr + '-' + counter++ + "\" data-filename=\"" + filename + "\"></div>";
+            html += "<iframe src=\"" + iframeSrc + "\" scrolling=\"no\"></iframe>";
+            html += "</div>";
+        }
+        indexWrapper.innerHTML = html;
+
+        if (window.location.href.startsWith("file://")) {
+            let element = document.getElementById("online");
+            element.parentElement.removeChild(element);
+            let style = document.createElement("style");
+            style.innerText = `
+    .index-wrapper>.item>.cover::before {
+    background-color: rgba(84, 6, 3, .75);
+    }`;
+            document.body.appendChild(style);
+        }
+
+        const loading = document.querySelector(".loading");
+        runSyncFunctions(function () {
+            loading.style.opacity = "1";
+        }, function () {
+            loading.style.transition = "opacity 1s";
+        }, function () {
+            loading.style.opacity = "0";
+        });
+        setTimeout(() => {
+            loading.style.display = "none";
+            loading.style.transition = null;
+            loading.style.opacity = null;
+        }, 1000);
+    }
+});
+    </script>
 </body>
 
 </html>
