@@ -162,3 +162,21 @@ body[data-value-of-enable-navbar="true"] .reader {
     background-color: transparent;
     box-shadow: 0 0 4px var(--studio-green-50);
 }
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    min-width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+}

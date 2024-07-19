@@ -18,7 +18,8 @@
     padding-bottom: 8px !important;
 }
 
-.global-navbar button {
+.global-navbar button,
+#navbar button {
     display: inline-block;
     font-weight: 400;
     text-align: center;
@@ -33,20 +34,26 @@
     color: #fff;
     background-color: #007bff;
     border-color: #007bff;
+    max-height: 31px;
+    align-self: center;
 }
 
-.global-navbar button:hover {
+.global-navbar button:hover,
+#navbar button:hover {
     color: #fff;
     background-color: #0069d9;
     border-color: #0062cc;
     text-decoration: none;
 }
 
-.global-navbar .info {
+.global-navbar .info,
+#navbar .info {
+    align-self: center;
     color: #fff;
 }
 
-.global-navbar .btn-settings {
+.global-navbar .btn-settings,
+#navbar .btn-settings {
     margin-left: auto;
 }
 

@@ -91,9 +91,10 @@ function initSearch(resultWrapper, configs) {
     if (articles.length == 0) {
         for (const book of window.books) {
             if (book != undefined && book["indexList"] != undefined) {
-                for (const url of book["indexList"]) {
+                for (const { fakeUrl, realUrl } of book["indexList"]) {
                     articles.push({
-                        "url": url,
+                        "fakeUrl": fakeUrl,
+                        "realUrl": realUrl,
                         "text": undefined
                     });
                 }
@@ -103,14 +104,15 @@ function initSearch(resultWrapper, configs) {
     searchInfo.counter = 0;
     searchInfo.isLoading = true;
     searchInfo.isReady = false;
+    const infoDom = document.querySelector(".global-navbar .info") || document.querySelector("#navbar .info");
     for (const i in articles) {
-        const url = articles[i].url;
+        const url = articles[i].realUrl;
         ajax(url, articles[i]["text"], function (responseText) {
             articles[i].text = responseText;
             if (++searchInfo.counter == articles.length) {
                 searchInfo.isLoading = false;
                 searchInfo.isReady = true;
-                document.querySelector(".global-navbar .info").innerText = "Search Ready";
+                infoDom.innerText = "Search Ready";
                 if (searchInfo.hasUnfinishedTask) {
                     if (searchInfo.keywords.length) {
                         searchKeywords(searchInfo.keywords, configs);
@@ -120,7 +122,7 @@ function initSearch(resultWrapper, configs) {
                 }
             } else {
                 const indicator = "Search Loading " + searchInfo.counter + "/" + articles.length;
-                document.querySelector(".global-navbar .info").innerText = indicator;
+                infoDom.innerText = indicator;
                 resultWrapper.innerText = indicator;
             }
         });
@@ -172,14 +174,14 @@ function searchKeywords(keywords, configs) {
                         times += item.text.split("\n").filter(line => line.includes("<img ") && line.includes(keyword)).length;
                     }
                 } else if (configs.type === "filename") {
-                    const urlSegments = item.url.split("/");
+                    const urlSegments = item.fakeUrl.split("/");
                     const filename = urlSegments.pop();
                     if (filename.includes(keyword)) {
                         isMatched = true;
                         times += filename.split(keyword).length - 1;
                     }
                 } else if (configs.type === "folder") {
-                    const urlSegments = item.url.split("/");
+                    const urlSegments = item.fakeUrl.split("/");
                     urlSegments.pop();
                     const folder = urlSegments.pop();
                     if (folder.includes(keyword)) {
@@ -192,7 +194,7 @@ function searchKeywords(keywords, configs) {
                 let link = document.createElement("div");
                 link.classList.add("link");
                 link.setAttribute("data-times", times);
-                const nameSplit = item.url.split("/");
+                const nameSplit = item.fakeUrl.split("/");
                 item.filename = nameSplit.pop();
                 item.folder = nameSplit.pop();
                 const folder = (configs && configs.type === "folder") ? highlight(item.folder, keywords, configs) : item.folder;
@@ -209,9 +211,9 @@ function searchKeywords(keywords, configs) {
                         }
                     }
                 }
-                link.innerHTML = "<a target='_self' href='book-reader.html?src=" + item.url + "'>"
+                link.innerHTML = "<a target='_self' href='book-reader.html?src=" + item.realUrl + "&fakeUrl=" + item.fakeUrl + "'>"
                     + "<span class='folder'>" + folder + "</span> / <span>" + filename + "</span></a>"
-                    + "<div class='cover-wrapper'><div class='cover' onclick=\"window.open('book-reader.html?src=" + item.url + "','_self');\"></div></div>"
+                    + "<div class='cover-wrapper'><div class='cover' onclick=\"window.open('book-reader.html?src=" + item.realUrl + "&fakeUrl=" + item.fakeUrl + "','_self');\"></div></div>"
                     + "<div class='text'><pre>" + lines.join("\n") + "</pre></div>";
                 resultWrapper.appendChild(link);
             }

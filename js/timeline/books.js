@@ -1,12 +1,7 @@
 /** Requires param.js */
 /** Requires books-index.js */
 
-const bookNames = [
-    "",
-    "致王震書",// 1
-    "王震來信",// 2
-    "出路 5"// 3
-];
+const bookNames = window.bookNames;
 
 const bookList = document.getElementsByClassName("book-list");
 if (bookList.length) {
@@ -43,18 +38,19 @@ if (rawLink != undefined) {
 }
 const indexWrapper = document.getElementById("index-list");
 if (indexWrapper != undefined) {
-    let list = books[bookNumber]["indexList"];
+    const list = books[bookNumber]["indexList"];
     let html = "";
     let counter = 1;
-    for (let link of list) {
-        let nameSplit = link.split("/");
+    for (const {fakeUrl, realUrl} of list) {
+        let link = realUrl;
+        const nameSplit = fakeUrl.split("/");
         const filename = nameSplit.pop();
         const folder = nameSplit.pop();
         const folderAbbr = folder.split("-").shift() + ' ' + folder.split("-").pop();
-        let iframeSrc = link, previewSrc = link;
+        let iframeSrc = realUrl, previewSrc = realUrl;
         if (window.location.href.startsWith("file://")) {
         } else {
-            link = "book-reader.html?src=" + link;
+            link = "book-reader.html?src=" + link + "&fakeUrl=" + fakeUrl;
             iframeSrc = link + "&is-iframe=true";
             previewSrc = link + "&is-iframe=true&is-preview=true";
         }
@@ -90,9 +86,17 @@ function openFile(link) {
     if (link == undefined) {
         link = document.querySelector(".reader>iframe").getAttribute("data-link");
     }
-    if (link) {
-        window.open(link, "_self");
+    if (!link) {
+        return;
     }
+    document.querySelectorAll("body > div").forEach(e => {
+        if (e.classList.contains("loading")) {
+            e.style.display = null;
+        } else {
+            e.remove();
+        }
+    });
+    window.open(link, "_self");
 }
 
 let timelineHtml = "<div style='height: 25px;'></div>";
@@ -101,11 +105,11 @@ for (const i in bookNames) {
         const indexList = window.books[i].indexList;
         let time = '&nbsp;', begin = '', end = '';
         if (indexList.length > 0) {
-            const segments = indexList[indexList.length - 1].split("/");
+            const segments = indexList[indexList.length - 1].fakeUrl.split("/");
             const val = segments[2].split('-');
             if (Number.isNaN(Number(val[2])) || Number.isNaN(Number(val[3]))) {
-                begin = indexList[0].split("/")[3].split(".").slice(0, 2).join(".");
-                end = indexList[indexList.length - 1].split("/")[3].split(".").slice(0, 2).join(".");
+                begin = indexList[0].fakeUrl.split("/")[3].split(".").slice(0, 2).join(".");
+                end = indexList[indexList.length - 1].fakeUrl.split("/")[3].split(".").slice(0, 2).join(".");
             } else {
                 begin = val[2] + '.' + val[3];
                 end = val[4] + '.' + val[5];

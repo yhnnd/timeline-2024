@@ -251,6 +251,13 @@ function deepCopy(obj, maxLevel = 3, level = 0) {
 }
 
 function goBack() {
+    document.querySelectorAll("body > div").forEach(e => {
+        if (e.classList.contains("loading")) {
+            e.style.display = null;
+        } else {
+            e.remove();
+        }
+    });
     if (window.location.pathname.endsWith("/book.html")) {
         window.open("index.html", "_self");
     } else {
@@ -616,12 +623,16 @@ function hideSettings(btn) {
 }
 
 function initNavbar() {
-    const navbar = document.createElement("div");
-    navbar.classList.add("global-navbar");
+    let navbar = document.querySelector("#navbar");
+    const isPageOwnNavbarFound = Boolean(navbar);
+    if (!isPageOwnNavbarFound) {
+        navbar = document.createElement("div");
+        navbar.classList.add("global-navbar");
+    }
     const button = document.createElement("button");
     button.innerText = "Go Back";
     button.setAttribute("onclick", "goBack()");
-    navbar.append(button);
+    navbar.prepend(button);
 
     const info = document.createElement("div");
     info.classList.add("info");
@@ -635,9 +646,11 @@ function initNavbar() {
     renderSettings();
     hideSettings(button2);
 
-    const fakeNavbar = document.createElement("div");
-    fakeNavbar.classList.add("fake-navbar");
-    document.body.prepend(fakeNavbar);
+    if (!isPageOwnNavbarFound) {
+        const fakeNavbar = document.createElement("div");
+        fakeNavbar.classList.add("fake-navbar");
+        document.body.prepend(fakeNavbar);
+    }
 
     for (const [key, value] of Object.entries(localStorage)) {
         document.body.setAttribute("data-value-of-" + key, value);

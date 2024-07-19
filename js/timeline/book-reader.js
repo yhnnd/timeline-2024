@@ -158,7 +158,7 @@ function renderArticle(src, containerClassName, container2ClassName) {
                             isAbortLoadingImgs = true;
                         }
                     }
-                    return "@image " + line;
+                    return "@image " + window.parseFakeUrl(line, { fakeUrl: getParameter("fakeUrl") || getParameter("src") });
                 }
                 if (line.startsWith("<div") && line.endsWith(">")) {
                     return "@div_start " + line;
@@ -269,7 +269,7 @@ function renderArticle(src, containerClassName, container2ClassName) {
                     const wrapperOpen = '<div class="video-wrapper">';
                     const covers = '<div class="backdrop-filter blur"></div><div class="backdrop-filter white"></div><div class="cover">' + line + '</div>';
                     const videoOpen = '<video width="100%" ' + parameters.join(" ") + ' style="width: 100%;">';
-                    const source = '<source src="' + src + '" type="video/' + fileType + '">'; // <source src="resources/35_1713060169.mp4" type="video/mp4">
+                    const source = '<source src="' + window.parseFakeUrl(src, { fakeUrl: getParameter("fakeUrl") || getParameter("src") }) + '" type="video/' + fileType + '">'; // <source src="resources/35_1713060169.mp4" type="video/mp4">
                     const videoClose = '</video>';
                     const wrapperClose = '</div>';
                     return wrapperOpen + covers + videoOpen + source + videoClose + wrapperClose;
@@ -396,7 +396,8 @@ function renderArticle(src, containerClassName, container2ClassName) {
             container1.prepend(function () {
                 const title = document.createElement("div");
                 title.classList = "title";
-                const segments = getParameter("src").split("/").slice(1);
+                const url = getParameter("fakeUrl") || getParameter("src");
+                const segments = url.split("/").slice(1);
                 title.innerHTML = "<span class='badge'>" + segments.join("</span>&nbsp;/&nbsp;<span class='badge'>") + "</span>";
                 const folderIndex = segments.length - 2;
                 const badgeList = title.querySelectorAll(".badge");
@@ -533,6 +534,18 @@ body[data-value-of-enable-hover-highlight-img="true"]:has([random-id="${randomId
         if (isMapEnabled) {
             renderMaps(parseMapsResult.maps);
         }
+
+        document.querySelector(".desktop").style.display = "flex";
+        document.querySelector(".footer").style.display = null;
+        const loading = document.querySelector(".loading");
+        loading.style.opacity = "1";
+        loading.style.transition = "opacity 1s";
+        loading.style.opacity = "0";
+        setTimeout(() => {
+            loading.style.display = "none";
+            loading.style.transition = null;
+            loading.style.opacity = null;
+        }, 1000);
     });
 }
 
