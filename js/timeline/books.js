@@ -71,6 +71,20 @@ background-color: rgba(84, 6, 3, .75);
 }`;
         document.body.appendChild(style);
     }
+
+    const loading = document.querySelector(".loading");
+    runSyncFunctions(function () {
+        loading.style.opacity = "1";
+    }, function () {
+        loading.style.transition = "opacity 1s";
+    }, function () {
+        loading.style.opacity = "0";
+    });
+    setTimeout(() => {
+        loading.style.display = "none";
+        loading.style.transition = null;
+        loading.style.opacity = null;
+    }, 1000);
 }
 
 function previewFile(link, iframeSrc) {
