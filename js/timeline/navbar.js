@@ -251,13 +251,7 @@ function deepCopy(obj, maxLevel = 3, level = 0) {
 }
 
 function goBack() {
-    document.querySelectorAll("body > div").forEach(e => {
-        if (e.classList.contains("loading")) {
-            e.style.display = null;
-        } else {
-            e.remove();
-        }
-    });
+    document.querySelector(".loading").style.display = null;
     if (window.location.pathname.endsWith("/book.html")) {
         window.open("index.html", "_self");
     } else {
@@ -721,3 +715,20 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector(".settings-2").parentElement.style.display = "none";
     }
 });
+
+function hideLoading (event) {
+    event && event.stopPropagation();
+    const loading = document.querySelector(".loading");
+    runSyncFunctions(function () {
+        loading.style.opacity = "1";
+    }, function () {
+        loading.style.transition = "opacity 1s";
+    }, function () {
+        loading.style.opacity = "0";
+    });
+    setTimeout(() => {
+        loading.style.display = "none";
+        loading.style.transition = null;
+        loading.style.opacity = null;
+    }, 1000);
+}

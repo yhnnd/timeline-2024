@@ -46,13 +46,7 @@ function openFile(link) {
     if (!link) {
         return;
     }
-    document.querySelectorAll("body > div").forEach(e => {
-        if (e.classList.contains("loading")) {
-            e.style.display = null;
-        } else {
-            e.remove();
-        }
-    });
+    document.querySelector(".loading").style.display = null;
     window.open(link, "_self");
 }
 

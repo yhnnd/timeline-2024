@@ -5,6 +5,7 @@
 if (getParameter("is-iframe") !== "true") { // Loading image and footer video in iframe will slow down the page loading. should not put these into iframes.
     const loading = document.createElement("div");
     loading.classList.add("loading");
+    loading.setAttribute("onclick", "hideLoading(event)");
     loading.style.display = "none";
     loading.innerHTML = `<div id="skyside-shield-image" style="width: 100%; border: none; margin-bottom: 20px; display: flex; justify-content: center; background-color: black; align-items: center;">
     <img alt="" style="min-width: 355.55px; max-width: 355.55px; width: 355.55px; min-height: 200px; max-height: 200px; height: 200px;"
@@ -562,19 +563,7 @@ body[data-value-of-enable-hover-highlight-img="true"]:has([random-id="${randomId
         document.querySelector(".desktop").style.display = "flex";
         if (getParameter("is-iframe") !== "true") {
             document.querySelector(".footer").style.display = null;
-            const loading = document.querySelector(".loading");
-            runSyncFunctions(function () {
-                loading.style.opacity = "1";
-            }, function () {
-                loading.style.transition = "opacity 1s";
-            }, function () {
-                loading.style.opacity = "0";
-            });
-            setTimeout(() => {
-                loading.style.display = "none";
-                loading.style.transition = null;
-                loading.style.opacity = null;
-            }, 1000);
+            hideLoading();
         }
     });
 }

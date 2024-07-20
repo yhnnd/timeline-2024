@@ -15,7 +15,7 @@
     <script src="../js/timeline/ios-button-2024.js"></script>
 </head>
 <body style="margin: 0; min-height: 100vh;">
-    <div class="loading">
+    <div class="loading" onclick="hideLoading(event)">
         <div id="skyside-shield-image"
         style="width: 100%; border: none; margin-bottom: 20px; display: flex; justify-content: center; background-color: black; align-items: center;">
             <img alt="" style="min-width: 355.55px; max-width: 355.55px; width: 355.55px; min-height: 200px; max-height: 200px; height: 200px;"
@@ -315,19 +315,7 @@ document.addEventListener("DOMContentLoaded", function() {
     } else {
         clicked('tab', 'books');
     }
-    const loading = document.querySelector(".loading");
-    runSyncFunctions(function () {
-        loading.style.opacity = "1";
-    }, function () {
-        loading.style.transition = "opacity 1s";
-    }, function () {
-        loading.style.opacity = "0";
-    });
-    setTimeout(() => {
-        loading.style.display = "none";
-        loading.style.transition = null;
-        loading.style.opacity = null;
-    }, 1000);
+    hideLoading();
 });
     </script>
     <style>
