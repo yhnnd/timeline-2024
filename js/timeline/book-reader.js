@@ -225,7 +225,13 @@ function renderArticle(src, containerClassName, container2ClassName) {
 
         if (window.openLink === undefined) {
             window.openLink = function (event) {
-                const to = event.target.getAttribute('to');
+                let to = event.target.getAttribute('to');
+                const fakeUrl = window.getParameter("fakeUrl");
+                if (fakeUrl && !fakeUrl.startsWith(window.localRepositoryKey)) {
+                    const repositoryKey = fakeUrl.split("/").shift() + "/";
+                    const repositoryUrl = window.repositoryMap[repositoryKey];
+                    to = to.replace("../", repositoryUrl);
+                }
                 if (to) {
                     window.open(to, "_self");
                 }

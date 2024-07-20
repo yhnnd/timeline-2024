@@ -537,6 +537,7 @@ window.repositoryMap = {
     "@2023/": "https://yhnnd.github.io/timeline-public/docs/",
     "@2024/": "../"
 };
+window.localRepositoryKey = "@2024/";
 
 window.parseFakeUrl = function (line, configs) {
     let repository = "";
