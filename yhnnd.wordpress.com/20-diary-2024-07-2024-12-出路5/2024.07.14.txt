@@ -2,5 +2,5 @@ Shield of Skyside
 Animation Version 1
 
 <border>
-@video ../yhnnd.wordpress.com/3-diary-2024-07-2024-12-出路5/pics-2024-07-14-diary-pics/animation-v1.mp4 loop muted autoplay
+@video ../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-07-14-diary-pics/animation-v1.mp4 loop muted autoplay
 </border>

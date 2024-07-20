@@ -1,18 +1,18 @@
 Shield of Skyside
 Animation Version 2
 <border>
-@video ../yhnnd.wordpress.com/3-diary-2024-07-2024-12-出路5/pics-2024-07-15-diary-pics/animation-v2.mp4 loop muted autoplay
+@video ../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-07-15-diary-pics/animation-v2.mp4 loop muted autoplay
 </border>
 
 @command("enable-image-recognition")
 Sticker of the Shield of Skyside (very large)
 <border>
-<img src="../yhnnd.wordpress.com/3-diary-2024-07-2024-12-出路5/pics-2024-07-15-diary-pics/sticker.jpg" alt="">
+<img src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-07-15-diary-pics/sticker.jpg" alt="">
 </border>
 
 The Earth (very large)
 <border>
-<img src="../yhnnd.wordpress.com/3-diary-2024-07-2024-12-出路5/pics-2024-07-15-diary-pics/earth_2015_pacific_24k_no_highlights.jpg" alt="">
+<img src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-07-15-diary-pics/earth_2015_pacific_24k_no_highlights.jpg" alt="">
 </border>
 
 @utf("E8B4B4E7BAB8E4BDBFE794A8E8AEB0E5BD95");

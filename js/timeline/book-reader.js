@@ -17,7 +17,7 @@ if (getParameter("is-iframe") !== "true") { // Loading image and footer video in
     footer.classList.add("footer");
     footer.style.display = "none";
     footer.innerHTML = `<div class="col" id="skyside-shield-animation" style="border: none; margin-bottom: 20px; display: flex; justify-content: center; background-color: black; align-items: center; height: 200px; overflow: hidden;">
-    <video src="../yhnnd.wordpress.com/3-diary-2024-07-2024-12-出路5/pics-2024-07-15-diary-pics/animation-v2.mp4"
+    <video src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-07-15-diary-pics/animation-v2.mp4"
     autoplay muted loop
     style="min-width: 355.55px; max-width: 355.55px; width: 355.55px; transform: scale(1.21);"
     ></video>

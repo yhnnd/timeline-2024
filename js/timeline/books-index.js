@@ -21,7 +21,8 @@ window.bookNames = [
     "出路 4",// 17
     "致王震書2 (2024)",// 18
     "王震來信2 (2024)",// 19
-    "出路 5 (2024)"// 20
+    "出路 5 (2024)",// 20
+    "詩 (2024)"// 21
 ];
 
 window.books[1] = {};
@@ -536,7 +537,19 @@ window.books[20].indexList = [
 // 21 詩 (2024)
 window.books[21] = {};
 window.books[21].indexList = [
-    "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2024.02.24.txt"
+    "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2014.06.04.txt",
+    "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2018.10.13.txt",
+    "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2018.11.25.txt",
+    "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2023.10.09.txt",
+    "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2023.10.25.txt",
+    "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2023.10.27.txt",
+    "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2023.10.28.txt",
+    "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2023.10.30.txt",
+    "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2023.10.31.txt",
+    "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2024.02.13.txt",
+    "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2024.02.24.txt",
+    "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2024.03.10.txt",
+    "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2024.05.07.txt"
 ];
 
 window.repositoryMap = {
