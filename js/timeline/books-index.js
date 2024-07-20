@@ -530,6 +530,7 @@ window.books[20].indexList = [
     "@2024/yhnnd.wordpress.com/3-diary-2024-07-2024-12-出路5/2024.07.15.txt",
     "@2024/yhnnd.wordpress.com/3-diary-2024-07-2024-12-出路5/2024.07.16.txt",
     "@2024/yhnnd.wordpress.com/3-diary-2024-07-2024-12-出路5/2024.07.17.txt",
+    "@2024/yhnnd.wordpress.com/3-diary-2024-07-2024-12-出路5/2024.07.20.txt",
 ];
 
 window.repositoryMap = {
