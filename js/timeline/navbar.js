@@ -251,7 +251,10 @@ function deepCopy(obj, maxLevel = 3, level = 0) {
 }
 
 function goBack() {
-    document.querySelector(".loading").style.display = null;
+    const loading = document.querySelector(".loading");
+    if (loading) {
+        loading.style.display = null;
+    }
     if (window.location.pathname.endsWith("/book.html")) {
         window.open("index.html", "_self");
     } else {
