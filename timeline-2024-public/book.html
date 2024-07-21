@@ -51,6 +51,7 @@
     <script src="../js/timeline/books-index.js"></script>
     <script src="../js/timeline/books.js"></script>
     <script>
+let isLoaded = false;
 document.addEventListener("DOMContentLoaded", function() {
     const bookNumber = getParameter("book");
     const rawLink = document.getElementById("raw-link");
@@ -95,6 +96,12 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         hideLoading();
+        isLoaded = true;
+        setInterval(() => {
+            if (isLoaded && document.querySelector(".loading").style.display !== 'none') {
+                hideLoading();
+            }
+        }, 3000);
     }
 });
     </script>
