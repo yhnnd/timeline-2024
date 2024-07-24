@@ -1,3 +1,26 @@
+Shield of Skyside
+Animation Version 1
+
+<border>
+@video ../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-07-14-diary-pics/animation-v1.mp4 loop muted autoplay
+</border>
+
+Shield of Skyside
+Animation Version 2
+
+<border>
+@video ../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-07-15-diary-pics/animation-v2.mp4 loop muted autoplay
+</border>
+
+Shield of Skyside
+Animation Version 3
+
+<border>
+@video ../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-07-24-diary-pics/animation-v3.mp4 loop muted autoplay
+</border>
+
+
+
 The Twelve Kingdoms
 
 
