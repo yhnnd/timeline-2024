@@ -159,6 +159,11 @@ function renderArticle(src, containerClassName, container2ClassName) {
                 } else if (line === "</border>" && localStorage.getItem("enable-border") === "true") {
                     return '@command("border-end")';
                 }
+                if (line === "@command(\"line-width-maximum\")") {
+                    const style = document.createElement("style");
+                    style.innerText = "pre { width: 800px; }";
+                    document.body.append(style);
+                }
                 line = line.replaceAll("<link", '@command("link-start")');
                 line = line.replaceAll("</link>", '@command("link-end")');
                 return line;
@@ -222,6 +227,7 @@ function renderArticle(src, containerClassName, container2ClassName) {
         responseText = responseText.replaceAll('@command("border-end")', "\n</div>");
         responseText = responseText.replaceAll('@command("link-start")', "<div class='link' type='link' onclick='openLink(event)'");
         responseText = responseText.replaceAll('@command("link-end")', "</div>");
+        responseText = responseText.replaceAll("@command(\"line-width-maximum\")", "<span class='highlight-green'>@command(\"line-width-maximum\")</span>");
 
         if (window.openLink === undefined) {
             window.openLink = function (event) {
