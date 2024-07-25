@@ -160,9 +160,7 @@ function renderArticle(src, containerClassName, container2ClassName) {
                     return '@command("border-end")';
                 }
                 if (line === "@command(\"line-width-maximum\")") {
-                    const style = document.createElement("style");
-                    style.innerText = "pre { width: 800px; }";
-                    document.body.append(style);
+                    document.body.setAttribute("data-line-width-maximum", "true");
                 }
                 line = line.replaceAll("<link", '@command("link-start")');
                 line = line.replaceAll("</link>", '@command("link-end")');

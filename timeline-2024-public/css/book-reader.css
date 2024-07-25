@@ -164,6 +164,26 @@ body[data-value-of-enable-line-width-560px="true"][data-value-of-enable-line-wid
     max-width: min(656px, 100vw, 100%);
 }
 
+body[data-line-width-maximum="true"] pre,
+body[data-line-width-maximum="true"] pre .line,
+body[data-line-width-maximum="true"] pre .empty-line,
+body[data-line-width-maximum="true"][data-value-of-enable-line-split="true"] .img-wrapper .content,
+body[data-line-width-maximum="true"][data-value-of-enable-line-width-560px="true"] pre,
+body[data-line-width-maximum="true"][data-value-of-enable-line-width-560px="true"] pre .line,
+body[data-line-width-maximum="true"][data-value-of-enable-line-width-560px="true"] pre .empty-line,
+body[data-line-width-maximum="true"][data-value-of-enable-line-width-560px="true"][data-value-of-enable-line-split="true"] .img-wrapper .content,
+body[data-line-width-maximum="true"][data-value-of-enable-line-width-560px="true"][data-value-of-enable-line-width-608px="true"] pre,
+body[data-line-width-maximum="true"][data-value-of-enable-line-width-560px="true"][data-value-of-enable-line-width-608px="true"] pre .line,
+body[data-line-width-maximum="true"][data-value-of-enable-line-width-560px="true"][data-value-of-enable-line-width-608px="true"] pre .empty-line,
+body[data-line-width-maximum="true"][data-value-of-enable-line-width-560px="true"][data-value-of-enable-line-width-608px="true"][data-value-of-enable-line-split="true"] .img-wrapper .content,
+body[data-line-width-maximum="true"][data-value-of-enable-line-width-560px="true"][data-value-of-enable-line-width-608px="true"][data-value-of-enable-line-width-656px="true"] pre,
+body[data-line-width-maximum="true"][data-value-of-enable-line-width-560px="true"][data-value-of-enable-line-width-608px="true"][data-value-of-enable-line-width-656px="true"] pre .line,
+body[data-line-width-maximum="true"][data-value-of-enable-line-width-560px="true"][data-value-of-enable-line-width-608px="true"][data-value-of-enable-line-width-656px="true"] pre .empty-line,
+body[data-line-width-maximum="true"][data-value-of-enable-line-width-560px="true"][data-value-of-enable-line-width-608px="true"][data-value-of-enable-line-width-656px="true"][data-value-of-enable-line-split="true"] .img-wrapper .content {
+    width: 800px;
+    max-width: min(800px, 100vw, 100%);
+}
+
 pre img {
     width: 100%;
 }
