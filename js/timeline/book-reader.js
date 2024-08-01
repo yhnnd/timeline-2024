@@ -16,13 +16,69 @@ if (getParameter("is-iframe") !== "true") { // Loading image and footer video in
     const footer = document.createElement("div");
     footer.classList.add("footer");
     footer.style.display = "none";
-    footer.innerHTML = `<div class="col" id="skyside-shield-animation" style="border: none; margin-bottom: 20px; display: flex; justify-content: center; background-color: black; align-items: center; height: 200px; overflow: hidden;">
-    <video src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-07-15-diary-pics/animation-v2.mp4"
+    footer.innerHTML =
+`<div class="col" id="version-selector" style="display: none;">
+    <div style='background: white; padding: 2px 3px;' onclick="selectShieldVersion(this, event)">
+        <span>versions:</span>
+        <span class="version-option" video-src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-07-14-diary-pics/animation-v1.mp4">1</span>
+        <span class="version-option" video-src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-07-15-diary-pics/animation-v2.mp4">2</span>
+        <span class="version-option" video-src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-07-24-diary-pics/animation-v3.mp4">3</span>
+        <span class="version-option" video-src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-08-01-diary-pics/animation-v4.mp4" selected="true">4</span>
+    </div>
+</div>
+<div class="col" id="skyside-shield-animation" style="border: none; display: flex; justify-content: center; background-color: black; align-items: center; height: 200px; overflow: hidden;">
+    <video src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-08-01-diary-pics/animation-v4.mp4"
     autoplay muted loop
-    style="min-width: 355.55px; max-width: 355.55px; width: 355.55px; transform: scale(1.21);"
+    style="height: 200px; transform: scale(1.2);"
+    onclick="toggleSelectShieldVersion()"
     ></video>
-</div>`;
+</div>
+<style>
+.version-option {
+    display: inline-block;
+    width: 20px;
+    text-align: center;
+    color: white;
+    background-color: black;
+    outline: 1px solid black;
+}
+.version-option[selected="true"] {
+    color: black;
+    background-color: transparent;
+}
+</style>`;
+    const footerScript = document.createElement("script");
+    footerScript.innerHTML = `
+function selectShieldVersion(panel, event) {
+    if (panel === event.target) {
+        return;
+    }
+    const versionOption = event.target;
+    if (versionOption.innerHTML !== versionOption.innerText) {
+        return;
+    }
+    const videoSrc = versionOption.getAttribute('video-src');
+    if (!videoSrc) {
+        return;
+    }
+    const video = document.querySelector("#skyside-shield-animation video");
+    if (!video) {
+        return;
+    }
+    video.setAttribute("src", videoSrc);
+    document.querySelectorAll(".version-option").forEach(op => {
+        op.removeAttribute("selected");
+    });
+    versionOption.setAttribute("selected", "true");
+}
+
+function toggleSelectShieldVersion() {
+    const footer = document.querySelector(".footer");
+    const selector = footer.querySelector("#version-selector");
+    selector.style.display = selector.style.display ? null : 'none';
+}`;
     document.body.append(footer);
+    document.body.append(footerScript);
     document.querySelector(".loading").style.display = "flex";
     document.querySelector(".desktop").style.minHeight = "calc(100vh - 420px)";
 }
