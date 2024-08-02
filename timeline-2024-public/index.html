@@ -269,7 +269,6 @@
         style="border: none; display: flex; justify-content: center; background-color: black; align-items: center; height: 200px; overflow: hidden;">
             <video src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-08-01-diary-pics/animation-v4.mp4"
             autoplay muted loop
-            style="height: 200px; transform: scale(1.2);"
             onclick="toggleSelectShieldVersion()"
             ></video>
         </div>
@@ -283,9 +282,14 @@
     background-color: black;
     outline: 1px solid black;
 }
+
 .version-option[selected="true"] {
     color: black;
     background-color: transparent;
+}
+
+#skyside-shield-animation video {
+    height: 200px;
 }
     </style>
     <script>
@@ -315,7 +319,18 @@ function selectShieldVersion(panel, event) {
 function toggleSelectShieldVersion() {
     const footer = document.querySelector(".footer");
     const selector = footer.querySelector("#version-selector");
-    selector.style.display = selector.style.display ? null : 'none';
+    const video = document.querySelector("#skyside-shield-animation video");
+    if (!video) {
+        return;
+    }
+    if (selector.style.display === "none") { /* show selector */
+        selector.style.display = null;
+        video.style.height = "198px";
+        video.style.border = "1px solid white";
+    } else { /* hide selector */
+        selector.style.display = "none";
+        video.removeAttribute("style");
+    }
 }
     </script>
 
