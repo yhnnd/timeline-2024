@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const bookNumber = getParameter("book");
     const rawLink = document.getElementById("raw-link");
     if (rawLink != undefined) {
-        rawLink.href = "raw-" + bookNumber + ".html";
+        rawLink.href = window.repositoryMap["@2023/"] + "timeline-public/raw-" + bookNumber + ".html";
         rawLink.innerText = "pics of book " + bookNumber + "《" + bookNames[bookNumber] + "》";
     }
     const indexWrapper = document.getElementById("index-list");
