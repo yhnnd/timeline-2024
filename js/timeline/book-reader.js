@@ -27,10 +27,7 @@ if (getParameter("is-iframe") !== "true") { // Loading image and footer video in
     </div>
 </div>
 <div class="col" id="skyside-shield-animation" style="border: none; display: flex; justify-content: center; background-color: black; align-items: center; height: 200px; overflow: hidden;">
-    <video src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-08-01-diary-pics/animation-v4.mp4"
-    autoplay muted loop
-    onclick="toggleSelectShieldVersion()"
-    ></video>
+    <img src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-08-03-diary-pics/animation-v4.gif" onclick="clickGIF(this);">
 </div>
 <style>
 .version-option {
@@ -47,12 +44,27 @@ if (getParameter("is-iframe") !== "true") { // Loading image and footer video in
     background-color: transparent;
 }
 
+#skyside-shield-animation img,
 #skyside-shield-animation video {
     height: 200px;
 }
 </style>`;
     const footerScript = document.createElement("script");
     footerScript.innerHTML = `
+function clickGIF(img) {
+    const wrapper = document.querySelector("#skyside-shield-animation");
+    if (!wrapper) {
+        return;
+    }
+    const video = document.createElement("video");
+    video.setAttribute("src", "../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-08-01-diary-pics/animation-v4.mp4");
+    video.setAttribute("autoplay", true);
+    video.setAttribute("muted", true);
+    video.setAttribute("loop", true);
+    video.setAttribute("onclick", "toggleSelectShieldVersion()");
+    wrapper.innerHTML = video.outerHTML;
+}
+
 function selectShieldVersion(panel, event) {
     if (panel === event.target) {
         return;
