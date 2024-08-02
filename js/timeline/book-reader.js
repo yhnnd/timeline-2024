@@ -446,9 +446,12 @@ function renderArticle(src, containerClassName, container2ClassName) {
                 temp = [];
             }
             for (let i = 0; i < lines1.length; ++i) {
-                if (lines1[i].startsWith("page ") && lines1[i].split(' ').length <= 3) {
-                    const pageNumber = parseInt(lines1[i].split(' ')[1]);
-                    if (pageNumber > 1 && temp.length) {
+                const words = lines1[i].split(' ');
+                if (["page", "Page"].includes(words[0]) && [2, 3].includes(words.length)) {
+                    const pageNumber = parseInt(words[1]);
+                    const condition1 = (pageNumber === 1 && words.length === 3 && ["right", "back"].includes(words[2]));
+                    const condition2 = (pageNumber > 1);
+                    if ((condition1 || condition2) && temp.length) {
                         pushTempPage();
                     }
                     linesPage.push(lines1[i]);
