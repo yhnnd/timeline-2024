@@ -1,3 +1,7 @@
+@command("enable-image-recognition")
+2024/07/16
+1-1200
+
 1
 <img src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-07-16-diary-pics/png/mov/mov_00000.png" alt="">
 
