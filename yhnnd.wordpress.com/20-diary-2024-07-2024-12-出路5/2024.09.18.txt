@@ -1,0 +1,179 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <style>
+    :root {
+      --gray: #F0F0F0;
+    }
+    img {
+      width: 200px;
+    }
+    .container {
+      width: 840px;
+      margin: 0 auto;
+    }
+    .date-group {
+      background-image: repeating-linear-gradient(
+        -45deg,
+        var(--gray),
+        var(--gray) 25px,
+        transparent 25px,
+        transparent 50px
+      );
+      border: 20px solid var(--gray);
+      border-top: none;
+      margin-bottom: 40px;
+    }
+    .date-group-title {
+      font-size: 24px;
+      border-top: 20px solid var(--gray);
+      margin-left: -200px;
+      margin-right: -20px;
+      height: 34px;
+      margin-bottom: -34px;
+    }
+  </style>
+  <div class="container">
+    <h1 style="font-weight: 100;font-size: 50px;">Album</h1>
+  </div>
+  <div class="container" id="album">
+  </div>
+  <script>
+function getDate(route) {
+  const filename = route.split('/').pop();
+  return filename.split(' ')[1];
+}
+let imgs = [];
+const album = document.querySelector("#album");
+function appendImg(img) {
+  const date = getDate(img);
+  let dateGroup = album.querySelector(".date-" + date);
+  if (!dateGroup) {
+    dateGroup = document.createElement("div");
+    dateGroup.className = "date-group date-" + date;
+    dateGroup.innerHTML = "<div class='date-group-title'>" + date + "</div>";
+    album.append(dateGroup);
+  }
+  dateGroup.innerHTML += "<img src='" + img + "'>"
+}
+// 倒叙
+for (i = imgs.length - 1; i >= 0; --i) {
+  appendImg(imgs[i]);
+}
+// // 正叙
+// for (i = 0; i < imgs.length; ++i) {
+//   appendImg(imgs[i]);
+// }
+  </script>
+</body>
+</html>
+
+
+
+2024年9月14日星期六
+今天公司的电脑能访问外网了
+YouTube 和 Twitter 全都可以访问
+晚上六点下班，去 KFC 吃晚饭
+我打车去丈八六路地铁站
+打了半天都打不到车
+环普外边的道路上到处堵车
+后来我打到车了
+我站在十字路口的路障旁边等车
+一路上到处都堵车
+到了丈八六路地铁站
+坐地铁去了西安站
+走到西安站的地面上
+西安城墙上有黄色的灯光
+
+
+2024年9月15日星期日
+到了北京丰台站
+坐地铁去找李路阳
+李路阳让我去大钟寺地铁站等他
+我和李路阳去了字节跳动楼下的烤肉店
+四小杯果啤，我俩都没喝
+一顿饭二百多块钱
+李路阳的支气管炎还是没康复
+他一路上一直咳嗽
+我和李路阳从大钟寺骑共享单车去他家
+骑车的路上
+一个迎面走来的老头骂我“操你妈”
+我当时想
+我不能让这些无关紧要的 NPC 占用我的时间
+我在李路阳家坐着
+等下午三点和他去看电影
+他的橘猫躲在床下不出来
+李路阳洗完澡
+我和他步行去电影院
+李路阳渴了
+我们走到附近的饮料店
+李路阳买了杯饮料
+一杯饮料十八块钱
+一楼的汉堡王店门紧闭
+我和他去电影院看了电影
+《一雪前耻》
+乔杉演得很好
+看完电影
+下午五点多
+我和李路阳告别
+李路阳说他晚上要去听一场演唱会
+我问李路阳是谁的演唱会
+他说是麻园诗人的演唱会
+我骑青桔共享单车去了大钟寺地铁站
+坐地铁去昌平区未来科学城站
+和许小彦一起坐公交车去大东流村
+我和她在川渝饭店吃晚饭
+要了三道菜
+饭店的女老板是牡丹江人
+
+
+2024年9月16日星期一
+没吃早饭，中午吃了两个月饼
+晚上和许小彦去饭店吃烤鱼
+乌江鱼
+晚上许小彦的女儿许洁给她打电话
+许洁说她现在读的学校条件太差，想转学回到之前的学校
+许小彦和许洁打了很长时间电话
+我睡着了
+
+
+2024年9月17日星期二
+今天上午我下楼去买早饭
+我买了一笼圆笼包、两根油条、两杯豆浆
+我走回去，和许小彦吃了早饭
+许小彦说她一宿都没睡好
+她说我夜里打鼾、说梦话
+我问她：我说了什么梦话？
+许小彦说：你说的梦话是英语，我听不懂
+我俩睡午觉一直到下午三点
+下午三点我要走了
+她身体不舒服，不能下床送我
+我下楼走到公交站
+坐公交车去了未来科学城地铁站
+坐地铁经太阳宫和双井换乘之后
+到了北京西站
+在北京西站对街的超市买了水、橙汁、方便面、酸奶
+
+
+2024年9月18日星期三
+夜里
+我的铺位在车厢门的旁边
+晚上车厢门不关
+我感冒了
+早上我从中铺下来刷牙
+我坐在下铺，打开手机听歌《悬溺》
+火车开到了西安站
+我从西安站挤地铁去丈八六路
+地铁上人满为患
+我站在车厢门旁边，和周围的人挤在一起
+我从丈八六路地铁站打车到了环普
+在环普一楼的乡村基吃了早饭
+我在微信上问李俊的病好了吗
+李俊说好点了
+上午，我流鼻涕，我下楼去一楼乡村基对面的药店用医保买了感冒药
+我头晕，因为戴眼镜
+我中午没去吃饭，直接去会议室找一个黑色沙发躺着睡午觉
