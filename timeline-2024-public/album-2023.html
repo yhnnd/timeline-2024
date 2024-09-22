@@ -1,0 +1,343 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Album 2023</title>
+</head>
+<body>
+  <style>
+:root {
+  --gray: #F0F0F0;
+}
+img, video {
+  max-width: 200px;
+  max-height: 400px;
+}
+.container {
+  width: 840px;
+  margin: 0 auto;
+}
+.date-group {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--gray),
+    var(--gray) 25px,
+    transparent 25px,
+    transparent 50px
+  );
+  border: 20px solid var(--gray);
+  border-top: none;
+  margin-bottom: 40px;
+}
+.date-group-title {
+  font-size: 24px;
+  border-top: 20px solid var(--gray);
+  margin-left: -200px;
+  margin-right: -20px;
+  height: 34px;
+  margin-bottom: -34px;
+}
+  </style>
+  <div class="container">
+    <h1 style="font-weight: 100;font-size: 50px;">Album 2023</h1>
+  </div>
+  <div class="container" id="album">
+  </div>
+  <div id="inspectImageWrapper" class="inspect-image-wrapper"></div>
+  <script>
+let imgs = [
+"../mobile-pics/Camera/IMG_20230808_104358.jpg",
+"../mobile-pics/Camera/IMG_20230811_173440.jpg",
+"../mobile-pics/Camera/IMG_20230815_204725.jpg",
+"../mobile-pics/Camera/IMG_20230817_173540.jpg",
+"../mobile-pics/Camera/IMG_20230817_175540.jpg",
+"../mobile-pics/Camera/IMG_20230819_141554.jpg",
+"../mobile-pics/Camera/IMG_20230819_141718.jpg",
+"../mobile-pics/Camera/IMG_20230819_141858.jpg",
+"../mobile-pics/Camera/IMG_20230819_142030.jpg",
+"../mobile-pics/Camera/IMG_20230819_142216.jpg",
+"../mobile-pics/Camera/IMG_20230819_142354.jpg",
+"../mobile-pics/Camera/IMG_20230819_142735.jpg",
+"../mobile-pics/Camera/IMG_20230819_143231.jpg",
+"../mobile-pics/Camera/IMG_20230819_144717.jpg",
+"../mobile-pics/Camera/IMG_20230819_144735.jpg",
+"../mobile-pics/Camera/IMG_20230819_145112.jpg",
+"../mobile-pics/Camera/IMG_20230819_145129.jpg",
+"../mobile-pics/Camera/IMG_20230819_145143.jpg",
+"../mobile-pics/Camera/IMG_20230819_145201.jpg",
+"../mobile-pics/Camera/IMG_20230819_145229.jpg",
+"../mobile-pics/Camera/IMG_20230819_145241.jpg",
+"../mobile-pics/Camera/IMG_20230819_145252.jpg",
+"../mobile-pics/Camera/IMG_20230819_145724.jpg",
+"../mobile-pics/Camera/IMG_20230819_145903.jpg",
+"../mobile-pics/Camera/IMG_20230819_145921.jpg",
+"../mobile-pics/Camera/IMG_20230819_145954.jpg",
+"../mobile-pics/Camera/IMG_20230819_145957.jpg",
+"../mobile-pics/Camera/IMG_20230819_150035.jpg",
+"../mobile-pics/Camera/IMG_20230819_150152.jpg",
+"../mobile-pics/Camera/IMG_20230819_150247.jpg",
+"../mobile-pics/Camera/IMG_20230819_150348.jpg",
+"../mobile-pics/Camera/IMG_20230819_163001.jpg",
+"../mobile-pics/Camera/IMG_20230821_145333.jpg",
+"../mobile-pics/Camera/IMG_20230821_145403.jpg",
+"../mobile-pics/Camera/IMG_20230821_145554.jpg",
+"../mobile-pics/Camera/IMG_20230821_145756.jpg",
+"../mobile-pics/Camera/IMG_20230821_145832.jpg",
+"../mobile-pics/Camera/IMG_20230821_150016.jpg",
+"../mobile-pics/Camera/IMG_20230822_010226.jpg",
+"../mobile-pics/Camera/IMG_20230901_093609.jpg",
+"../mobile-pics/Camera/IMG_20230901_125502.jpg",
+"../mobile-pics/Camera/IMG_20230901_125524.jpg",
+"../mobile-pics/Camera/IMG_20230901_144426.jpg",
+"../mobile-pics/Camera/IMG_20230901_145653.jpg",
+"../mobile-pics/Camera/IMG_20230901_152104.jpg",
+"../mobile-pics/Camera/IMG_20230901_170426.jpg",
+"../mobile-pics/Camera/IMG_20230901_171231.jpg",
+"../mobile-pics/Camera/IMG_20230901_171438.jpg",
+"../mobile-pics/Camera/IMG_20230903_090235.jpg",
+"../mobile-pics/Camera/IMG_20230903_091308.jpg",
+"../mobile-pics/Camera/IMG_20230903_091457.jpg",
+"../mobile-pics/Camera/IMG_20230905_150148.jpg",
+"../mobile-pics/Camera/IMG_20230905_150200.jpg",
+"../mobile-pics/Camera/IMG_20230905_160955.jpg",
+"../mobile-pics/Camera/IMG_20230916_185601.jpg",
+"../mobile-pics/Camera/IMG_20230916_185637.jpg",
+"../mobile-pics/Camera/IMG_20230921_141325.jpg",
+"../mobile-pics/Camera/IMG_20230921_141333.jpg",
+"../mobile-pics/Camera/IMG_20230923_132821.jpg",
+"../mobile-pics/Camera/IMG_20230924_165021.jpg",
+"../mobile-pics/Camera/IMG_20230924_165107.jpg",
+"../mobile-pics/Camera/IMG_20230924_165258.jpg",
+"../mobile-pics/Camera/IMG_20230924_170106.jpg",
+"../mobile-pics/Camera/IMG_20230924_170122.jpg",
+"../mobile-pics/Camera/IMG_20230924_173828.jpg",
+"../mobile-pics/Camera/IMG_20230928_175232.jpg",
+"../mobile-pics/Camera/IMG_20230929_234421.jpg",
+"../mobile-pics/Camera/IMG_20230929_234515.jpg",
+"../mobile-pics/Camera/IMG_20230930_124735.jpg",
+"../mobile-pics/Camera/IMG_20230930_124802.jpg",
+"../mobile-pics/Camera/IMG_20230930_194626.jpg",
+"../mobile-pics/Camera/IMG_20230930_194726.jpg",
+"../mobile-pics/Camera/IMG_20231001_161344.jpg",
+"../mobile-pics/Camera/IMG_20231004_183401.jpg",
+"../mobile-pics/Camera/IMG_20231006_154724.jpg",
+"../mobile-pics/Camera/IMG_20231006_155929.jpg",
+"../mobile-pics/Camera/IMG_20231006_160027.jpg",
+"../mobile-pics/Camera/IMG_20231007_144634.jpg",
+"../mobile-pics/Camera/IMG_20231007_144645.jpg",
+"../mobile-pics/Camera/IMG_20231007_144708.jpg",
+"../mobile-pics/Camera/IMG_20231110_194337.jpg",
+"../mobile-pics/Camera/IMG_20231116_192521.jpg",
+"../mobile-pics/Camera/IMG_20231117_133943.jpg",
+"../mobile-pics/Camera/IMG_20231202_113341.jpg",
+"../mobile-pics/Camera/IMG_20231212_101405.jpg",
+"../mobile-pics/Camera/IMG_20231212_225624.jpg",
+"../mobile-pics/Camera/IMG_20231213_141251.jpg",
+"../mobile-pics/Camera/IMG_20231217_195352.jpg",
+"../mobile-pics/Camera/VID_20231220_091025.mp4",
+"../mobile-pics/Camera/IMG_20231220_124526.jpg",
+"../mobile-pics/Camera/IMG_20231221_093043.jpg",
+"../mobile-pics/Camera/VID_20240120_202100.mp4",
+"../mobile-pics/Camera/VID_20240120_202116.mp4",
+"../mobile-pics/Camera/IMG_20240121_131458.jpg",
+"../mobile-pics/Camera/IMG_20240121_131526.jpg",
+"../mobile-pics/Camera/IMG_20240121_131542.jpg",
+"../mobile-pics/Camera/IMG_20240123_110922591.jpg",
+"../mobile-pics/Camera/IMG_20240128_141341.jpg",
+"../mobile-pics/Camera/IMG_20240206_195447.jpg",
+"../mobile-pics/Camera/IMG_20240210_191033.jpg",
+"../mobile-pics/Camera/IMG_20240315_232632.jpg",
+"../mobile-pics/Camera/VID_20240330_160408.mp4",
+"../mobile-pics/Camera/IMG_20240404_143734.jpg",
+"../mobile-pics/Camera/IMG_20240815_225301.jpg",
+"../mobile-pics/Camera/IMG_20240815_225303.jpg",
+"../mobile-pics/Camera/IMG_20240815_230057.jpg",
+"../mobile-pics/Camera/IMG_20240815_230059.jpg",
+"../mobile-pics/Camera/IMG_20240815_230101.jpg",
+"../mobile-pics/Camera/IMG_20240815_231036_1.jpg",
+"../mobile-pics/Camera/IMG_20240815_231036.jpg",
+"../mobile-pics/Camera/IMG_20240815_231037_1.jpg",
+"../mobile-pics/Camera/IMG_20240815_231037.jpg",
+"../mobile-pics/Camera/IMG_20240815_231038.jpg",
+"../mobile-pics/Camera/IMG_20240815_232250.jpg",
+"../mobile-pics/Camera/IMG_20240816_210952.jpg",
+"../mobile-pics/Camera/IMG_20240816_215232.jpg",
+"../mobile-pics/Camera/IMG_20240817_084522.jpg",
+"../mobile-pics/Camera/IMG_20240817_084838.jpg",
+"../mobile-pics/Camera/IMG_20240817_084843.jpg",
+"../mobile-pics/Camera/IMG_20240817_084846.jpg",
+"../mobile-pics/Camera/IMG_20240823_221708.jpg",
+"../mobile-pics/Camera/IMG_20240823_221710.jpg",
+"../mobile-pics/Camera/IMG_20240829_175108.jpg",
+"../mobile-pics/Camera/IMG_20240829_175113.jpg",
+"../mobile-pics/Camera/IMG_20240829_175130.jpg",
+"../mobile-pics/Camera/IMG_20240902_241718.jpg",
+"../mobile-pics/Camera/IMG_20240902_241725.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1693473030697.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1697717406018.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1697717408472.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1697717617831.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1698664745440.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1699527185621.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1699800550476.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1699986935340.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1699988334930.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1700482206978.mp4",
+"../mobile-pics/Pictures/WeiXin/mmexport1702992360752.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1703827774393.mp4",
+"../mobile-pics/Pictures/WeiXin/mmexport1705313298306.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1705421559050.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1705421765891.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1705421871789.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1705421923506.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1708125249993.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1713143147792.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1713275787370.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1713275792001.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1713275805921.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1713275822233.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1713275844957.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1713282768964.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1713416316240.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1718615206455.mp4",
+"../mobile-pics/Pictures/WeiXin/mmexport1723595919823.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848801353.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848803247.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848805167.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848806928.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848808651.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848810398.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848812127.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848813855.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848815519.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848817271.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848819019.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848820704.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848822430.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848824097.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848847710.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848849816.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848852141.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848854017.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848856032.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848858080.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848861459.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848863635.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848865762.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848867793.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848911334.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1723848923064.jpg",
+"../mobile-pics/Pictures/WeiXin/mmexport1724091446812.mp4",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1692410940857.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1697089468877.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1702280726590.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1702450298027.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1702450915828.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1702451058629.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1703048845205.mp4",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1703067762439.mp4",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1704532202512.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1704948543514.mp4",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1704948843279.mp4",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1706946480638.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1710518843573.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1710669506923.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1710669676393.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1710669706459.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1710670026698.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1714217961270.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1714633647172.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1715521698407.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1715698303462.jpg",
+"../mobile-pics/Pictures/WeiXin/wx_camera_1723970932609.mp4",
+];
+
+function getDate(route) {
+  const filename = route.split("/").pop();
+  if (route.startsWith("../mobile-pics/Camera/")) {
+    return filename.split("_")[1];
+  }
+  if (route.startsWith("../mobile-pics/Pictures/WeiXin/")) {
+    let timestamp = "";
+    if (filename.startsWith("mmexport")) {
+      timestamp = filename.split("mmexport").pop().split(".")[0];
+    } else {
+      timestamp = filename.split("_").pop().split(".")[0];
+    }
+    let time = new Date();
+    time.setTime(timestamp);
+    const year = time.getFullYear();
+    const month = String(time.getMonth() + 1).padStart(2, '0');
+    const day = String(time.getDate()).padStart(2, '0');
+    return year + month + day;
+  }
+}
+
+let dateGroups = {};
+
+function formatDate(date) {
+  return date.substr(0, 4) + "-" + date.substr(4, 2) + "-" + date.substr(6, 2);
+}
+
+function prepareDateGroups(img) {
+  const date = getDate(img);
+  dateGroups[Number(date)] = formatDate(date);
+}
+
+const album = document.querySelector("#album");
+
+function appendDateGroups() {
+  let dateList = Object.entries(dateGroups);
+  for (let i = dateList.length - 1; i >= 0; --i) {
+    const date = dateList[i][1];
+    let dateGroup = album.querySelector(".date-" + date);
+    if (!dateGroup) {
+      dateGroup = document.createElement("div");
+      dateGroup.className = "date-group date-" + date;
+      dateGroup.innerHTML = "<div class='date-group-title'>" + date + "</div>";
+      album.append(dateGroup);
+    }
+  }
+}
+
+function appendImg(img) {
+  const date = getDate(img);
+  let dateGroup = album.querySelector(".date-" + formatDate(date));
+  if (!dateGroup) {
+    throw new Error("dateGroup not found");
+  }
+  if (img.endsWith(".jpg")) {
+    dateGroup.innerHTML += "<img src='" + img + "' onclick='inspectImage(\"" + img + "\")'>";
+  } else if (img.endsWith(".mp4")) {
+    dateGroup.innerHTML += "<video controls><source src=\"" + img + "\" type=\"video/mp4\"></video>";
+  }
+}
+
+for (i = 0; i < imgs.length; ++i) {
+  prepareDateGroups(imgs[i]);
+}
+
+appendDateGroups();
+
+for (i = 0; i < imgs.length; ++i) {
+  appendImg(imgs[i]);
+}
+
+function inspectImage(src) {
+  document.body.classList.add("modal-open");
+  document.getElementById('inspectImageWrapper').innerHTML += '<div onclick="quitInspectImage()" style="display: block; position: fixed; top: 0; left: 0; width: 100%; z-index: 1499; height: ' + window.innerHeight + 'px; opacity: 0.8; background: black; filter: brightness(0.1);">' +
+      '</div>' +
+      '<div onclick="quitInspectImage()" style="display: block; position: fixed; top: 0; left: 0; width: 100%; height: ' + window.innerHeight + 'px; z-index: 1500;">' +
+      '<div style="display: flex; width: 100%; height: 100%; align-items: center; justify-content: center;">' +
+      '<img style="max-width: 100%; height: auto; max-height: 100%;" src="' + src + '">' +
+      '</div>' +
+      '</div>';
+}
+
+function quitInspectImage() {
+  document.body.classList.remove("modal-open");
+  document.getElementById('inspectImageWrapper').innerHTML = '';
+}
+  </script>
+</body>
+</html>
