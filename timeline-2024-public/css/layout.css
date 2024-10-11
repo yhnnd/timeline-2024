@@ -161,3 +161,24 @@ pre del * {
     max-height: 100vh;
     overflow: hidden;
 }
+
+@media print {
+    .no-print,
+    .no-print *,
+    .fake-navbar,
+    .fake-navbar *,
+    .global-navbar,
+    .global-navbar *,
+    .footer,
+    .footer * {
+        display: none !important;
+    }
+
+    .container {
+        margin-bottom: 0 !important;
+    }
+
+    .page {
+        border-color: transparent !important;
+    }
+}
