@@ -1,0 +1,40 @@
+Today is 2024/Oct./11 Friday.
+
+On Tesla's We Robot Event in Los Angeles California, Elon Musk annouced CyberCab, a robotaxi.
+
+How to hide an element when printing a web page?
+
+https://stackoverflow.com/questions/355313/how-do-i-hide-an-element-when-printing-a-web-page
+
+This afternoon the MacBook Air I purchased on Apple Website last month was delivered to GLP I Park phase 3.
+
+``` html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hidden print</title>
+</head>
+<body>
+  <div class="yellow-block no-print">
+    123456
+  </div>
+  <style>
+.yellow-block {
+  width: 400px;
+  height: 400px;
+  background-color: yellow;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+@media print {
+  .no-print, .no-print * {
+    display: none;
+  }
+}
+  </style>
+</body>
+</html>
+```
