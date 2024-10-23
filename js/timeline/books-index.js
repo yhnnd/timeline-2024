@@ -555,8 +555,12 @@ window.books[20].indexList = [
     "@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.10.09.txt",
     "@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.10.10.txt",
     "@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.10.11.txt",
+    "@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.10.14.txt",
     "@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.10.17.txt",
-    "@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.10.18.txt"
+    "@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.10.18.txt",
+    "@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.10.21.txt",
+    "@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.10.22.txt",
+    "@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.10.23.txt",
 ];
 
 // 21 詩 (2024)
