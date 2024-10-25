@@ -719,6 +719,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+async function runSyncFunctions() {
+    const functions = [...arguments];
+    let resultFunction = functions.pop();
+    for (let i = functions.length; i > 0; --i) {
+        const nextFunction = resultFunction;
+        resultFunction = async function () {
+            await functions[i - 1]();
+            return new Promise(function (resolve) {
+                setTimeout(function () {
+                    resolve(nextFunction());
+                });
+            });
+        }
+    }
+    return await resultFunction();
+}
+
 function hideLoading (event) {
     event && event.stopPropagation();
     const loading = document.querySelector(".loading");
