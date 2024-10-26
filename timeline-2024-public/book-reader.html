@@ -28,6 +28,18 @@
     </div>
     <div class="desktop" style="display: none; width: 100%; gap: 20px;">
         <div class="left" style="display: flex; width: 100%; justify-content: end;">
+            <div class="buttons-previous-and-next no-print" style="position: relative;">
+                <div style="position: absolute;left: -360px;top: 20px;">
+                    <button onclick="gotoPrevious()">previous</button>
+                    <button onclick="gotoNext()">next</button>
+                </div>
+            </div>
+            <div class="buttons-previous-and-next no-print" style="position: relative;">
+                <div style="position: absolute;left: -360px;bottom: 20px;">
+                    <button onclick="gotoPrevious()">previous</button>
+                    <button onclick="gotoNext()">next</button>
+                </div>
+            </div>
             <div class="container container-1">
                 <pre></pre>
             </div>
@@ -47,5 +59,71 @@
     <script src="../js/timeline/at-sign-map.js"></script>
     <script src="../js/timeline/book-reader.js"></script>
     <script src="../js/timeline/search.js"></script>
+    <script>
+const currentArticle = {
+    realUrl: getParameter('src'),
+    fakeUrl: getParameter('fakeUrl')
+};
+for (const book of window.books) {
+    if (book === undefined || book.indexList === undefined || !book.indexList.length) {
+        continue;
+    }
+    for (let i = 0; i < book.indexList.length; ++i) {
+        const {fakeUrl, realUrl} = book.indexList[i];
+        if (fakeUrl === currentArticle.fakeUrl) {
+            if (i === 0) {
+                document.querySelectorAll('[onclick="gotoPrevious()"]').forEach(btn => {
+                    btn.setAttribute("disabled", true);
+                });
+            }
+            if (i === book.indexList.length - 1) {
+                document.querySelectorAll('[onclick="gotoNext()"]').forEach(btn => {
+                    btn.setAttribute("disabled", true);
+                });
+            }
+        }
+    }
+}
+
+function gotoPrevious() {
+    const currentArticle = {
+        realUrl: getParameter('src'),
+        fakeUrl: getParameter('fakeUrl')
+    };
+    for (const book of window.books) {
+        if (book === undefined || book.indexList === undefined || !book.indexList.length) {
+            continue;
+        }
+        for (let i = 0; i < book.indexList.length; ++i) {
+            const {fakeUrl, realUrl} = book.indexList[i];
+            if (fakeUrl === currentArticle.fakeUrl) {
+                if (i > 0) {
+                    window.open("book-reader.html?src=" + book.indexList[i - 1].realUrl + "&fakeUrl=" + book.indexList[i - 1].fakeUrl + "&from=" + getParameter("from"), "_self");
+                }
+            }
+        }
+    }
+}
+
+function gotoNext() {
+    const currentArticle = {
+        realUrl: getParameter('src'),
+        fakeUrl: getParameter('fakeUrl')
+    };
+    for (const book of window.books) {
+        if (book === undefined || book.indexList === undefined || !book.indexList.length) {
+            continue;
+        }
+        for (let i = 0; i < book.indexList.length; ++i) {
+            const {fakeUrl, realUrl} = book.indexList[i];
+            if (fakeUrl === currentArticle.fakeUrl) {
+                if (i < book.indexList.length - 1) {
+                    window.open("book-reader.html?src=" + book.indexList[i + 1].realUrl + "&fakeUrl=" + book.indexList[i + 1].fakeUrl + "&from=" + getParameter("from"), "_self");
+                }
+            }
+        }
+    }
+}
+    </script>
 </body>
 </html>

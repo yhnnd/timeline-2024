@@ -257,6 +257,18 @@ function goBack() {
     }
     if (window.location.pathname.endsWith("/book.html")) {
         window.open("index.html", "_self");
+    } else if (window.location.pathname.endsWith("/index-articles.html")) {
+        window.open("index.html", "_self");
+    } else if (window.location.pathname.endsWith("/index-places.html")) {
+        window.open("index.html", "_self");
+    } else if (window.location.pathname.endsWith("/index-names.html")) {
+        window.open("index.html", "_self");
+    } else if (window.location.pathname.endsWith("/index-alias.html")) {
+        window.open("index.html", "_self");
+    } else if (window.location.pathname.endsWith("/album-2023.html")) {
+        window.open("index.html", "_self");
+    } else if (!["null", "undefined", null, undefined].includes(getParameter("from"))) {
+        window.open(getParameter("from"), "_self");
     } else {
         history.back();
     }
@@ -591,6 +603,18 @@ display: none;
                     </div>
                 </div>
             </li>
+            <!-- 21 -->
+            <li>
+                <div class="settings-item">
+                    <div>
+                        <code>21</code>
+                        <span>Enable Button Previous &amp; Button Next</span>
+                    </div>
+                    <div class="ios-button" data-key="enable-button-previous-and-button-next">
+                        <div class="ios-button-circle"></div>
+                    </div>
+                </div>
+            </li>
         </ul>
     </li>
 </ul>`;
@@ -617,6 +641,13 @@ function hideSettings(btn) {
     btn.setAttribute("onclick", "showSettings(this)");
     document.querySelector(".settings-2").parentElement.style.display = "none";
     document.body.classList.remove("modal-open");
+}
+
+function getParameter(name) {
+    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    let r = window.location.search.substr(1).match(reg);
+    if (r) return decodeURIComponent(r[2]);
+    return null;
 }
 
 function initNavbar() {
@@ -651,13 +682,6 @@ function initNavbar() {
 
     for (const [key, value] of Object.entries(localStorage)) {
         document.body.setAttribute("data-value-of-" + key, value);
-    }
-
-    function getParameter(name) {
-        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        let r = window.location.search.substr(1).match(reg);
-        if (r) return decodeURIComponent(r[2]);
-        return null;
     }
 
     for (const key of ["is-iframe", "is-preview"]) {

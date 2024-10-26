@@ -342,3 +342,11 @@ body[data-value-of-enable-no-backdrop="true"] .container-2 .video-wrapper video 
 body[data-value-of-enable-no-backdrop="true"] .container-2 .video-wrapper .backdrop-filter {
     display: none;
 }
+
+body[data-value-of-enable-button-previous-and-button-next="true"] .buttons-previous-and-next {
+    display: block;
+}
+
+body[data-value-of-enable-button-previous-and-button-next="false"] .buttons-previous-and-next {
+    display: none;
+}
