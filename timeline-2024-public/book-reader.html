@@ -64,13 +64,15 @@ const currentArticle = {
     realUrl: getParameter('src'),
     fakeUrl: getParameter('fakeUrl')
 };
+let isArticleIndexValid = false;
 for (const book of window.books) {
     if (book === undefined || book.indexList === undefined || !book.indexList.length) {
         continue;
     }
     for (let i = 0; i < book.indexList.length; ++i) {
         const {fakeUrl, realUrl} = book.indexList[i];
-        if (fakeUrl === currentArticle.fakeUrl) {
+        if (realUrl === currentArticle.realUrl || fakeUrl === currentArticle.fakeUrl) {
+            isArticleIndexValid = true;
             if (i === 0) {
                 document.querySelectorAll('[onclick="gotoPrevious()"]').forEach(btn => {
                     btn.setAttribute("disabled", true);
@@ -83,6 +85,14 @@ for (const book of window.books) {
             }
         }
     }
+}
+if (!isArticleIndexValid) {
+    document.querySelectorAll('[onclick="gotoPrevious()"]').forEach(btn => {
+        btn.setAttribute("disabled", true);
+    });
+    document.querySelectorAll('[onclick="gotoNext()"]').forEach(btn => {
+        btn.setAttribute("disabled", true);
+    });
 }
 
 function gotoPrevious() {
