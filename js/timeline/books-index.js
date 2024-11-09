@@ -516,6 +516,7 @@ window.books[18] = {};
 window.books[18].indexList = [
     "@2024/yhnnd.wordpress.com/18-letters-to-patrick-wang-致王震書/2024.07.11.txt", /* 1 */
     "@2024/yhnnd.wordpress.com/18-letters-to-patrick-wang-致王震書/2024.07.17.txt", /* 2 */
+    "@2024/yhnnd.wordpress.com/18-letters-to-patrick-wang-致王震書/2024.11.09.txt", /* 3 */
 ];
 
 // 19 王震來信2 (2024)
