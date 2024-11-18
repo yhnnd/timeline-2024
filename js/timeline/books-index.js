@@ -526,6 +526,7 @@ window.books[19].indexList = [
     "@2024/yhnnd.wordpress.com/19-letters-from-patrick-wang-王震來信/2024.07.25.txt", /* 1 */
     "@2024/yhnnd.wordpress.com/19-letters-from-patrick-wang-王震來信/2024.07.31.txt", /* 2 */
     "@2024/yhnnd.wordpress.com/19-letters-from-patrick-wang-王震來信/2024.08.02.txt", /* 3 */
+    "@2024/yhnnd.wordpress.com/19-letters-from-patrick-wang-王震來信/2024.11.18.txt", /* 4 */
 ];
 
 // 20 出路 5 (2024)
@@ -579,6 +580,8 @@ window.books[20].indexList = [
     "@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.11.14.txt",
     "@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.11.15.txt",
     "@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.11.16.txt",
+    "@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.11.17.txt",
+    "@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.11.18.txt",
 ];
 
 // 21 詩 (2024)
