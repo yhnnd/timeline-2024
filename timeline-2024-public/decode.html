@@ -24,9 +24,7 @@
       if (temp.startsWith(url)) {
         temp = temp.substr(url.length);
       }
-      document.querySelector("#content").innerHTML = temp.split("$").map(line => {
-        return line.split("+").map(decode).join(" ");
-      }).join("\n");
+      document.querySelector("#content").innerHTML = temp.split(encodeURIComponent("\n")).map(decode).join("\n");
     }
 
     function decode(fragment) {
