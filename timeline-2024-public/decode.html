@@ -10,9 +10,6 @@
     <pre style="width: 800px; font-size: 1.5rem; white-space: pre-wrap; word-break: break-all;" id="content"></pre>
   </div>
   <script>
-    const defaultUrl = "https://yhnnd.github.io/timeline-2024/timeline-2024-public/decode.html?content=";
-    const url = window.location.origin + window.location.pathname + "?content=";
-
     function getParameter(name) {
       let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
       let r = window.location.search.substr(1).match(reg);
@@ -22,11 +19,6 @@
 
     function decrypt(val) {
       let temp = val;
-      if (temp.startsWith(defaultUrl)) {
-        temp = temp.substr(defaultUrl.length);
-      } else if (temp.startsWith(url)) {
-        temp = temp.substr(url.length);
-      }
       document.querySelector("#content").innerHTML = temp.split("\n").map(decode).join("\n");
     }
 
