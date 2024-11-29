@@ -22,7 +22,12 @@ Ignore Tokens: <input id="tokens">
   </div>
   <script>
     tokens.value = [];
-    let url = "https://yhnnd.github.io/timeline-2024/timeline-2024-public/decode.html?content=";
+    function getDecodeUrl() {
+      let breadcrumbs = window.location.pathname.split("/");
+      breadcrumbs.pop();
+      return window.location.origin + breadcrumbs.join("/") + "/decode.html";
+    }
+    const url = getDecodeUrl() + "?content=";
     function isLegal(fragment) {
       for (const token of tokens.value) {
         if (token.length && fragment.includes(token)) {
