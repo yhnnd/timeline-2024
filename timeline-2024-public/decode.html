@@ -1,0 +1,112 @@
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Decode</title>
+</head>
+
+<body>
+  <div style="display: flex; justify-content: center; margin-bottom: 200px;">
+    <pre style="width: 800px; font-size: 1.5rem;" id="content"></pre>
+  </div>
+  <script>
+    let url = "https://yhnnd.github.io/timeline-2024/timeline-2024-public/decode.html?content=";
+
+    function getParameter(name) {
+      let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+      let r = window.location.search.substr(1).match(reg);
+      if (r) return decodeURIComponent(r[2]);
+      return null;
+    }
+
+    function decrypt(val) {
+      let temp = val;
+      if (temp.startsWith(url)) {
+        temp = temp.substr(url.length);
+      }
+      document.querySelector("#content").innerHTML = temp.split("$").map(line => {
+        return line.split("+").map(decode).join(" ");
+      }).join("\n");
+    }
+
+    function decode(fragment) {
+      if (fragment.length) {
+        const segments = [];
+        let tempZh = "", tempEn = "", isInZh = false, isInEn = false;
+        for (let i = 0; i < fragment.length; ++i) {
+          const ch = fragment[i];
+          if (ch === "<") {
+            if (isInZh) {
+              segments.push({
+                text: tempZh,
+                isZh: true
+              });
+              tempZh = "";
+            }
+            isInEn = true;
+            isInZh = false;
+            tempEn = "";
+          } else if (ch === ">") {
+            if (isInEn) {
+              segments.push({
+                text: tempEn,
+                isEn: true
+              });
+              tempEn = "";
+            }
+            isInEn = false;
+            isInZh = true;
+            tempZh = "";
+          } else {
+            if (!isInEn && !isInZh) {
+              isInZh = true;
+              tempZh = ch;
+            } else if (isInZh) {
+              tempZh += ch;
+            } else if (isInEn) {
+              tempEn += ch;
+            }
+          }
+        }
+        if (tempZh.length) {
+          segments.push({
+            text: tempZh,
+            isZh: true
+          });
+        }
+        let result = "";
+        for (const segment of segments) {
+          if (segment.isEn) {
+            result += segment.text;
+          } else if (segment.isZh) {
+            result += (function (segment) {
+              const encodedZh = segment.text;
+              let handle = "";
+              for (let i = 0; i < encodedZh.length; ++i) {
+                if (i % 2 === 0) {
+                  handle += "%";
+                }
+                handle += encodedZh[i];
+              }
+              let decodedZh = "";
+              try {
+                decodedZh = decodeURIComponent(handle);
+              } catch {
+                return encodedZh;
+              }
+              return decodedZh;
+            })(segment);
+          }
+        }
+        return result;
+      }
+      return fragment;
+    }
+
+    window.onload = function () {
+      decrypt(getParameter("content"));
+    };
+  </script>
+</body>
+
+</html>
