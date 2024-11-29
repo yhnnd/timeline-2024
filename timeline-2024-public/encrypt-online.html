@@ -107,14 +107,12 @@ Ignore Tokens: <input id="tokens">
       return result;
     }
     function encrypt() {
-      editorB.value = url + editorA.value.split('\n').map(line => {
-        return line.split(" ").map(fragment => {
-          if (isLegal(fragment) && encodeURIComponent(fragment) !== fragment) {
-            fragment = encode(fragment);
-          }
-          return fragment
-        }).join("+")
-      }).join('$')
+      editorB.value = url + editorA.value.split("\n").map(fragment => {
+        if (isLegal(fragment) && encodeURIComponent(fragment) !== fragment) {
+          fragment = encode(fragment);
+        }
+        return fragment;
+      }).join(encodeURIComponent("\n"));
     }
     function swap() {
       const tempA = editorA.value
@@ -126,9 +124,7 @@ Ignore Tokens: <input id="tokens">
       if (temp.startsWith(url)) {
         temp = temp.substr(url.length);
       }
-      editorB.value = temp.split("$").map(line => {
-        return line.split("+").map(decode).join(" ");
-      }).join("\n");
+      editorB.value = temp.split(encodeURIComponent("\n")).map(decode).join("\n");
     }
     function decode(fragment) {
       if (fragment.length) {
