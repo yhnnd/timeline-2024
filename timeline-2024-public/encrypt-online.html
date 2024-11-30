@@ -127,7 +127,9 @@
 
     function encrypt() {
       editorB.value = url + editorA.value.split("\n").map(fragment => {
-        if (isLegal(fragment) && encodeURIComponent(fragment) !== fragment) {
+        if (!fragment) {
+          fragment = "";
+        } else if (isLegal(fragment) && encodeURIComponent(fragment) !== fragment) {
           fragment = encode(fragment);
         } else {
           fragment = "<" + fragment + ">";
