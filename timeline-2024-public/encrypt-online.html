@@ -21,6 +21,9 @@
   <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="decrypt()">Decrypt</button>
 </div>
 <textarea style="width: 100%; min-height: 400px; height: max-content;" id="editorB"></textarea>
+<div style="display: flex; align-items: center; justify-content: end; gap: 10px;">
+  <input id="urlLength" disabled style="background-color: transparent; border: none;"></input>
+</div>
 </pre>
   </div>
   <script>
@@ -121,7 +124,11 @@
           fragment = encode(fragment);
         }
         return fragment;
-      }).join(encodeURIComponent("\n")) + "&fontsize=" + fontSize.value;
+      }).join(encodeURIComponent("\n"));
+      if (fontSize.value) {
+        editorB.value = editorB.value + "&fontsize=" + fontSize.value;
+      }
+      urlLength.value = editorB.value.length + " characters";
     }
     function swap() {
       const tempA = editorA.value
