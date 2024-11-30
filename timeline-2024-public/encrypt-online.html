@@ -127,7 +127,7 @@
     }
 
     function encrypt() {
-      editorB.value = url + editorA.value.split("\n").map(fragment => {
+      let content = editorA.value.split("\n").map(fragment => {
         if (!fragment) {
           fragment = "";
         } else if (isLegal(fragment) && encodeURIComponent(fragment) !== fragment) {
@@ -137,6 +137,9 @@
         }
         return fragment;
       }).join(encodeURIComponent("\n"));
+      content = content.replaceAll("<", "%3C");
+      content = content.replaceAll(">", "%3E");
+      editorB.value = url + content;
       if (fontSize.value) {
         editorB.value = editorB.value + "&fontsize=" + fontSize.value;
       }
