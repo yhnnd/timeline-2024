@@ -19,6 +19,8 @@
 
     function decrypt(val) {
       let temp = val;
+      temp = temp.replaceAll("%0G", "(");
+      temp = temp.replaceAll("%0H", ")");
       document.querySelector("#content").innerHTML = temp.split("\n").map(decode).join("\n");
     }
 
