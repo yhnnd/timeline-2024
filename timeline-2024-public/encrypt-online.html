@@ -29,12 +29,15 @@
   <script>
     tokens.value = [];
     fontSize.value = "32px";
+
     function getDecodeUrl() {
       let breadcrumbs = window.location.pathname.split("/");
       breadcrumbs.pop();
       return window.location.origin + breadcrumbs.join("/") + "/decode.html";
     }
+
     const url = getDecodeUrl() + "?content=";
+
     function isLegal(fragment) {
       for (const token of tokens.value) {
         if (token.length && fragment.includes(token)) {
@@ -43,12 +46,15 @@
       }
       return true;
     }
+
     function isAlpha(ch) {
       return /^[A-Z]$/i.test(ch);
     }
+
     function isDigit(str) {
       return /^\d+$/.test(str);
     }
+
     function encode(fragment) { // split Zh and alpha/digit
       const segments = [];
       let tempZh = "", tempAlphaOrDigit = "";
@@ -118,10 +124,13 @@
       }
       return result;
     }
+
     function encrypt() {
       editorB.value = url + editorA.value.split("\n").map(fragment => {
         if (isLegal(fragment) && encodeURIComponent(fragment) !== fragment) {
           fragment = encode(fragment);
+        } else {
+          fragment = "<" + fragment + ">";
         }
         return fragment;
       }).join(encodeURIComponent("\n"));
@@ -130,18 +139,26 @@
       }
       urlLength.value = editorB.value.length + " characters";
     }
+
     function swap() {
       const tempA = editorA.value
       editorA.value = editorB.value
       editorB.value = tempA
+      urlLength.value = editorB.value.length + " characters";
     }
+
     function decrypt() {
       let temp = editorA.value;
       if (temp.startsWith(url)) {
         temp = temp.substr(url.length);
       }
+      if (temp.includes("&")) {
+        temp = temp.split("&")[0];
+      }
       editorB.value = temp.split(encodeURIComponent("\n")).map(decode).join("\n");
+      urlLength.value = editorB.value.length + " characters";
     }
+
     function decode(fragment) {
       if (fragment.length) {
         const segments = [];
