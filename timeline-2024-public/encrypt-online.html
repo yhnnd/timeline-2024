@@ -9,7 +9,10 @@
   <div style="display: flex; justify-content: center; margin-bottom: 200px;">
     <pre style="width: 800px;"><h1>Encrypt Tools</h1>
 
-Ignore Tokens: <input id="tokens">
+<div style="display: flex; align-items: center; gap: 10px;">
+  <span>Ignore Tokens:</span><input id="tokens" style="display: inline-block;">
+  <span>Font Size:</span><input id="fontSize">
+</div>
 
 <textarea style="width: 100%; min-height: 400px; height: max-content;" id="editorA"></textarea>
 <div style="display: flex; gap: 10px;">
@@ -22,6 +25,7 @@ Ignore Tokens: <input id="tokens">
   </div>
   <script>
     tokens.value = [];
+    fontSize.value = "32px";
     function getDecodeUrl() {
       let breadcrumbs = window.location.pathname.split("/");
       breadcrumbs.pop();
@@ -117,7 +121,7 @@ Ignore Tokens: <input id="tokens">
           fragment = encode(fragment);
         }
         return fragment;
-      }).join(encodeURIComponent("\n"));
+      }).join(encodeURIComponent("\n")) + "&fontsize=" + fontSize.value;
     }
     function swap() {
       const tempA = editorA.value
