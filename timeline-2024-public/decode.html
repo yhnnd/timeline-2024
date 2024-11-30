@@ -12,15 +12,18 @@
   <script>
     function getParameter(name) {
       let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-      let r = window.location.search.substr(1).match(reg);
-      if (r) return decodeURIComponent(r[2]);
+      let temp = window.location.search.substr(1);
+      temp = temp.replaceAll("%0G", "(");
+      temp = temp.replaceAll("%0H", ")");
+      let r = temp.match(reg);
+      if (r) {
+        return decodeURIComponent(r[2]);
+      }
       return null;
     }
 
     function decrypt(val) {
       let temp = val;
-      temp = temp.replaceAll("%0G", "(");
-      temp = temp.replaceAll("%0H", ")");
       document.querySelector("#content").innerHTML = temp.split("\n").map(decode).join("\n");
     }
 
