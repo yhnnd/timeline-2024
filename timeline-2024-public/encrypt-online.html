@@ -139,6 +139,8 @@
       }).join(encodeURIComponent("\n"));
       content = content.replaceAll("<", "%3C");
       content = content.replaceAll(">", "%3E");
+      content = content.replaceAll("(", "%0G");
+      content = content.replaceAll(")", "%0H");
       editorB.value = url + content;
       if (fontSize.value) {
         editorB.value = editorB.value + "&fontsize=" + fontSize.value;
@@ -165,6 +167,8 @@
       }
       temp = temp.replaceAll("%3C", "<");
       temp = temp.replaceAll("%3E", ">");
+      temp = temp.replaceAll("%0G", "(");
+      temp = temp.replaceAll("%0H", ")");
       editorB.value = temp.split(encodeURIComponent("\n")).map(decode).join("\n");
       urlLength.value = editorB.value.length + " characters";
     }
