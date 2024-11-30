@@ -37,6 +37,7 @@
     }
 
     const url = getDecodeUrl() + "?content=";
+    const defaultUrl = "https://yhnnd.github.io/timeline-2024/timeline-2024-public/decode.html?content=";
 
     function isLegal(fragment) {
       for (const token of tokens.value) {
@@ -153,10 +154,14 @@
       let temp = editorA.value;
       if (temp.startsWith(url)) {
         temp = temp.substr(url.length);
+      } else if (temp.startsWith(defaultUrl)) {
+        temp = temp.substr(defaultUrl.length);
       }
       if (temp.includes("&")) {
         temp = temp.split("&")[0];
       }
+      temp = temp.replaceAll("%3C", "<");
+      temp = temp.replaceAll("%3E", ">");
       editorB.value = temp.split(encodeURIComponent("\n")).map(decode).join("\n");
       urlLength.value = editorB.value.length + " characters";
     }
