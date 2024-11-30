@@ -97,7 +97,14 @@
     }
 
     window.onload = function () {
-      decrypt(getParameter("content"));
+      let content = getParameter("content");
+      if (content) {
+        decrypt(content);
+      }
+      let fontSize = getParameter("fontsize");
+      if (fontSize) {
+        document.querySelector("#content").style.fontSize = fontSize;
+      }
     };
   </script>
 </body>
