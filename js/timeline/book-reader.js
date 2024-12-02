@@ -536,6 +536,8 @@ function renderArticle(src, containerClassName, container2ClassName) {
                     decryptedText.style.position = "absolute";
                     decryptedText.style.top = "0";
                     decryptedText.style.left = "0";
+                    decryptedText.style.width = "100%";
+                    decryptedText.style.height = "100%";
                     decryptedText.innerHTML = decrypt(line);
                     span.append(decryptedText);
                     return span.outerHTML;
