@@ -528,7 +528,16 @@ function renderArticle(src, containerClassName, container2ClassName) {
                     span.setAttribute("to", segment);
                     span.style.width = "100%";
                     span.style.position = "relative";
-                    span.innerHTML = "<div style='opacity: 0.1;'>" + line + "</div><div style='position: absolute; top: 0; left: 0;'>" + decrypt(line) + "</div>";
+                    const ogText = document.createElement("div");
+                    ogText.style.opacity = "0.1";
+                    ogText.innerHTML = line;
+                    span.append(ogText);
+                    const decryptedText = document.createElement("div");
+                    decryptedText.style.position = "absolute";
+                    decryptedText.style.top = "0";
+                    decryptedText.style.left = "0";
+                    decryptedText.innerHTML = decrypt(line);
+                    span.append(decryptedText);
                     return span.outerHTML;
                 } else if (line.includes("https://")) {
                     line = line.split(" ").map(segment => {
