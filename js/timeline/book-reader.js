@@ -369,7 +369,7 @@ function renderArticle(src, containerClassName, container2ClassName) {
                             isAbortLoadingImgs = true;
                         }
                     }
-                    return "@image " + window.parseFakeUrl(line, { fakeUrl: getParameter("fakeUrl") || getParameter("src") });
+                    return "@image " + window.parseFakeUrl(line, { fakeUrl: getParameter("fakeUrl"), realUrl: getParameter("src") });
                 }
                 if (line.startsWith("<div") && line.endsWith(">")) {
                     return "@div_start " + line;
@@ -487,7 +487,7 @@ function renderArticle(src, containerClassName, container2ClassName) {
                     const wrapperOpen = '<div class="video-wrapper">';
                     const covers = '<div class="backdrop-filter blur"></div><div class="backdrop-filter white"></div><div class="cover">' + line + '</div>';
                     const videoOpen = '<video width="100%" ' + parameters.join(" ") + ' style="width: 100%;">';
-                    const source = '<source src="' + window.parseFakeUrl(src, { fakeUrl: getParameter("fakeUrl") || getParameter("src") }) + '" type="video/' + fileType + '">'; // <source src="resources/35_1713060169.mp4" type="video/mp4">
+                    const source = '<source src="' + window.parseFakeUrl(src, { fakeUrl: getParameter("fakeUrl"), realUrl: getParameter("src") }) + '" type="video/' + fileType + '">'; // <source src="resources/35_1713060169.mp4" type="video/mp4">
                     const videoClose = '</video>';
                     const wrapperClose = '</div>';
                     return wrapperOpen + covers + videoOpen + source + videoClose + wrapperClose;
