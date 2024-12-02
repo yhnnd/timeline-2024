@@ -624,10 +624,19 @@ window.localRepositoryKey = "@2024/";
 
 window.parseFakeUrl = function (line, configs) {
     let repository = "";
-    for (const key of Object.keys(window.repositoryMap)) {
-        if (configs.fakeUrl.includes(key)) {
-            repository = window.repositoryMap[key];
-            break;
+    if (configs.fakeUrl) {
+        for (const [key, value] of Object.entries(window.repositoryMap)) {
+            if (configs.fakeUrl.startsWith(key)) {
+                repository = value;
+                break;
+            }
+        }
+    } else if (configs.realUrl) {
+        for (const [key, value] of Object.entries(window.repositoryMap)) {
+            if (configs.realUrl.startsWith(value)) {
+                repository = value;
+                break;
+            }
         }
     }
     if (!repository) {
