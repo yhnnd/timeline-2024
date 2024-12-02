@@ -637,7 +637,7 @@ function renderArticle(src, containerClassName, container2ClassName) {
                 const title = document.createElement("div");
                 title.classList = "title";
                 const url = getParameter("fakeUrl") || getParameter("src");
-                const segments = url.split("/").slice(1);
+                const segments = url.split("/").filter(seg => seg.length).slice(1);
                 title.innerHTML = "<span class='badge'>" + segments.join("</span>&nbsp;/&nbsp;<span class='badge'>") + "</span>";
                 const folderIndex = segments.length - 2;
                 const badgeList = title.querySelectorAll(".badge");
