@@ -338,7 +338,8 @@ body[data-value-of-enable-dual-article-container="true"] .right {
     z-index: 10;
 }
 
-body[data-value-of-enable-no-backdrop="true"] .container-2 .video-wrapper video {
+body[data-value-of-enable-no-backdrop="true"] .container-2 .video-wrapper video,
+body[data-value-of-enable-no-backdrop="true"] .container-1 .link[type="decode-url"] .og-text {
     visibility: hidden;
 }
 
