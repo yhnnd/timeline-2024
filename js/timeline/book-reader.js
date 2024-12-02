@@ -525,7 +525,7 @@ function renderArticle(src, containerClassName, container2ClassName) {
                     span.classList = "link";
                     span.setAttribute("type", "url-text");
                     span.setAttribute("onclick", "openLink(event)");
-                    span.setAttribute("to", segment);
+                    span.setAttribute("to", line);
                     span.style.width = "100%";
                     span.style.position = "relative";
                     const ogText = document.createElement("div");
