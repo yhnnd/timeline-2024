@@ -523,7 +523,7 @@ function renderArticle(src, containerClassName, container2ClassName) {
                 if (line.startsWith(decodeUrl) || line.startsWith(defaultDecodeUrl)) {
                     const span = document.createElement("span");
                     span.classList = "link";
-                    span.setAttribute("type", "url-text");
+                    span.setAttribute("type", "decode-url");
                     span.setAttribute("onclick", "openLink(event)");
                     span.setAttribute("to", line);
                     span.style.width = "100%";
@@ -539,6 +539,8 @@ function renderArticle(src, containerClassName, container2ClassName) {
                     decryptedText.style.width = "100%";
                     decryptedText.style.height = "100%";
                     decryptedText.innerHTML = decrypt(line);
+                    decryptedText.setAttribute("onclick", "openLink(event)");
+                    decryptedText.setAttribute("to", line);
                     span.append(decryptedText);
                     return span.outerHTML;
                 } else if (line.includes("https://")) {
@@ -763,6 +765,8 @@ body[data-value-of-enable-hover-highlight-img="true"]:has([random-id="${randomId
                     text.setAttribute("onclick", "revealOuterHTML(this)");
                 } else if (link.getAttribute("type") === "url-text") { // url-text
                     text.innerHTML = link.innerHTML;
+                } else if (link.getAttribute("type") === "decode-url") { // decode-url
+                    text.innerHTML = link.getAttribute("to");
                 } else {
                     text.style.color = "var(--studio-red)";
                     text.innerHTML = link.innerHTML;
