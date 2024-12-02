@@ -227,6 +227,106 @@ function decode(fragment) {
     return fragment;
 }
 
+function getDecodeUrl() {
+  let breadcrumbs = window.location.pathname.split("/");
+  breadcrumbs.pop();
+  return window.location.origin + breadcrumbs.join("/") + "/decode.html";
+}
+
+const decodeUrl = getDecodeUrl() + "?content=";
+const defaultDecodeUrl = "https://yhnnd.github.io/timeline-2024/timeline-2024-public/decode.html?content=";
+
+function decrypt(value) {
+    let temp = value;
+    if (temp.startsWith(decodeUrl)) {
+        temp = temp.substr(decodeUrl.length);
+    } else if (temp.startsWith(defaultDecodeUrl)) {
+        temp = temp.substr(defaultDecodeUrl.length);
+    }
+    if (temp.includes("&")) {
+        temp = temp.split("&")[0];
+    }
+    temp = temp.replaceAll("%3C", "<");
+    temp = temp.replaceAll("%3E", ">");
+    temp = temp.replaceAll("%0G", "(");
+    temp = temp.replaceAll("%0H", ")");
+    return temp.split(encodeURIComponent("\n")).map(decodeOnline).join("\n");
+}
+
+function decodeOnline(fragment) {
+    if (!fragment.length) {
+        return fragment;
+    }
+    const segments = [];
+    let tempZh = "", tempEn = "", isInZh = false, isInEn = false;
+    for (let i = 0; i < fragment.length; ++i) {
+        const ch = fragment[i];
+        if (ch === "<") {
+            if (isInZh) {
+                segments.push({
+                    text: tempZh,
+                    isZh: true
+                });
+                tempZh = "";
+            }
+            isInEn = true;
+            isInZh = false;
+            tempEn = "";
+        } else if (ch === ">") {
+            if (isInEn) {
+                segments.push({
+                    text: tempEn,
+                    isEn: true
+                });
+                tempEn = "";
+            }
+            isInEn = false;
+            isInZh = true;
+            tempZh = "";
+        } else {
+            if (!isInEn && !isInZh) {
+                isInZh = true;
+                tempZh = ch;
+            } else if (isInZh) {
+                tempZh += ch;
+            } else if (isInEn) {
+                tempEn += ch;
+            }
+        }
+    }
+    if (tempZh.length) {
+        segments.push({
+            text: tempZh,
+            isZh: true
+        });
+    }
+    let result = "";
+    for (const segment of segments) {
+        if (segment.isEn) {
+            result += segment.text;
+        } else if (segment.isZh) {
+            result += (function (segment) {
+                const encodedZh = segment.text;
+                let handle = "";
+                for (let i = 0; i < encodedZh.length; ++i) {
+                    if (i % 2 === 0) {
+                        handle += "%";
+                    }
+                    handle += encodedZh[i];
+                }
+                let decodedZh = "";
+                try {
+                    decodedZh = decodeURIComponent(handle);
+                } catch {
+                    return encodedZh;
+                }
+                return decodedZh;
+            })(segment);
+        }
+    }
+    return result;
+}
+
 function renderArticle(src, containerClassName, container2ClassName) {
     ajax(src, undefined, function (responseText) {
         responseText = responseText.split("\n").map(line => {
@@ -420,7 +520,17 @@ function renderArticle(src, containerClassName, container2ClassName) {
 
         if (localStorage.getItem("enable-url-recognition") === "true") {
             responseText = responseText.split("\n").map(line => {
-                if (line.includes("https://")) {
+                if (line.startsWith(decodeUrl) || line.startsWith(defaultDecodeUrl)) {
+                    const span = document.createElement("span");
+                    span.classList = "link";
+                    span.setAttribute("type", "url-text");
+                    span.setAttribute("onclick", "openLink(event)");
+                    span.setAttribute("to", segment);
+                    span.style.width = "100%";
+                    span.style.position = "relative";
+                    span.innerHTML = "<div style='opacity: 0.1;'>" + line + "</div><div style='position: absolute; top: 0; left: 0;'>" + decrypt(line) + "</div>";
+                    return span.outerHTML;
+                } else if (line.includes("https://")) {
                     line = line.split(" ").map(segment => {
                         if (segment.startsWith("https://")) {
                             const span = document.createElement("span");
