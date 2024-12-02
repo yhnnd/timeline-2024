@@ -228,9 +228,9 @@ function decode(fragment) {
 }
 
 function getDecodeUrl() {
-  let breadcrumbs = window.location.pathname.split("/");
-  breadcrumbs.pop();
-  return window.location.origin + breadcrumbs.join("/") + "/decode.html";
+    let breadcrumbs = window.location.pathname.split("/");
+    breadcrumbs.pop();
+    return window.location.origin + breadcrumbs.join("/") + "/decode.html";
 }
 
 const decodeUrl = getDecodeUrl() + "?content=";
@@ -534,7 +534,11 @@ function renderArticle(src, containerClassName, container2ClassName) {
                     span.append(ogText);
                     const decryptedText = document.createElement("div");
                     decryptedText.classList = "decrypted-text";
-                    decryptedText.innerHTML = decrypt(line);
+                    if (localStorage.getItem("enable-line-split") === "true") {
+                        decryptedText.innerHTML = decrypt(line).replaceAll("\n", "<br>");
+                    } else {
+                        decryptedText.innerHTML = decrypt(line);
+                    }
                     decryptedText.setAttribute("onclick", "openLink(event)");
                     decryptedText.setAttribute("to", line);
                     span.append(decryptedText);
