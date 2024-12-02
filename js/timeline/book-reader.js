@@ -529,15 +529,11 @@ function renderArticle(src, containerClassName, container2ClassName) {
                     span.style.width = "100%";
                     span.style.position = "relative";
                     const ogText = document.createElement("div");
-                    ogText.style.opacity = "0.1";
+                    ogText.classList = "og-text";
                     ogText.innerHTML = line;
                     span.append(ogText);
                     const decryptedText = document.createElement("div");
-                    decryptedText.style.position = "absolute";
-                    decryptedText.style.top = "0";
-                    decryptedText.style.left = "0";
-                    decryptedText.style.width = "100%";
-                    decryptedText.style.height = "100%";
+                    decryptedText.classList = "decrypted-text";
                     decryptedText.innerHTML = decrypt(line);
                     decryptedText.setAttribute("onclick", "openLink(event)");
                     decryptedText.setAttribute("to", line);
