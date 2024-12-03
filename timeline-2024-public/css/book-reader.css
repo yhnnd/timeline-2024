@@ -37,7 +37,7 @@ pre {
     width: 512px;
     max-width: 100%;
     white-space: pre-wrap;
-    word-break: break-all;
+    word-break: break-word;
     word-wrap: break-word;
     font-family: Menlo, Monaco, Consolas, "Courier New", "Microsoft YaHei", monospace;
 }
@@ -66,7 +66,7 @@ pre .link {
     position: relative;
     display: inline-block;
     white-space: pre-wrap;
-    word-break: break-all;
+    word-break: break-word;
 }
 
 pre .name-link::before,
@@ -96,6 +96,12 @@ pre .link:hover::before {
 
 pre .link[type="decode-url"] .og-text {
     opacity: 0.1;
+}
+
+pre .og-text,
+pre .plain-og-text {
+    white-space: pre-wrap;
+    word-break: break-all;
 }
 
 pre .link[type="decode-url"] .decrypted-text {
