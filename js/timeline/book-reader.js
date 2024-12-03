@@ -767,6 +767,7 @@ body[data-value-of-enable-hover-highlight-img="true"]:has([random-id="${randomId
                     text.innerHTML = link.innerHTML;
                 } else if (link.getAttribute("type") === "decode-url") { // decode-url
                     text.innerHTML = link.getAttribute("to");
+                    text.classList.add("plain-og-text");
                 } else {
                     text.style.color = "var(--studio-red)";
                     text.innerHTML = link.innerHTML;
