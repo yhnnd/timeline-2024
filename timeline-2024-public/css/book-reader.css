@@ -60,19 +60,18 @@ pre .censored {
 }
 
 pre .name-link,
-pre .link {
-    color: var(--studio-blue);
-    cursor: pointer;
-    position: relative;
+pre .link,
+pre .plain-name {
     display: inline-block;
     white-space: pre-wrap;
     word-break: break-word;
 }
 
-pre .plain-name {
-    display: inline-block;
-    white-space: pre-wrap;
-    word-break: break-word;
+pre .name-link,
+pre .link {
+    color: var(--studio-blue);
+    cursor: pointer;
+    position: relative;
 }
 
 pre .name-link::before,
