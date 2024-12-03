@@ -724,7 +724,10 @@ body[data-value-of-enable-hover-highlight-img="true"]:has([random-id="${randomId
             });
             if (localStorage.getItem("enable-name-index") === "true") {
                 container2.querySelectorAll(".name-link").forEach(l => {
-                    l.replaceWith(l.innerText);
+                    const text = document.createElement("span");
+                    text.classList.add("plain-name");
+                    text.innerHTML = l.innerHTML;
+                    l.replaceWith(text);
                 });
             }
             if (localStorage.getItem("enable-border") === "true" && container2.querySelector(".has-border")) {
