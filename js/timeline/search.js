@@ -291,7 +291,7 @@ function doAdvancedSearch(conditions, keywords) {
                     let [timeA, timeB] = condition.value.split("-").map(e => parseInt(e));
                     let isTimeMatched = false;
                     for (let tempTime = timeA; tempTime <= timeB; ++tempTime) {
-                        if (filename.includes(tempTime) || item.text.includes(tempTime)) {
+                        if (filename.includes(tempTime) || item.text.includes(tempTime + " 年") || item.text.includes(tempTime + "年")) {
                             isTimeMatched = true;
                             break;
                         }
@@ -302,7 +302,7 @@ function doAdvancedSearch(conditions, keywords) {
                     }
                 } else {
                     let tempTime = parseInt(condition.value);
-                    if (filename.includes(tempTime) || item.text.includes(tempTime)) {
+                    if (filename.includes(tempTime) || item.text.includes(tempTime + " 年") || item.text.includes(tempTime + "年")) {
                     } else {
                         isMatched = false;
                         break;
@@ -378,6 +378,9 @@ function advancedSearch(conditions) {
 }
 
 function refreshAdvancedSearch() {
+    if (!searchInfo.isReady) {
+        return;
+    }
     const keywordWrapper = document.getElementsByClassName("search-keyword")[0];
     const conditions = [];
     const conditionInputs = keywordWrapper.querySelectorAll("input");
