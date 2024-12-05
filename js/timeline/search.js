@@ -313,7 +313,6 @@ function doAdvancedSearch(conditions, keywords) {
         if (isMatched == true) {
             let link = document.createElement("div");
             link.classList.add("link");
-            link.setAttribute("data-times", times);
             const nameSplit = item.fakeUrl.split("/");
             item.filename = nameSplit.pop();
             item.folder = nameSplit.pop();
