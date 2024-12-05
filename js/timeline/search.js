@@ -265,7 +265,7 @@ function closeSearch() {
 }
 
 function doAdvancedSearch(conditions, keywords) {
-    const resultWrapper = searchWrapper.getElementsByClassName("search-result")[0];
+    const resultWrapper = document.getElementsByClassName("search-result")[0];
     resultWrapper.innerHTML = "";
     for (const item of articles) {
         item.text = item.text.split("\n").map(line => {
@@ -340,10 +340,11 @@ function doAdvancedSearch(conditions, keywords) {
 function advancedSearch(conditions) {
     const searchWrapper = document.getElementsByClassName("search")[0];
     const keywordWrapper = document.getElementsByClassName("search-keyword")[0];
-    const resultWrapper = searchWrapper.getElementsByClassName("search-result")[0];
+    const resultWrapper = document.getElementsByClassName("search-result")[0];
     document.body.classList.add("modal-open");
     searchWrapper.parentElement.classList.add("on");
     const keywords = [];
+    keywordWrapper.innerHTML = "";
     for (const condition of conditions) {
         let conditionInput = document.createElement("input");
         conditionInput.value = condition.value;
