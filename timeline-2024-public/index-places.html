@@ -83,7 +83,7 @@
                         });
                     }
                 }
-                return "<div onclick=\"advancedSearch(" + JSON.stringify(conditions) + ")\">" + line + "</div>";
+                return "<div onclick='advancedSearch(" + JSON.stringify(conditions) + ")'>" + line + "</div>";
             });
             listItem.innerHTML = "<div>" + key + "</div><ul><li>" + lines.join("</li><li>") + "</li></ul>";
             placeList.append(listItem);
