@@ -101,6 +101,7 @@ window.femalePeopleNamesAlphabetMap = {
     K: [
         "康慧",
         "康茂琪",
+        "康Fiona",
         "孔德慧",
         "孔令琪",
     ],
