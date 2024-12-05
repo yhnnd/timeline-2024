@@ -41,6 +41,9 @@
 
     <div class="row single-col" style="margin-top: 10px;margin-bottom: 219px;">
         <div class="col first">
+            <ul id="place-list"></ul>
+        </div>
+        <div class="col">
             <ul>
                 <li>
                     莫尔道嘎
@@ -193,5 +196,34 @@
     <script src="../js/timeline/names.js"></script>
     <script src="../js/timeline/ajax.js"></script>
     <script src="../js/timeline/search.js"></script>
+    <script src="../js/timeline/places.js"></script>
+    <script>
+        function isTime(segment) {
+            return segment.startsWith("19") || segment.startsWith("20");
+        }
+        const placeList = document.getElementById("place-list");
+        for (const [key, places] of Object.entries(window.places)) {
+            const listItem = document.createElement("li");
+            const lines = places.map(place => {
+                const segments = place.split(";");
+                let line = "";
+                for (let i = 0; i < segments.length; ++i) {
+                    const segment = segments[i];
+                    let delim = "、"
+                    if (isTime(segment) || (i > 0 && isTime(segments[i - 1]))) {
+                        delim = " ";
+                    }
+                    if (line.length) {
+                        line = line + delim + segment;
+                    } else {
+                        line = segment;
+                    }
+                }
+                return "<div>" + line + "</div>";
+            });
+            listItem.innerHTML = "<div>" + key + "</div><ul><li>" + lines.join("</li><li>") + "</li></ul>";
+            placeList.append(listItem);
+        }
+    </script>
 </body>
 </html>
