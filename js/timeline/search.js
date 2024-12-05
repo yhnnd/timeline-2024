@@ -239,6 +239,9 @@ function searchKeywords(keywords, configs) {
 function highlight(text, keywords, configs) {
     text = text.replaceAll("<", "&lt;");
     for (const keyword of keywords) {
+        if (!keyword) {
+            continue;
+        }
         if (!configs || !configs.type || ["text", "folder", "filename"].includes(configs.type)) {
             const marker = "<code class='marker-wrapper'><var class='marker'><span>" + keyword.split("").map(ch => ch === '<' ? "&lt;" : ch).join("</span><span>") + "</span></var></code>";
             text = text.replaceAll(keyword.replaceAll("<", "&lt;"), marker);
