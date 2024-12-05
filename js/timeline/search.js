@@ -384,6 +384,9 @@ function refreshAdvancedSearch() {
     const keywords = [];
     for (let i = 0; i < conditionInputs.length; ++i) {
         const conditionInput = conditionInputs[i];
+        if (!conditionInput.value) {
+            continue;
+        }
         const condition = {
             type: conditionInput.getAttribute("condition-type"),
             value: conditionInput.value
