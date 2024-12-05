@@ -8,6 +8,7 @@ const searchInfo = {
     isLoading: false,
     isReady: false,
     hasUnfinishedTask: false,
+    unfinishedTaskType: "",
     keywords: []
 };
 
@@ -115,7 +116,11 @@ function initSearch(resultWrapper, configs) {
                 infoDom.innerText = "Search Ready";
                 if (searchInfo.hasUnfinishedTask) {
                     if (searchInfo.keywords.length) {
-                        searchKeywords(searchInfo.keywords, configs);
+                        if (searchInfo.unfinishedTaskType === "searchKeywords") {
+                            searchKeywords(searchInfo.keywords, configs);
+                        } else if (searchInfo.unfinishedTaskType === "advancedSearch") {
+                            advancedSearch(searchInfo.keywords);
+                        }
                     }
                     searchInfo.hasUnfinishedTask = false;
                     searchInfo.keywords = [];
@@ -223,6 +228,7 @@ function searchKeywords(keywords, configs) {
         }
     } else {
         searchInfo.hasUnfinishedTask = true;
+        searchInfo.unfinishedTaskType = "searchKeywords";
         searchInfo.keywords = keywords;
         if (searchInfo.isLoading == false) {
             initSearch(resultWrapper, configs);
@@ -364,7 +370,8 @@ function advancedSearch(conditions) {
         doAdvancedSearch(conditions, keywords);
     } else {
         searchInfo.hasUnfinishedTask = true;
-        searchInfo.keywords = keywords;
+        searchInfo.unfinishedTaskType = "advancedSearch";
+        searchInfo.keywords = conditions;
         if (searchInfo.isLoading == false) {
             initSearch(resultWrapper);
         }
