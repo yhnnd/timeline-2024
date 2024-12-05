@@ -263,3 +263,128 @@ function closeSearch() {
     searchInfo.hasUnfinishedTask = false;
     searchInfo.keywords = [];
 }
+
+function doAdvancedSearch(conditions, keywords) {
+    const resultWrapper = searchWrapper.getElementsByClassName("search-result")[0];
+    resultWrapper.innerHTML = "";
+    for (const item of articles) {
+        item.text = item.text.split("\n").map(line => {
+            return line.split(" ").map(decode).join(" ");
+        }).join("\n");
+        let isMatched = true;
+        for (const condition of conditions) {
+            if (condition.type === "TEXT") {
+                if (!item.text.includes(condition.value)) {
+                    isMatched = false;
+                    break;
+                }
+            } else if (condition.type === "TIME") {
+                const urlSegments = item.fakeUrl.split("/");
+                const filename = urlSegments.pop();
+                if (condition.value.includes("-")) {
+                    let [timeA, timeB] = condition.value.split("-").map(e => parseInt(e));
+                    let isTimeMatched = false;
+                    for (let tempTime = timeA; tempTime <= timeB; ++tempTime) {
+                        if (filename.includes(tempTime) || item.text.includes(tempTime)) {
+                            isTimeMatched = true;
+                            break;
+                        }
+                    }
+                    if (!isTimeMatched) {
+                        isMatched = false;
+                        break;
+                    }
+                } else {
+                    let tempTime = parseInt(condition.value);
+                    if (filename.includes(tempTime) || item.text.includes(tempTime)) {
+                    } else {
+                        isMatched = false;
+                        break;
+                    }
+                }
+            }
+        }
+        if (isMatched == true) {
+            let link = document.createElement("div");
+            link.classList.add("link");
+            link.setAttribute("data-times", times);
+            const nameSplit = item.fakeUrl.split("/");
+            item.filename = nameSplit.pop();
+            item.folder = nameSplit.pop();
+            const folder = item.folder;
+            const filename = item.filename;
+            const textContent = highlight(item.text, keywords);
+            const lines = textContent.split("\n");
+            const imgs = [], maxSizeOfImgs = 8;
+            for (let i = 0; i < lines.length; ++i) {
+                if (lines[i].startsWith('<img ')) {
+                    if (imgs.length < maxSizeOfImgs) {
+                        imgs.push(lines[i]);
+                    } else {
+                        lines[i] = lines[i].replace("<", "&lt;");
+                    }
+                }
+            }
+            link.innerHTML = "<a target='_self' href='book-reader.html?src=" + item.realUrl + "&fakeUrl=" + item.fakeUrl + "'>"
+                + "<span class='folder'>" + folder + "</span> / <span>" + filename + "</span></a>"
+                + "<div class='cover-wrapper'><div class='cover' onclick=\"window.open('book-reader.html?src=" + item.realUrl + "&fakeUrl=" + item.fakeUrl + "','_self');\"></div></div>"
+                + "<div class='text'><pre>" + lines.join("\n") + "</pre></div>";
+            resultWrapper.appendChild(link);
+        }
+    }
+    if (resultWrapper.innerHTML === "") {
+        resultWrapper.innerHTML = "No Result";
+    }
+}
+
+function advancedSearch(conditions) {
+    const searchWrapper = document.getElementsByClassName("search")[0];
+    const keywordWrapper = document.getElementsByClassName("search-keyword")[0];
+    const resultWrapper = searchWrapper.getElementsByClassName("search-result")[0];
+    document.body.classList.add("modal-open");
+    searchWrapper.parentElement.classList.add("on");
+    const keywords = [];
+    for (const condition of conditions) {
+        let conditionInput = document.createElement("input");
+        conditionInput.value = condition.value;
+        conditionInput.type = "text";
+        conditionInput.setAttribute("condition-type", condition.type);
+        keywordWrapper.append(conditionInput);
+        if (condition.type === "TEXT") {
+            keywords.push(condition.value);
+        }
+    }
+    const refreshBtn = document.createElement("button");
+    refreshBtn.innerHTML = "refresh";
+    refreshBtn.setAttribute("onclick", "refreshAdvancedSearch();");
+    keywordWrapper.append(refreshBtn);
+    keywordWrapper.parentElement.classList.add("on");
+    if (searchInfo.isReady) {
+        doAdvancedSearch(conditions, keywords);
+    } else {
+        searchInfo.hasUnfinishedTask = true;
+        searchInfo.keywords = keywords;
+        if (searchInfo.isLoading == false) {
+            initSearch(resultWrapper);
+        }
+    }
+}
+
+function refreshAdvancedSearch() {
+    const keywordWrapper = document.getElementsByClassName("search-keyword")[0];
+    const conditions = [];
+    const conditionInputs = keywordWrapper.querySelectorAll("input");
+    const keywords = [];
+    for (let i = 0; i < conditionInputs.length; ++i) {
+        const conditionInput = conditionInputs[i];
+        const condition = {
+            type: conditionInput.getAttribute("condition-type"),
+            value: conditionInput.value
+        };
+        conditions.push(condition);
+        if (condition.type === "TEXT") {
+            keywords.push(condition.value);
+        }
+    }
+    doAdvancedSearch(conditions, keywords);
+}
