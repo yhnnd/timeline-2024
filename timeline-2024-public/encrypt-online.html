@@ -59,12 +59,18 @@
       return /^\d+$/.test(str);
     }
 
+    const puncts = ["%", "-", "+", ".", ",", "(", ")", "[", "]", "/", "?", "!", "'", "*", "|", "@", "#", "$", "^", "&", "~", "=", "`"];
+
+    function isPunct(ch) {
+      return puncts.includes(ch);
+    }
+
     function encode(fragment) { // split Zh and alpha/digit
       const segments = [];
       let tempZh = "", tempAlphaOrDigit = "";
       let isInZh = false, isInAlphaOrDigit = false;
       for (i = 0; i < fragment.length; ++i) {
-        if (isAlpha(fragment[i]) || isDigit(fragment[i]) || ['-', '.', '(', ')'].includes(fragment[i])) {
+        if (isAlpha(fragment[i]) || isDigit(fragment[i]) || isPunct(fragment[i])) {
           if (isInZh) {
             isInZh = false;
             isInAlphaOrDigit = true;
@@ -140,10 +146,16 @@
         }
         return fragment;
       }).join("%0A");
+      for (const punct of puncts) {
+        if (punct !== encodeURIComponent(punct)) {
+          content = content.replaceAll(punct, encodeURIComponent(punct));
+        }
+      }
       content = content.replaceAll("<", "%3C");
       content = content.replaceAll(">", "%3E");
       content = content.replaceAll("(", "%0G");
       content = content.replaceAll(")", "%0H");
+      content = content.replaceAll("'", "%0I");
       editorB.value = url + content;
       if (fontSize.value) {
         editorB.value = editorB.value + "&fontsize=" + fontSize.value;
@@ -209,6 +221,12 @@
         temp = temp.replaceAll("%3E", ">");
         temp = temp.replaceAll("%0G", "(");
         temp = temp.replaceAll("%0H", ")");
+        temp = temp.replaceAll("%0I", "'");
+        for (const punct of puncts) {
+          if (punct !== encodeURIComponent(punct)) {
+            temp = temp.replaceAll(encodeURIComponent(punct), punct);
+          }
+        }
         editorB.value = temp.split("%0A").map(decode).join("\n");
       } else if (encodeType === "base64") {
         temp = temp.replaceAll("%3D", "=");
