@@ -15,6 +15,7 @@
       let temp = window.location.search.substr(1);
       temp = temp.replaceAll("%0G", "(");
       temp = temp.replaceAll("%0H", ")");
+      temp = temp.replaceAll("%0I", "'");
       let r = temp.match(reg);
       if (r) {
         return decodeURIComponent(r[2]);
