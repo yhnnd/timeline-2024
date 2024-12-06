@@ -22,12 +22,7 @@
       return null;
     }
 
-    function decrypt(val) {
-      let temp = val;
-      document.querySelector("#content").innerHTML = temp.split("\n").map(decode).join("\n");
-    }
-
-    function decode(fragment) {
+    function decodeUtf(fragment) {
       if (fragment.length) {
         const segments = [];
         let tempZh = "", tempEn = "", isInZh = false, isInEn = false;
@@ -101,10 +96,23 @@
       return fragment;
     }
 
+    function decodeBase64(text) {
+      return new TextDecoder().decode(Uint8Array.from(atob(text), (c) => c.charCodeAt(0)));
+    }
+
     window.onload = function () {
+      let result = "";
       let content = getParameter("content");
       if (content) {
-        decrypt(content);
+        result = content.split("\n").map(decodeUtf).join("\n");
+      } else {
+        let base64 = getParameter("base64");
+        if (base64) {
+          result = base64.split("\n").map(decodeBase64).join("\n");
+        }
+      }
+      if (result.length) {
+        document.querySelector("#content").innerHTML = result;
       }
       let fontSize = getParameter("fontsize");
       if (fontSize) {
