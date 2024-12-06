@@ -16,6 +16,9 @@
       temp = temp.replaceAll("%0G", "(");
       temp = temp.replaceAll("%0H", ")");
       temp = temp.replaceAll("%0I", "'");
+      temp = temp.replaceAll("%0J", "!");
+      temp = temp.replaceAll("%0K", "*");
+      temp = temp.replaceAll("%0L", "~");
       let r = temp.match(reg);
       if (r) {
         return decodeURIComponent(r[2]);
