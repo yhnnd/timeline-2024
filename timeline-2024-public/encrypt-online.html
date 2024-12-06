@@ -195,10 +195,10 @@
         temp = temp.substr(defaultUrl.length);
         encodeType = "utf";
       } else if (temp.startsWith(base64Url)) {
-        temp = temp.substr(decodeBase64Url.length);
+        temp = temp.substr(base64Url.length);
         encodeType = "base64";
       } else if (temp.startsWith(defaultBase64Url)) {
-        temp = temp.substr(defaultDecodeBase64Url.length);
+        temp = temp.substr(defaultBase64Url.length);
         encodeType = "base64";
       }
       if (temp.includes("&")) {
