@@ -16,7 +16,7 @@
 
 <textarea style="width: 100%; min-height: 400px; height: max-content;" id="editorA"></textarea>
 <div style="display: flex; gap: 10px;">
-  <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="encrypt()">Encrypt</button>
+  <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="doEncodeUtf()">Encode UTF</button>
   <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="doEncodeBase64()">Encode Base64</button>
   <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="swap()">Swap</button>
   <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="decrypt()">Decrypt</button>
@@ -129,7 +129,7 @@
       return result;
     }
 
-    function encrypt() {
+    function doEncodeUtf() {
       let content = editorA.value.split("\n").map(fragment => {
         if (!fragment) {
           fragment = "";
@@ -172,6 +172,9 @@
       }).join("%0A");
       base64 = base64.replaceAll("=", "%3D");
       editorB.value = base64Url + base64;
+      if (fontSize.value) {
+        editorB.value = editorB.value + "&fontsize=" + fontSize.value;
+      }
       urlLength.value = editorB.value.length + " characters";
     }
 
