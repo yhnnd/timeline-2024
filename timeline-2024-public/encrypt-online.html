@@ -165,7 +165,7 @@
           if (!isLegal(line)) {
             return line;
           }
-          return "@base64(\"" + encodeBase64(line) + "\");";
+          return encodeBase64(line);
         } else {
           return "";
         }
