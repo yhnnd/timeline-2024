@@ -251,6 +251,8 @@
       } else if (encodeType === "base64") {
         temp = temp.replaceAll("%3D", "=");
         editorB.value = temp.split("%0A").map(decodeBase64).join("\n");
+      } else {
+        editorB.value = "";
       }
       urlLength.value = editorB.value.length + " characters";
     }
