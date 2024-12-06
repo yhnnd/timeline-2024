@@ -13,7 +13,7 @@ Ignore Tokens: <input id="tokens">
 
 <textarea style="width: 100%; min-height: 400px; height: max-content;" id="editorA"></textarea>
 <div style="display: flex; gap: 10px;">
-  <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="encrypt()">Encrypt</button>
+  <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="doEncodeUtf()">Encode UTF</button>
   <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="doEncodeBase64()">Encode Base64</button>
   <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="swap()">Swap</button>
   <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="decrypt()">Decrypt</button>
@@ -22,7 +22,8 @@ Ignore Tokens: <input id="tokens">
 </pre>
   </div>
   <script>
-    tokens.value = ["@", "/"];
+    tokens.value = "";
+    const puncts = ["%", "-", "+", ".", ",", "(", ")", "[", "]", "/", "?", "!", "'", "*", "|", "@", "#", "$", "^", "&", "~", "=", "`"];
 
     function isLegal(fragment) {
       for (const token of tokens.value) {
@@ -41,12 +42,16 @@ Ignore Tokens: <input id="tokens">
         return /^\d+$/.test(str);
     }
 
+    function isPunct(ch) {
+      return puncts.includes(ch);
+    }
+
     function encode(fragment) { // split Zh and alpha/digit
       const segments = [];
       let tempZh = "", tempAlphaOrDigit = "";
       let isInZh = false, isInAlphaOrDigit = false;
       for (i = 0; i < fragment.length; ++ i) {
-        if (isAlpha(fragment[i]) || isDigit(fragment[i]) || ['-', '.', '(', ')'].includes(fragment[i])) {
+        if (isAlpha(fragment[i]) || isDigit(fragment[i]) || isPunct(fragment[i])) {
           if (isInZh) {
             isInZh = false;
             isInAlphaOrDigit = true;
@@ -119,7 +124,7 @@ Ignore Tokens: <input id="tokens">
       return new TextDecoder().decode(Uint8Array.from(atob(text), (c) => c.charCodeAt(0)));
     }
 
-    function encrypt() {
+    function doEncodeUtf() {
       editorB.value = editorA.value.split('\n').map(line => {
         return line.split(" ").map(fragment => {
           if (isLegal(fragment) && encodeURIComponent(fragment) !== fragment) {
