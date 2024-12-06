@@ -22,7 +22,7 @@ Ignore Tokens: <input id="tokens">
 </pre>
   </div>
   <script>
-    tokens.value = ["@", "\"", ";", "/", "&", "<", ">"];
+    tokens.value = ["@", "/"];
 
     function isLegal(fragment) {
       for (const token of tokens.value) {
@@ -132,9 +132,11 @@ Ignore Tokens: <input id="tokens">
 
     function doEncodeBase64() {
       editorB.value = editorA.value.split('\n').map(line => {
-        const result = encodeBase64(line);
-        if (result.length) {
-          return "@base64(\"" + result + "\");";
+        if (line.length) {
+          if (!isLegal(line)) {
+            return line;
+          }
+          return "@base64(\"" + encodeBase64(line) + "\");";
         } else {
           return "";
         }
