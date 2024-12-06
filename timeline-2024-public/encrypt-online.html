@@ -172,6 +172,9 @@
       content = content.replaceAll("(", "%0G");
       content = content.replaceAll(")", "%0H");
       content = content.replaceAll("'", "%0I");
+      content = content.replaceAll("!", "%0J");
+      content = content.replaceAll("*", "%0K");
+      content = content.replaceAll("~", "%0L");
       editorB.value = url + content;
       if (fontSize.value) {
         editorB.value = editorB.value + "&fontsize=" + fontSize.value;
@@ -238,6 +241,9 @@
         temp = temp.replaceAll("%0G", "(");
         temp = temp.replaceAll("%0H", ")");
         temp = temp.replaceAll("%0I", "'");
+        temp = temp.replaceAll("%0J", "!");
+        temp = temp.replaceAll("%0K", "*");
+        temp = temp.replaceAll("%0L", "~");
         editorB.value = temp.split("%0A").map((line) => {
           line = decodePuncts(line);
           return decodeUtf(line);
