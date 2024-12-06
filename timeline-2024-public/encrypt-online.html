@@ -66,8 +66,9 @@
     }
 
     function encodePuncts(text) {
+      text = text.replaceAll("%", "%25");
       for (const punct of puncts) {
-        if (punct !== encodeURIComponent(punct)) {
+        if (punct !== "%" && punct !== encodeURIComponent(punct)) {
           text = text.replaceAll(punct, encodeURIComponent(punct));
         }
       }
@@ -76,10 +77,11 @@
 
     function decodePuncts(text) {
       for (const punct of puncts) {
-        if (punct !== encodeURIComponent(punct)) {
+        if (punct !== "%" && punct !== encodeURIComponent(punct)) {
           text = text.replaceAll(encodeURIComponent(punct), punct);
         }
       }
+      text = text.replaceAll("%25", "%");
       return text;
     }
 
