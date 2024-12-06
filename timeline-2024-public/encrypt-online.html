@@ -17,6 +17,7 @@
 <textarea style="width: 100%; min-height: 400px; height: max-content;" id="editorA"></textarea>
 <div style="display: flex; gap: 10px;">
   <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="encrypt()">Encrypt</button>
+  <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="doEncodeBase64()">Encode Base64</button>
   <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="swap()">Swap</button>
   <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="decrypt()">Decrypt</button>
 </div>
@@ -38,6 +39,8 @@
 
     const url = getDecodeUrl() + "?content=";
     const defaultUrl = "https://yhnnd.github.io/timeline-2024/timeline-2024-public/decode.html?content=";
+    const base64Url = getDecodeUrl() + "?base64=";
+    const defaultBase64Url = "https://yhnnd.github.io/timeline-2024/timeline-2024-public/decode.html?base64=";
 
     function isLegal(fragment) {
       for (const token of tokens.value) {
@@ -136,7 +139,7 @@
           fragment = "<" + fragment + ">";
         }
         return fragment;
-      }).join(encodeURIComponent("\n"));
+      }).join("%0A");
       content = content.replaceAll("<", "%3C");
       content = content.replaceAll(">", "%3E");
       content = content.replaceAll("(", "%0G");
@@ -145,6 +148,30 @@
       if (fontSize.value) {
         editorB.value = editorB.value + "&fontsize=" + fontSize.value;
       }
+      urlLength.value = editorB.value.length + " characters";
+    }
+
+    function encodeBase64(text) {
+      return btoa(String.fromCharCode(...new TextEncoder().encode(text)));
+    }
+
+    function decodeBase64(text) {
+      return new TextDecoder().decode(Uint8Array.from(atob(text), (c) => c.charCodeAt(0)));
+    }
+
+    function doEncodeBase64() {
+      let base64 = editorA.value.split('\n').map(line => {
+        if (line.length) {
+          if (!isLegal(line)) {
+            return line;
+          }
+          return "@base64(\"" + encodeBase64(line) + "\");";
+        } else {
+          return "";
+        }
+      }).join("%0A");
+      base64 = base64.replaceAll("=", "%3D");
+      editorB.value = base64Url + base64;
       urlLength.value = editorB.value.length + " characters";
     }
 
@@ -157,19 +184,33 @@
 
     function decrypt() {
       let temp = editorA.value;
+      let encodeType = ""; // utf, base64
       if (temp.startsWith(url)) {
         temp = temp.substr(url.length);
+        encodeType = "utf";
       } else if (temp.startsWith(defaultUrl)) {
         temp = temp.substr(defaultUrl.length);
+        encodeType = "utf";
+      } else if (temp.startsWith(base64Url)) {
+        temp = temp.substr(decodeBase64Url.length);
+        encodeType = "base64";
+      } else if (temp.startsWith(defaultBase64Url)) {
+        temp = temp.substr(defaultDecodeBase64Url.length);
+        encodeType = "base64";
       }
       if (temp.includes("&")) {
         temp = temp.split("&")[0];
       }
-      temp = temp.replaceAll("%3C", "<");
-      temp = temp.replaceAll("%3E", ">");
-      temp = temp.replaceAll("%0G", "(");
-      temp = temp.replaceAll("%0H", ")");
-      editorB.value = temp.split(encodeURIComponent("\n")).map(decode).join("\n");
+      if (encodeType === "utf") {
+        temp = temp.replaceAll("%3C", "<");
+        temp = temp.replaceAll("%3E", ">");
+        temp = temp.replaceAll("%0G", "(");
+        temp = temp.replaceAll("%0H", ")");
+        editorB.value = temp.split("%0A").map(decode).join("\n");
+      } else if (encodeType === "base64") {
+        temp = temp.replaceAll("%3D", "=");
+        editorB.value = temp.split("%0A").map(decodeBase64).join("\n");
+      }
       urlLength.value = editorB.value.length + " characters";
     }
 
