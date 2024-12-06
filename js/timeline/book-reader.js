@@ -151,6 +151,10 @@ function hideOuterHTML(target) {
     target.setAttribute("onclick", "revealOuterHTML(this)");
 }
 
+function decodeBase64(text) {
+    return new TextDecoder().decode(Uint8Array.from(atob(text), (c) => c.charCodeAt(0)));
+}
+
 function decode(fragment) {
     if (fragment.startsWith("@utf(\"") && fragment.endsWith("\");")) {
         fragment = fragment.replaceAll("&lt;", "<");
@@ -223,6 +227,9 @@ function decode(fragment) {
             }
         }
         return result;
+    } else if (fragment.startsWith("@base64(\"") && fragment.endsWith("\");")) {
+        fragment = fragment.substr("@base64(\"".length, fragment.length - "@base64(\"".length - "\");".length);
+        return decodeBase64(fragment);
     }
     return fragment;
 }
@@ -235,22 +242,38 @@ function getDecodeUrl() {
 
 const decodeUrl = getDecodeUrl() + "?content=";
 const defaultDecodeUrl = "https://yhnnd.github.io/timeline-2024/timeline-2024-public/decode.html?content=";
+const decodeBase64Url = getDecodeUrl() + "?base64=";
+const defaultDecodeBase64Url = "https://yhnnd.github.io/timeline-2024/timeline-2024-public/decode.html?base64=";
 
 function decrypt(value) {
     let temp = value;
+    let encodeType = ""; // utf, base64
     if (temp.startsWith(decodeUrl)) {
         temp = temp.substr(decodeUrl.length);
+        encodeType = "utf";
     } else if (temp.startsWith(defaultDecodeUrl)) {
         temp = temp.substr(defaultDecodeUrl.length);
+        encodeType = "utf";
+    } else if (temp.startsWith(decodeBase64Url)) {
+        temp = temp.substr(decodeBase64Url.length);
+        encodeType = "base64";
+    } else if (temp.startsWith(defaultDecodeBase64Url)) {
+        temp = temp.substr(defaultDecodeBase64Url.length);
+        encodeType = "base64";
     }
     if (temp.includes("&")) {
         temp = temp.split("&")[0];
     }
-    temp = temp.replaceAll("%3C", "<");
-    temp = temp.replaceAll("%3E", ">");
-    temp = temp.replaceAll("%0G", "(");
-    temp = temp.replaceAll("%0H", ")");
-    return temp.split(encodeURIComponent("\n")).map(decodeOnline).join("\n");
+    if (encodeType === "utf") {
+        temp = temp.replaceAll("%3C", "<");
+        temp = temp.replaceAll("%3E", ">");
+        temp = temp.replaceAll("%0G", "(");
+        temp = temp.replaceAll("%0H", ")");
+        return temp.split("%0A").map(decodeOnline).join("\n");
+    } else if (encodeType === "base64") {
+        temp = temp.replaceAll("%3D", "=");
+        return temp.split("%0A").map(decodeBase64).join("\n");
+    }
 }
 
 function decodeOnline(fragment) {
