@@ -14,6 +14,7 @@ Ignore Tokens: <input id="tokens">
 <textarea style="width: 100%; min-height: 400px; height: max-content;" id="editorA"></textarea>
 <div style="display: flex; gap: 10px;">
   <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="encrypt()">Encrypt</button>
+  <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="doEncodeBase64()">Encode Base64</button>
   <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="swap()">Swap</button>
   <button style="width: max-content; height: max-content; padding: 5px 10px;" onclick="decrypt()">Decrypt</button>
 </div>
@@ -22,6 +23,7 @@ Ignore Tokens: <input id="tokens">
   </div>
   <script>
     tokens.value = ["@", "\"", ";", "/", "&", "<", ">"];
+
     function isLegal(fragment) {
       for (const token of tokens.value) {
         if (token.length && fragment.includes(token)) {
@@ -30,12 +32,15 @@ Ignore Tokens: <input id="tokens">
       }
       return true;
     }
+
     function isAlpha(ch) {
       return /^[A-Z]$/i.test(ch);
     }
+
     function isDigit(str){
         return /^\d+$/.test(str);
     }
+
     function encode(fragment) { // split Zh and alpha/digit
       const segments = [];
       let tempZh = "", tempAlphaOrDigit = "";
@@ -105,6 +110,15 @@ Ignore Tokens: <input id="tokens">
       }
       return result;
     }
+
+    function encodeBase64(text) {
+      return btoa(String.fromCharCode(...new TextEncoder().encode(text)));
+    }
+
+    function decodeBase64(text) {
+      return new TextDecoder().decode(Uint8Array.from(atob(text), (c) => c.charCodeAt(0)));
+    }
+
     function encrypt() {
       editorB.value = editorA.value.split('\n').map(line => {
         return line.split(" ").map(fragment => {
@@ -115,16 +129,25 @@ Ignore Tokens: <input id="tokens">
         }).join(" ")
       }).join('\n')
     }
+
+    function doEncodeBase64() {
+      editorB.value = editorA.value.split('\n').map(line => {
+        return "@base64(\"" + encodeBase64(line) + "\");";
+      }).join('\n');
+    }
+
     function swap() {
       const tempA = editorA.value
       editorA.value = editorB.value
       editorB.value = tempA
     }
+
     function decrypt() {
       editorB.value = editorA.value.split("\n").map(line => {
         return line.split(" ").map(decode).join(" ");
       }).join("\n");
     }
+
     function decode(fragment) {
       if (fragment.startsWith("@utf(\"") && fragment.endsWith("\");")) {
         fragment = fragment.substr("@utf(\"".length, fragment.length - "@utf(\"".length - "\");".length);
@@ -196,6 +219,9 @@ Ignore Tokens: <input id="tokens">
           }
         }
         return result;
+      } else if (fragment.startsWith("@base64(\"") && fragment.endsWith("\");")) {
+        fragment = fragment.substr("@base64(\"".length, fragment.length - "@base64(\"".length - "\");".length);
+        return decodeBase64(fragment);
       }
       return fragment;
     }
