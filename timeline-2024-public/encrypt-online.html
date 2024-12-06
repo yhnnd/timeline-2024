@@ -160,7 +160,7 @@
     }
 
     function doEncodeBase64() {
-      let base64 = editorA.value.split('\n').map(line => {
+      let base64 = editorA.value.split("\n").map((line) => {
         if (line.length) {
           if (!isLegal(line)) {
             return line;
