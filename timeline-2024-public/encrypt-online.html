@@ -65,7 +65,25 @@
       return puncts.includes(ch);
     }
 
-    function encode(fragment) { // split Zh and alpha/digit
+    function encodePuncts(text) {
+      for (const punct of puncts) {
+        if (punct !== encodeURIComponent(punct)) {
+          text = text.replaceAll(punct, encodeURIComponent(punct));
+        }
+      }
+      return text;
+    }
+
+    function decodePuncts(text) {
+      for (const punct of puncts) {
+        if (punct !== encodeURIComponent(punct)) {
+          text = text.replaceAll(encodeURIComponent(punct), punct);
+        }
+      }
+      return text;
+    }
+
+    function encodeUtf(fragment) { // split Zh and alpha/digit
       const segments = [];
       let tempZh = "", tempAlphaOrDigit = "";
       let isInZh = false, isInAlphaOrDigit = false;
@@ -140,17 +158,13 @@
         if (!fragment) {
           fragment = "";
         } else if (isLegal(fragment) && encodeURIComponent(fragment) !== fragment) {
-          fragment = encode(fragment);
+          fragment = encodeUtf(fragment);
+          fragment = encodePuncts(fragment);
         } else {
           fragment = "<" + fragment + ">";
         }
         return fragment;
       }).join("%0A");
-      for (const punct of puncts) {
-        if (punct !== encodeURIComponent(punct)) {
-          content = content.replaceAll(punct, encodeURIComponent(punct));
-        }
-      }
       content = content.replaceAll("<", "%3C");
       content = content.replaceAll(">", "%3E");
       content = content.replaceAll("(", "%0G");
@@ -222,12 +236,10 @@
         temp = temp.replaceAll("%0G", "(");
         temp = temp.replaceAll("%0H", ")");
         temp = temp.replaceAll("%0I", "'");
-        for (const punct of puncts) {
-          if (punct !== encodeURIComponent(punct)) {
-            temp = temp.replaceAll(encodeURIComponent(punct), punct);
-          }
-        }
-        editorB.value = temp.split("%0A").map(decode).join("\n");
+        editorB.value = temp.split("%0A").map((line) => {
+          line = decodePuncts(line);
+          return decodeUtf(line);
+        }).join("\n");
       } else if (encodeType === "base64") {
         temp = temp.replaceAll("%3D", "=");
         editorB.value = temp.split("%0A").map(decodeBase64).join("\n");
@@ -235,7 +247,7 @@
       urlLength.value = editorB.value.length + " characters";
     }
 
-    function decode(fragment) {
+    function decodeUtf(fragment) {
       if (!fragment.length) {
         return fragment;
       }
