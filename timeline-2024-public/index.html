@@ -12,8 +12,12 @@ function clicked(type, target) {
             elem.style.display = "none";
         } else {
             elem.style.display = null;
-            if (type === 'tab' && target === 'calendar' && renderCalendar) {
-                renderCalendar();
+            if (type === 'tab' && target === 'calendar') {
+                try {
+                    renderCalendar && renderCalendar();
+                } catch {
+                    console.log("clicked: renderCalendar is not defined.");
+                }
             }
         }
     })
