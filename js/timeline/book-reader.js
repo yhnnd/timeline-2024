@@ -356,7 +356,7 @@ function decodeOnline(fragment) {
     return result;
 }
 
-function renderArticleParse (responseText) {
+function renderArticleParse (responseText, containerClassName, container2ClassName) {
     responseText = responseText.split("\n").map(line => {
         return line.split(" ").map(decode).join(" ");
     }).join("\n");
@@ -822,7 +822,9 @@ body[data-value-of-enable-hover-highlight-img="true"]:has([random-id="${randomId
 }
 
 function renderArticle(src, containerClassName, container2ClassName) {
-    ajax(src, undefined, renderArticleParse);
+    ajax(src, undefined, function(responseText) {
+        renderArticleParse(responseText, containerClassName, container2ClassName);
+    });
 }
 
 const src = getParameter("src");
