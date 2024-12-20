@@ -27,7 +27,6 @@ if (getParameter("is-iframe") !== "true") { // Loading image and footer video in
     </div>
 </div>
 <div class="col" id="skyside-shield-animation" style="border: none; display: flex; justify-content: center; background-color: black; align-items: center; height: 200px; overflow: hidden;">
-    <img src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-08-03-diary-pics/animation-v4.gif" onclick="clickGIF(this);">
 </div>
 <style>
 .version-option {
@@ -49,63 +48,70 @@ if (getParameter("is-iframe") !== "true") { // Loading image and footer video in
     height: 200px;
 }
 </style>`;
-    const footerScript = document.createElement("script");
-    footerScript.innerHTML = `
-function clickGIF(img) {
-    const wrapper = document.querySelector("#skyside-shield-animation");
-    if (!wrapper) {
-        return;
-    }
-    const video = document.createElement("video");
-    video.setAttribute("src", "../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-08-01-diary-pics/animation-v4.mp4");
-    video.setAttribute("autoplay", true);
-    video.setAttribute("muted", true);
-    video.setAttribute("loop", true);
-    video.setAttribute("onclick", "toggleSelectShieldVersion()");
-    wrapper.innerHTML = video.outerHTML;
-}
 
-function selectShieldVersion(panel, event) {
-    if (panel === event.target) {
-        return;
-    }
-    const versionOption = event.target;
-    if (versionOption.innerHTML !== versionOption.innerText) {
-        return;
-    }
-    const videoSrc = versionOption.getAttribute('video-src');
-    if (!videoSrc) {
-        return;
-    }
-    const video = document.querySelector("#skyside-shield-animation video");
-    if (!video) {
-        return;
-    }
-    video.setAttribute("src", videoSrc);
-    document.querySelectorAll(".version-option").forEach(op => {
-        op.removeAttribute("selected");
-    });
-    versionOption.setAttribute("selected", "true");
-}
+    window.loadFooterGIF = function() {
+        const wrapper = document.querySelector("#skyside-shield-animation");
+        if (!wrapper) {
+            return;
+        }
+        wrapper.innerHTML = `<img src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-08-03-diary-pics/animation-v4.gif" onclick="clickGIF(this);">`;
+    };
 
-function toggleSelectShieldVersion() {
-    const footer = document.querySelector(".footer");
-    const selector = footer.querySelector("#version-selector");
-    const video = document.querySelector("#skyside-shield-animation video");
-    if (!video) {
-        return;
-    }
-    if (selector.style.display === "none") { /* show selector */
-        selector.style.display = null;
-        video.style.height = "198px";
-        video.style.border = "1px solid white";
-    } else { /* hide selector */
-        selector.style.display = "none";
-        video.removeAttribute("style");
-    }
-}`;
+    window.clickGIF = function (img) {
+        const wrapper = document.querySelector("#skyside-shield-animation");
+        if (!wrapper) {
+            return;
+        }
+        const video = document.createElement("video");
+        video.setAttribute("src", "../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-08-01-diary-pics/animation-v4.mp4");
+        video.setAttribute("autoplay", true);
+        video.setAttribute("muted", true);
+        video.setAttribute("loop", true);
+        video.setAttribute("onclick", "toggleSelectShieldVersion()");
+        wrapper.innerHTML = video.outerHTML;
+    };
+
+    window.selectShieldVersion = function (panel, event) {
+        if (panel === event.target) {
+            return;
+        }
+        const versionOption = event.target;
+        if (versionOption.innerHTML !== versionOption.innerText) {
+            return;
+        }
+        const videoSrc = versionOption.getAttribute('video-src');
+        if (!videoSrc) {
+            return;
+        }
+        const video = document.querySelector("#skyside-shield-animation video");
+        if (!video) {
+            return;
+        }
+        video.setAttribute("src", videoSrc);
+        document.querySelectorAll(".version-option").forEach(op => {
+            op.removeAttribute("selected");
+        });
+        versionOption.setAttribute("selected", "true");
+    };
+
+    window.toggleSelectShieldVersion = function () {
+        const footer = document.querySelector(".footer");
+        const selector = footer.querySelector("#version-selector");
+        const video = document.querySelector("#skyside-shield-animation video");
+        if (!video) {
+            return;
+        }
+        if (selector.style.display === "none") { /* show selector */
+            selector.style.display = null;
+            video.style.height = "198px";
+            video.style.border = "1px solid white";
+        } else { /* hide selector */
+            selector.style.display = "none";
+            video.removeAttribute("style");
+        }
+    };
+
     document.body.append(footer);
-    document.body.append(footerScript);
     document.querySelector(".loading").style.display = "flex";
     document.querySelector(".desktop").style.minHeight = "calc(100vh - 420px)";
 }
@@ -350,390 +356,389 @@ function decodeOnline(fragment) {
     return result;
 }
 
-function renderArticle(src, containerClassName, container2ClassName) {
-    ajax(src, undefined, function (responseText) {
-        responseText = responseText.split("\n").map(line => {
-            return line.split(" ").map(decode).join(" ");
+function renderArticleParse (responseText) {
+    responseText = responseText.split("\n").map(line => {
+        return line.split(" ").map(decode).join(" ");
+    }).join("\n");
+
+    responseText = function (responseText) {
+        return responseText.split("\n").map((line) => {
+            if (line.trim().startsWith("{{") && line.trim().endsWith("}}") && localStorage.getItem("enable-delete-line") === "true") {
+                return line.replace("{{", '@command("delete-start")').replace("}}", '@command("delete-end")');
+            } else if (line === "<border>" && localStorage.getItem("enable-border") === "true") {
+                return '@command("border-start")';
+            } else if (line === "</border>" && localStorage.getItem("enable-border") === "true") {
+                return '@command("border-end")';
+            }
+            if (line === "@command(\"line-width-maximum\")") {
+                document.body.setAttribute("data-line-width-maximum", "true");
+            }
+            line = line.replaceAll("<link", '@command("link-start")');
+            line = line.replaceAll("</link>", '@command("link-end")');
+            return line;
         }).join("\n");
+    }(responseText);
 
-        responseText = function (responseText) {
-            return responseText.split("\n").map((line) => {
-                if (line.trim().startsWith("{{") && line.trim().endsWith("}}") && localStorage.getItem("enable-delete-line") === "true") {
-                    return line.replace("{{", '@command("delete-start")').replace("}}", '@command("delete-end")');
-                } else if (line === "<border>" && localStorage.getItem("enable-border") === "true") {
-                    return '@command("border-start")';
-                } else if (line === "</border>" && localStorage.getItem("enable-border") === "true") {
-                    return '@command("border-end")';
+    const imgs = [];
+    let maxImgSize = 512;
+    let isAbortLoadingImgs = false;
+
+    if (localStorage.getItem("enable-img-recognition") === "true" || responseText.includes("@command(\"enable-image-recognition\")")) {
+        responseText = responseText.split("\n").map(line => {
+            if (line.startsWith("<img ") && line.endsWith(">") && !isAbortLoadingImgs) {
+                imgs.push(line);
+                if (imgs.length >= 8 && getParameter("is-iframe") === "true") {
+                    isAbortLoadingImgs = true;
                 }
-                if (line === "@command(\"line-width-maximum\")") {
-                    document.body.setAttribute("data-line-width-maximum", "true");
-                }
-                line = line.replaceAll("<link", '@command("link-start")');
-                line = line.replaceAll("</link>", '@command("link-end")');
-                return line;
-            }).join("\n");
-        }(responseText);
-
-        const imgs = [];
-        let maxImgSize = 512;
-        let isAbortLoadingImgs = false;
-
-        if (localStorage.getItem("enable-img-recognition") === "true" || responseText.includes("@command(\"enable-image-recognition\")")) {
-            responseText = responseText.split("\n").map(line => {
-                if (line.startsWith("<img ") && line.endsWith(">") && !isAbortLoadingImgs) {
-                    imgs.push(line);
-                    if (imgs.length >= 8 && getParameter("is-iframe") === "true") {
+                if (imgs.length > maxImgSize) {
+                    if (confirm('Too many images (more than ' + maxImgSize + '). Continue to load images?')) {
+                        maxImgSize *= 2;
+                    } else {
                         isAbortLoadingImgs = true;
                     }
-                    if (imgs.length > maxImgSize) {
-                        if (confirm('Too many images (more than ' + maxImgSize + '). Continue to load images?')) {
-                            maxImgSize *= 2;
-                        } else {
-                            isAbortLoadingImgs = true;
-                        }
+                }
+                return "@image " + window.parseFakeUrl(line, { fakeUrl: getParameter("fakeUrl"), realUrl: getParameter("src") });
+            }
+            if (line.startsWith("<div") && line.endsWith(">")) {
+                return "@div_start " + line;
+            }
+            if (line.startsWith("</div") && line.endsWith(">")) {
+                return "@div_end " + line;
+            }
+            return line;
+        }).join("\n");
+    }
+
+    responseText = responseText.replaceAll("<", "&lt;");
+
+    if (localStorage.getItem("enable-img-recognition") === "true" || responseText.includes("@command(\"enable-image-recognition\")")) {
+        responseText = responseText.split("\n").map(line => {
+            if (line.startsWith("@image &lt;img ") && line.endsWith(">")) {
+                line = line.replace("@image &lt;img ", "<img ");
+                return insertStr(line, line.length - 1, " onclick=\"inspectImage(this.src)\"");
+            }
+            if (line.startsWith("@div_start &lt;div") && line.endsWith(">")) {
+                return line.replace("@div_start &lt;div", "<div");
+            }
+            if (line.startsWith("@div_end &lt;/div") && line.endsWith(">")) {
+                return line.replace("@div_end &lt;/div", "</div");
+            }
+            if (line.includes("@command(\"enable-image-recognition\")")) {
+                return line.replace("@command(\"enable-image-recognition\")", "<span class='highlight-green'>" + "@command(\"enable-image-recognition\")" + "</span>");
+            }
+            return line;
+        }).join("\n");
+    }
+
+    responseText = responseText.replaceAll('@command("delete-start")', "<del>");
+    responseText = responseText.replaceAll('@command("delete-end")', "</del>");
+    responseText = responseText.replaceAll('@command("border-start")', "<div class='has-border'>");
+    responseText = responseText.replaceAll('@command("border-end")', "\n</div>");
+    responseText = responseText.replaceAll('@command("link-start")', "<div class='link' type='link' onclick='openLink(event)'");
+    responseText = responseText.replaceAll('@command("link-end")', "</div>");
+    responseText = responseText.replaceAll("@command(\"line-width-maximum\")", "<span class='highlight-green'>@command(\"line-width-maximum\")</span>");
+
+    if (window.openLink === undefined) {
+        window.openLink = function (event) {
+            let to = event.target.getAttribute('to');
+            const fakeUrl = window.getParameter("fakeUrl");
+            if (fakeUrl && !fakeUrl.startsWith(window.localRepositoryKey)) {
+                const repositoryKey = fakeUrl.split("/").shift() + "/";
+                const repositoryUrl = window.repositoryMap[repositoryKey];
+                to = to.replace("../", repositoryUrl);
+            }
+            if (to) {
+                window.open(to, "_self");
+            }
+        }
+    }
+
+    if (localStorage.getItem("enable-highlight-red") === "true") {
+        // highlight all the symbols like ①, ②, ③.
+        for (const symbol of symbols) {
+            const replacement = "<span class='highlight-red'>" + symbol + "</span>";
+            responseText = responseText.replaceAll(symbol, replacement);
+        }
+    }
+
+    if (localStorage.getItem("enable-censorship") !== "false") {
+        // censor all the censored words
+        for (const item of censored) {
+            const replacement = "<span class='censored'>" + "█".repeat(item.length) + "</span>";
+            responseText = responseText.replaceAll(item, replacement);
+        }
+    }
+
+    if (localStorage.getItem("enable-name-index") === "true") {
+        if (window.peoplesNames?.length) {
+            window.peoplesNames = window.peoplesNames.sort((a, b) => {
+                return b[0].split(";")[0].length - a[0].split(";")[0].length;
+            });
+            for (const i in window.peoplesNames) {
+                const items = window.peoplesNames[i];
+                for (const item of items) {
+                    const name = item.split(";")[0];
+                    let info = item.split(";")[1];
+                    if (info == undefined) {
+                        info = "点击搜索";
                     }
-                    return "@image " + window.parseFakeUrl(line, { fakeUrl: getParameter("fakeUrl"), realUrl: getParameter("src") });
-                }
-                if (line.startsWith("<div") && line.endsWith(">")) {
-                    return "@div_start " + line;
-                }
-                if (line.startsWith("</div") && line.endsWith(">")) {
-                    return "@div_end " + line;
-                }
-                return line;
-            }).join("\n");
-        }
-
-        responseText = responseText.replaceAll("<", "&lt;");
-
-        if (localStorage.getItem("enable-img-recognition") === "true" || responseText.includes("@command(\"enable-image-recognition\")")) {
-            responseText = responseText.split("\n").map(line => {
-                if (line.startsWith("@image &lt;img ") && line.endsWith(">")) {
-                    line = line.replace("@image &lt;img ", "<img ");
-                    return insertStr(line, line.length - 1, " onclick=\"inspectImage(this.src)\"");
-                }
-                if (line.startsWith("@div_start &lt;div") && line.endsWith(">")) {
-                    return line.replace("@div_start &lt;div", "<div");
-                }
-                if (line.startsWith("@div_end &lt;/div") && line.endsWith(">")) {
-                    return line.replace("@div_end &lt;/div", "</div");
-                }
-                if (line.includes("@command(\"enable-image-recognition\")")) {
-                    return line.replace("@command(\"enable-image-recognition\")", "<span class='highlight-green'>" + "@command(\"enable-image-recognition\")" + "</span>");
-                }
-                return line;
-            }).join("\n");
-        }
-
-        responseText = responseText.replaceAll('@command("delete-start")', "<del>");
-        responseText = responseText.replaceAll('@command("delete-end")', "</del>");
-        responseText = responseText.replaceAll('@command("border-start")', "<div class='has-border'>");
-        responseText = responseText.replaceAll('@command("border-end")', "\n</div>");
-        responseText = responseText.replaceAll('@command("link-start")', "<div class='link' type='link' onclick='openLink(event)'");
-        responseText = responseText.replaceAll('@command("link-end")', "</div>");
-        responseText = responseText.replaceAll("@command(\"line-width-maximum\")", "<span class='highlight-green'>@command(\"line-width-maximum\")</span>");
-
-        if (window.openLink === undefined) {
-            window.openLink = function (event) {
-                let to = event.target.getAttribute('to');
-                const fakeUrl = window.getParameter("fakeUrl");
-                if (fakeUrl && !fakeUrl.startsWith(window.localRepositoryKey)) {
-                    const repositoryKey = fakeUrl.split("/").shift() + "/";
-                    const repositoryUrl = window.repositoryMap[repositoryKey];
-                    to = to.replace("../", repositoryUrl);
-                }
-                if (to) {
-                    window.open(to, "_self");
+                    let nameLink = document.createElement("div");
+                    nameLink.classList.add("name-link");
+                    nameLink.setAttribute("data-info", info);
+                    nameLink.setAttribute("data-name-index", i);
+                    nameLink.setAttribute("onclick", "searchElement(this)");
+                    nameLink.innerHTML = "<span>" + name.split("").join("</span><span>") + "</span>";
+                    responseText = responseText.replaceAll(name, nameLink.outerHTML);
                 }
             }
         }
+    }
 
-        if (localStorage.getItem("enable-highlight-red") === "true") {
-            // highlight all the symbols like ①, ②, ③.
-            for (const symbol of symbols) {
-                const replacement = "<span class='highlight-red'>" + symbol + "</span>";
-                responseText = responseText.replaceAll(symbol, replacement);
+    let parseMapsResult = {};
+    const isMapEnabled = localStorage.getItem("enable-at-sign-map") === "true" && window.parseMaps && window.renderMaps;
+
+    if (isMapEnabled) {
+        parseMapsResult = parseMaps(responseText);
+        responseText = parseMapsResult.text;
+    }
+
+    if (localStorage.getItem("enable-at-sign-video") === "true") {
+        responseText = responseText.split("\n").map(line => {
+            if (line.startsWith("@video")) { // @video resources/35_1713060169.mp4 loop
+                const parameters = line.split(" ");
+                parameters.shift();
+                const src = parameters.shift(); // resources/35_1713060169.mp4
+                const fileType = src.split(".").pop(); // mp4
+                if (!parameters.includes("loop") && !parameters.includes("controls")) {
+                    parameters.push("controls");
+                }
+                const wrapperOpen = '<div class="video-wrapper">';
+                const covers = '<div class="backdrop-filter blur"></div><div class="backdrop-filter white"></div><div class="cover">' + line + '</div>';
+                const videoOpen = '<video width="100%" ' + parameters.join(" ") + ' style="width: 100%;">';
+                const source = '<source src="' + window.parseFakeUrl(src, { fakeUrl: getParameter("fakeUrl"), realUrl: getParameter("src") }) + '" type="video/' + fileType + '">'; // <source src="resources/35_1713060169.mp4" type="video/mp4">
+                const videoClose = '</video>';
+                const wrapperClose = '</div>';
+                return wrapperOpen + covers + videoOpen + source + videoClose + wrapperClose;
             }
-        }
+            return line;
+        }).join("\n");
+    }
 
-        if (localStorage.getItem("enable-censorship") !== "false") {
-            // censor all the censored words
-            for (const item of censored) {
-                const replacement = "<span class='censored'>" + "█".repeat(item.length) + "</span>";
-                responseText = responseText.replaceAll(item, replacement);
-            }
-        }
+    const listItemNumberLines = [];
 
-        if (localStorage.getItem("enable-name-index") === "true") {
-            if (window.peoplesNames?.length) {
-                window.peoplesNames = window.peoplesNames.sort((a, b) => {
-                    return b[0].split(";")[0].length - a[0].split(";")[0].length;
-                });
-                for (const i in window.peoplesNames) {
-                    const items = window.peoplesNames[i];
-                    for (const item of items) {
-                        const name = item.split(";")[0];
-                        let info = item.split(";")[1];
-                        if (info == undefined) {
-                            info = "点击搜索";
-                        }
-                        let nameLink = document.createElement("div");
-                        nameLink.classList.add("name-link");
-                        nameLink.setAttribute("data-info", info);
-                        nameLink.setAttribute("data-name-index", i);
-                        nameLink.setAttribute("onclick", "searchElement(this)");
-                        nameLink.innerHTML = "<span>" + name.split("").join("</span><span>") + "</span>";
-                        responseText = responseText.replaceAll(name, nameLink.outerHTML);
-                    }
-                }
-            }
-        }
-
-        let parseMapsResult = {};
-        const isMapEnabled = localStorage.getItem("enable-at-sign-map") === "true" && window.parseMaps && window.renderMaps;
-
-        if (isMapEnabled) {
-            parseMapsResult = parseMaps(responseText);
-            responseText = parseMapsResult.text;
-        }
-
-        if (localStorage.getItem("enable-at-sign-video") === "true") {
-            responseText = responseText.split("\n").map(line => {
-                if (line.startsWith("@video")) { // @video resources/35_1713060169.mp4 loop
-                    const parameters = line.split(" ");
-                    parameters.shift();
-                    const src = parameters.shift(); // resources/35_1713060169.mp4
-                    const fileType = src.split(".").pop(); // mp4
-                    if (!parameters.includes("loop") && !parameters.includes("controls")) {
-                        parameters.push("controls");
-                    }
-                    const wrapperOpen = '<div class="video-wrapper">';
-                    const covers = '<div class="backdrop-filter blur"></div><div class="backdrop-filter white"></div><div class="cover">' + line + '</div>';
-                    const videoOpen = '<video width="100%" ' + parameters.join(" ") + ' style="width: 100%;">';
-                    const source = '<source src="' + window.parseFakeUrl(src, { fakeUrl: getParameter("fakeUrl"), realUrl: getParameter("src") }) + '" type="video/' + fileType + '">'; // <source src="resources/35_1713060169.mp4" type="video/mp4">
-                    const videoClose = '</video>';
-                    const wrapperClose = '</div>';
-                    return wrapperOpen + covers + videoOpen + source + videoClose + wrapperClose;
-                }
-                return line;
-            }).join("\n");
-        }
-
-        const listItemNumberLines = [];
-
-        if (responseText.includes("@list-item-number-increment")) {
-            const vars = {};
-            responseText = responseText.split("\n").map(line => {
-                if (line.startsWith("@list-item-number-increment")) {
-                    listItemNumberLines.push(line);
-                    const open = line.indexOf("(");
-                    const close = line.indexOf(")");
-                    if (open === -1 || close === -1 || open + 1 >= close) {
-                        return line;
-                    }
-                    const varName = line.substring(open + 1, close);
-                    if (vars[varName] === undefined) {
-                        vars[varName] = 1;
-                    }
-                    return "<span class=\"list-item-number\">" + (vars[varName]++) + "</span>";
-                }
-                return line;
-            }).join("\n");
-        }
-
-        if (localStorage.getItem("enable-url-recognition") === "true") {
-            responseText = responseText.split("\n").map(line => {
-                if (line.startsWith(decodeUrl) || line.startsWith(defaultDecodeUrl)) {
-                    const span = document.createElement("span");
-                    span.classList = "link";
-                    span.setAttribute("type", "decode-url");
-                    span.setAttribute("onclick", "openLink(event)");
-                    span.setAttribute("to", line);
-                    span.style.width = "100%";
-                    span.style.position = "relative";
-                    const ogText = document.createElement("div");
-                    ogText.classList = "og-text";
-                    ogText.innerHTML = line;
-                    span.append(ogText);
-                    const decryptedText = document.createElement("div");
-                    decryptedText.classList = "decrypted-text";
-                    if (localStorage.getItem("enable-line-split") === "true") {
-                        decryptedText.innerHTML = decrypt(line).replaceAll("\n", "<br>");
-                    } else {
-                        decryptedText.innerHTML = decrypt(line);
-                    }
-                    decryptedText.setAttribute("onclick", "openLink(event)");
-                    decryptedText.setAttribute("to", line);
-                    span.append(decryptedText);
-                    return span.outerHTML;
-                } else if (line.includes("https://")) {
-                    line = line.split(" ").map(segment => {
-                        if (segment.startsWith("https://")) {
-                            const span = document.createElement("span");
-                            span.classList = "link";
-                            span.setAttribute("type", "url-text");
-                            span.setAttribute("onclick", "openLink(event)");
-                            span.setAttribute("to", segment);
-                            span.innerHTML = segment;
-                            segment = span.outerHTML;
-                        }
-                        return segment;
-                    }).join(" ");
-                }
-                return line;
-            }).join("\n");
-        }
-
-        const lines1 = responseText.split("\n");
-        let lines2 = lines1;
-
-        if (localStorage.getItem("enable-line-split") === "true") {
-            let lineNumber = 0;
-            lines2 = lines1.map(line => {
-                if (line === "<div class='has-border'>") {
-                    return "<div class='has-border' data-line-number='" + (lineNumber++) + "'><div class='empty-line' data-line-number='" + (lineNumber++) + "'><br></div>";
-                } else if (line === "</div>") {
+    if (responseText.includes("@list-item-number-increment")) {
+        const vars = {};
+        responseText = responseText.split("\n").map(line => {
+            if (line.startsWith("@list-item-number-increment")) {
+                listItemNumberLines.push(line);
+                const open = line.indexOf("(");
+                const close = line.indexOf(")");
+                if (open === -1 || close === -1 || open + 1 >= close) {
                     return line;
-                } else if (line === '') {
-                    return "<div class='empty-line' data-line-number='" + (lineNumber++) + "'><br></div>";
                 }
-                return "<div class='line' data-line-number='" + (lineNumber++) + "'>" + line + "</div>";
-            });
-            responseText = lines2.join("");
-        }
-
-        const container1 = document.getElementsByClassName(containerClassName)[0];
-
-        if (localStorage.getItem("enable-page-split") === "true") {
-            const pages = [], linesPage = [];
-            let temp = [];
-            function pushTempPage() {
-                if (linesPage.length === 0) {
-                    linesPage.push(lines1[0].includes("page ") ? lines1[0] : "");
+                const varName = line.substring(open + 1, close);
+                if (vars[varName] === undefined) {
+                    vars[varName] = 1;
                 }
+                return "<span class=\"list-item-number\">" + (vars[varName]++) + "</span>";
+            }
+            return line;
+        }).join("\n");
+    }
+
+    if (localStorage.getItem("enable-url-recognition") === "true") {
+        responseText = responseText.split("\n").map(line => {
+            if (line.startsWith(decodeUrl) || line.startsWith(defaultDecodeUrl)) {
+                const span = document.createElement("span");
+                span.classList = "link";
+                span.setAttribute("type", "decode-url");
+                span.setAttribute("onclick", "openLink(event)");
+                span.setAttribute("to", line);
+                span.style.width = "100%";
+                span.style.position = "relative";
+                const ogText = document.createElement("div");
+                ogText.classList = "og-text";
+                ogText.innerHTML = line;
+                span.append(ogText);
+                const decryptedText = document.createElement("div");
+                decryptedText.classList = "decrypted-text";
                 if (localStorage.getItem("enable-line-split") === "true") {
-                    pages.push(temp.join(""));
+                    decryptedText.innerHTML = decrypt(line).replaceAll("\n", "<br>");
                 } else {
-                    pages.push(temp.join("\n"));
+                    decryptedText.innerHTML = decrypt(line);
                 }
-                temp = [];
-            }
-            for (let i = 0; i < lines1.length; ++i) {
-                const words = lines1[i].split(' ');
-                if (["page", "Page"].includes(words[0]) && [2, 3].includes(words.length)) {
-                    const pageNumber = parseInt(words[1]);
-                    const condition1 = (pageNumber === 1 && words.length === 3 && ["right", "back"].includes(words[2]));
-                    const condition2 = (pageNumber > 1);
-                    if ((condition1 || condition2) && temp.length) {
-                        pushTempPage();
+                decryptedText.setAttribute("onclick", "openLink(event)");
+                decryptedText.setAttribute("to", line);
+                span.append(decryptedText);
+                return span.outerHTML;
+            } else if (line.includes("https://")) {
+                line = line.split(" ").map(segment => {
+                    if (segment.startsWith("https://")) {
+                        const span = document.createElement("span");
+                        span.classList = "link";
+                        span.setAttribute("type", "url-text");
+                        span.setAttribute("onclick", "openLink(event)");
+                        span.setAttribute("to", segment);
+                        span.innerHTML = segment;
+                        segment = span.outerHTML;
                     }
-                    linesPage.push(lines1[i]);
-                }
-                temp.push(lines2[i]);
+                    return segment;
+                }).join(" ");
             }
-            if (temp.length) {
-                pushTempPage();
+            return line;
+        }).join("\n");
+    }
+
+    const lines1 = responseText.split("\n");
+    let lines2 = lines1;
+
+    if (localStorage.getItem("enable-line-split") === "true") {
+        let lineNumber = 0;
+        lines2 = lines1.map(line => {
+            if (line === "<div class='has-border'>") {
+                return "<div class='has-border' data-line-number='" + (lineNumber++) + "'><div class='empty-line' data-line-number='" + (lineNumber++) + "'><br></div>";
+            } else if (line === "</div>") {
+                return line;
+            } else if (line === '') {
+                return "<div class='empty-line' data-line-number='" + (lineNumber++) + "'><br></div>";
             }
-            let pageNumber = 0;
-            function getClass() {
-                const classList = ["page"];
-                if (pageNumber === 0) {
-                    classList.push("first-page");
-                }
-                if (linesPage[pageNumber].length > 12) {
-                    classList.push("extra-width");
-                }
-                if (localStorage.getItem("enable-pre-width-fit-content") === "true" || responseText.includes("@command(\"enable-pre-width-fit-content\")")) {
-                    classList.push("width-fit-content");
-                }
-                return classList.join(" ");
+            return "<div class='line' data-line-number='" + (lineNumber++) + "'>" + line + "</div>";
+        });
+        responseText = lines2.join("");
+    }
+
+    const container1 = document.getElementsByClassName(containerClassName)[0];
+
+    if (localStorage.getItem("enable-page-split") === "true") {
+        const pages = [], linesPage = [];
+        let temp = [];
+        function pushTempPage() {
+            if (linesPage.length === 0) {
+                linesPage.push(lines1[0].includes("page ") ? lines1[0] : "");
             }
-            container1.innerHTML = pages.map(page => {
-                return "<pre class=\"" + getClass() + "\" data-page-number=" + pageNumber + " data-page-info=\"" + linesPage[pageNumber++] + "\">" + page + "</pre>";
-            }).join("");
-        } else {
-            const pre = container1.getElementsByTagName("pre")[0];
+            if (localStorage.getItem("enable-line-split") === "true") {
+                pages.push(temp.join(""));
+            } else {
+                pages.push(temp.join("\n"));
+            }
+            temp = [];
+        }
+        for (let i = 0; i < lines1.length; ++i) {
+            const words = lines1[i].split(' ');
+            if (["page", "Page"].includes(words[0]) && [2, 3].includes(words.length)) {
+                const pageNumber = parseInt(words[1]);
+                const condition1 = (pageNumber === 1 && words.length === 3 && ["right", "back"].includes(words[2]));
+                const condition2 = (pageNumber > 1);
+                if ((condition1 || condition2) && temp.length) {
+                    pushTempPage();
+                }
+                linesPage.push(lines1[i]);
+            }
+            temp.push(lines2[i]);
+        }
+        if (temp.length) {
+            pushTempPage();
+        }
+        let pageNumber = 0;
+        function getClass() {
+            const classList = ["page"];
+            if (pageNumber === 0) {
+                classList.push("first-page");
+            }
+            if (linesPage[pageNumber].length > 12) {
+                classList.push("extra-width");
+            }
             if (localStorage.getItem("enable-pre-width-fit-content") === "true" || responseText.includes("@command(\"enable-pre-width-fit-content\")")) {
-                pre.classList.add("width-fit-content");
+                classList.push("width-fit-content");
             }
-            pre.innerHTML = responseText;
+            return classList.join(" ");
         }
-
-        if (getParameter("is-iframe") !== "true" && localStorage.getItem("enable-badge") === "true") {
-            container1.prepend(function () {
-                const title = document.createElement("div");
-                title.classList = "title";
-                const url = getParameter("fakeUrl") || getParameter("src");
-                const segments = url.split("/").filter(seg => seg.length).slice(1);
-                title.innerHTML = "<span class='badge'>" + segments.join("</span>&nbsp;/&nbsp;<span class='badge'>") + "</span>";
-                const folderIndex = segments.length - 2;
-                const badgeList = title.querySelectorAll(".badge");
-                if (folderIndex >= 0 && folderIndex < badgeList.length && searchKeywords) {
-                    badgeList[folderIndex].setAttribute("onclick", "searchKeywords([this.innerText], {type: 'folder'})");
-                }
-                const wrapper = document.createElement("pre");
-                wrapper.classList = "badges";
-                wrapper.append(title);
-                return wrapper;
-            }());
+        container1.innerHTML = pages.map(page => {
+            return "<pre class=\"" + getClass() + "\" data-page-number=" + pageNumber + " data-page-info=\"" + linesPage[pageNumber++] + "\">" + page + "</pre>";
+        }).join("");
+    } else {
+        const pre = container1.getElementsByTagName("pre")[0];
+        if (localStorage.getItem("enable-pre-width-fit-content") === "true" || responseText.includes("@command(\"enable-pre-width-fit-content\")")) {
+            pre.classList.add("width-fit-content");
         }
+        pre.innerHTML = responseText;
+    }
 
-        if (getParameter("is-iframe") !== "true" && localStorage.getItem("enable-dual-article-container") === "true") {
-            const container2 = document.getElementsByClassName(container2ClassName)[0];
-            container1.querySelectorAll("img").forEach(img => {
-                img.setAttribute("random-id", "img-" + getRandomId());
-            });
-            container2.innerHTML = container1.innerHTML;
-            container2.parentElement.classList.remove("hidden");
-            function getImageWrapper(img) {
-                const imgWrapper = document.createElement("div");
-                imgWrapper.classList = "img-wrapper";
-                imgWrapper.style.width = parseFloat(img.clientWidth) + "px";
-                imgWrapper.style.minWidth = parseFloat(img.clientWidth) + "px";
-                imgWrapper.style.maxWidth = parseFloat(img.clientWidth) + "px";
-                const height = (parseFloat(img.naturalHeight) * parseFloat(img.clientWidth) / parseFloat(img.naturalWidth)) + "px";
-                imgWrapper.style.height = height;
-                imgWrapper.style.minHeight = height;
-                imgWrapper.style.maxHeight = height;
-                return imgWrapper;
+    if (getParameter("is-iframe") !== "true" && localStorage.getItem("enable-badge") === "true") {
+        container1.prepend(function () {
+            const title = document.createElement("div");
+            title.classList = "title";
+            const url = getParameter("fakeUrl") || getParameter("src");
+            const segments = url.split("/").filter(seg => seg.length).slice(1);
+            title.innerHTML = "<span class='badge'>" + segments.join("</span>&nbsp;/&nbsp;<span class='badge'>") + "</span>";
+            const folderIndex = segments.length - 2;
+            const badgeList = title.querySelectorAll(".badge");
+            if (folderIndex >= 0 && folderIndex < badgeList.length && searchKeywords) {
+                badgeList[folderIndex].setAttribute("onclick", "searchKeywords([this.innerText], {type: 'folder'})");
             }
-            let index = 0;
-            container1.querySelectorAll("img").forEach(img => {
-                img.alt = imgs[index++];
-                img.onload = function () {
-                    const imgWrapper = getImageWrapper(img);
-                    imgWrapper.setAttribute("onclick", "inspectImage(\"" + img.src + "\")");
-                    const background = document.createElement("div");
-                    background.style.backgroundImage = "url(" + img.src + ")";
-                    background.classList = "background-image";
-                    imgWrapper.append(background);
-                    imgWrapper.setAttribute("random-id", img.getAttribute("random-id"));
-                    img.replaceWith(imgWrapper);
-                }
-            });
-            index = 0;
-            container2.querySelectorAll("img").forEach(img => {
-                const randomId = img.getAttribute("random-id");
-                img.alt = imgs[index++];
-                img.onload = function () {
-                    const img = container2.querySelector("[random-id=\"" + randomId + "\"]");
-                    const imgWrapper = getImageWrapper(img);
-                    const background = document.createElement("div");
-                    background.style.backgroundImage = "url(" + img.src + ")";
-                    background.classList = "background-image";
-                    const backdropBlur = document.createElement("div");
-                    backdropBlur.classList = "backdrop-filter blur";
-                    const backdropWhite = document.createElement("div");
-                    backdropWhite.classList = "backdrop-filter white";
-                    const content = document.createElement("div");
-                    content.innerText = img.alt;
-                    content.classList = "content";
-                    imgWrapper.append(background);
-                    imgWrapper.append(backdropWhite);
-                    imgWrapper.append(backdropBlur);
-                    imgWrapper.append(content);
-                    imgWrapper.setAttribute("random-id", randomId);
-                    imgWrapper.innerHTML += `<style>
+            const wrapper = document.createElement("pre");
+            wrapper.classList = "badges";
+            wrapper.append(title);
+            return wrapper;
+        }());
+    }
+
+    if (getParameter("is-iframe") !== "true" && localStorage.getItem("enable-dual-article-container") === "true") {
+        const container2 = document.getElementsByClassName(container2ClassName)[0];
+        container1.querySelectorAll("img").forEach(img => {
+            img.setAttribute("random-id", "img-" + getRandomId());
+        });
+        container2.innerHTML = container1.innerHTML;
+        container2.parentElement.classList.remove("hidden");
+        function getImageWrapper(img) {
+            const imgWrapper = document.createElement("div");
+            imgWrapper.classList = "img-wrapper";
+            imgWrapper.style.width = parseFloat(img.clientWidth) + "px";
+            imgWrapper.style.minWidth = parseFloat(img.clientWidth) + "px";
+            imgWrapper.style.maxWidth = parseFloat(img.clientWidth) + "px";
+            const height = (parseFloat(img.naturalHeight) * parseFloat(img.clientWidth) / parseFloat(img.naturalWidth)) + "px";
+            imgWrapper.style.height = height;
+            imgWrapper.style.minHeight = height;
+            imgWrapper.style.maxHeight = height;
+            return imgWrapper;
+        }
+        let index = 0;
+        container1.querySelectorAll("img").forEach(img => {
+            img.alt = imgs[index++];
+            img.onload = function () {
+                const imgWrapper = getImageWrapper(img);
+                imgWrapper.setAttribute("onclick", "inspectImage(\"" + img.src + "\")");
+                const background = document.createElement("div");
+                background.style.backgroundImage = "url(" + img.src + ")";
+                background.classList = "background-image";
+                imgWrapper.append(background);
+                imgWrapper.setAttribute("random-id", img.getAttribute("random-id"));
+                img.replaceWith(imgWrapper);
+            }
+        });
+        index = 0;
+        container2.querySelectorAll("img").forEach(img => {
+            const randomId = img.getAttribute("random-id");
+            img.alt = imgs[index++];
+            img.onload = function () {
+                const img = container2.querySelector("[random-id=\"" + randomId + "\"]");
+                const imgWrapper = getImageWrapper(img);
+                const background = document.createElement("div");
+                background.style.backgroundImage = "url(" + img.src + ")";
+                background.classList = "background-image";
+                const backdropBlur = document.createElement("div");
+                backdropBlur.classList = "backdrop-filter blur";
+                const backdropWhite = document.createElement("div");
+                backdropWhite.classList = "backdrop-filter white";
+                const content = document.createElement("div");
+                content.innerText = img.alt;
+                content.classList = "content";
+                imgWrapper.append(background);
+                imgWrapper.append(backdropWhite);
+                imgWrapper.append(backdropBlur);
+                imgWrapper.append(content);
+                imgWrapper.setAttribute("random-id", randomId);
+                imgWrapper.innerHTML += `<style>
 body[data-value-of-enable-hover-highlight-img="true"]:has([random-id="${randomId}"]:hover) [random-id="${randomId}"] {
     z-index: 10;
     outline: 5px solid yellow;
@@ -742,78 +747,82 @@ body[data-value-of-enable-hover-highlight-img="true"]:has([random-id="${randomId
     background-color: white;
 }
 </style>`;
-                    img.replaceWith(imgWrapper);
-                }
-            });
-            if (localStorage.getItem("enable-name-index") === "true") {
-                container2.querySelectorAll(".name-link").forEach(l => {
-                    const text = document.createElement("span");
-                    text.classList.add("plain-name");
-                    text.innerHTML = l.innerHTML;
-                    l.replaceWith(text);
-                });
+                img.replaceWith(imgWrapper);
             }
-            if (localStorage.getItem("enable-border") === "true" && container2.querySelector(".has-border")) {
-                container2.querySelectorAll(".has-border").forEach(b => {
-                    b.style.borderColor = "transparent";
-                    if (localStorage.getItem("enable-line-split") === "true") {
-                        b.querySelector(".empty-line:first-child").innerHTML = "&lt;border&gt;";
-                        b.querySelector(".empty-line:last-child").innerHTML = "&lt;/border&gt;";
-                    } else {
-                        b.innerHTML = "&lt;border&gt;" + b.innerHTML.replace(/\n$/, "") + "&lt;/border&gt;";
-                    }
-                });
-            }
-            if (isMapEnabled) {
-                container2.querySelectorAll(".outer-wrapper").forEach(w => {
-                    const t = document.createElement("div");
-                    t.classList.add("src-text");
-                    t.innerText = parseMapsResult.src.shift();
-                    w.prepend(t);
-                    w.querySelector(".map-wrapper").remove();
-                    w.style.background = "unset";
-                });
-            }
-            container2.querySelectorAll("video").forEach(video => {
-                video.removeAttribute("controls");
-            });
-            if (listItemNumberLines.length) {
-                container2.querySelectorAll(".list-item-number").forEach(li => {
-                    li.replaceWith(listItemNumberLines.shift());
-                });
-            }
-            container2.querySelectorAll(".link").forEach(link => {
+        });
+        if (localStorage.getItem("enable-name-index") === "true") {
+            container2.querySelectorAll(".name-link").forEach(l => {
                 const text = document.createElement("span");
-                if (link.getAttribute("type") === "link") { // <link to=''></link>
-                    text.setAttribute("to", link.getAttribute("to"));
-                    text.setAttribute("innerHTML", link.innerHTML);
-                    text.innerHTML = link.innerHTML;
-                    text.setAttribute("onclick", "revealOuterHTML(this)");
-                } else if (link.getAttribute("type") === "url-text") { // url-text
-                    text.innerHTML = link.innerHTML;
-                } else if (link.getAttribute("type") === "decode-url") { // decode-url
-                    text.innerHTML = link.getAttribute("to");
-                    text.classList.add("plain-og-text");
-                } else {
-                    text.style.color = "var(--studio-red)";
-                    text.innerHTML = link.innerHTML;
-                }
-                link.replaceWith(text);
+                text.classList.add("plain-name");
+                text.innerHTML = l.innerHTML;
+                l.replaceWith(text);
             });
-        } else {
-            container1.parentElement.style.justifyContent = "center";
         }
-
+        if (localStorage.getItem("enable-border") === "true" && container2.querySelector(".has-border")) {
+            container2.querySelectorAll(".has-border").forEach(b => {
+                b.style.borderColor = "transparent";
+                if (localStorage.getItem("enable-line-split") === "true") {
+                    b.querySelector(".empty-line:first-child").innerHTML = "&lt;border&gt;";
+                    b.querySelector(".empty-line:last-child").innerHTML = "&lt;/border&gt;";
+                } else {
+                    b.innerHTML = "&lt;border&gt;" + b.innerHTML.replace(/\n$/, "") + "&lt;/border&gt;";
+                }
+            });
+        }
         if (isMapEnabled) {
-            renderMaps(parseMapsResult.maps);
+            container2.querySelectorAll(".outer-wrapper").forEach(w => {
+                const t = document.createElement("div");
+                t.classList.add("src-text");
+                t.innerText = parseMapsResult.src.shift();
+                w.prepend(t);
+                w.querySelector(".map-wrapper").remove();
+                w.style.background = "unset";
+            });
         }
+        container2.querySelectorAll("video").forEach(video => {
+            video.removeAttribute("controls");
+        });
+        if (listItemNumberLines.length) {
+            container2.querySelectorAll(".list-item-number").forEach(li => {
+                li.replaceWith(listItemNumberLines.shift());
+            });
+        }
+        container2.querySelectorAll(".link").forEach(link => {
+            const text = document.createElement("span");
+            if (link.getAttribute("type") === "link") { // <link to=''></link>
+                text.setAttribute("to", link.getAttribute("to"));
+                text.setAttribute("innerHTML", link.innerHTML);
+                text.innerHTML = link.innerHTML;
+                text.setAttribute("onclick", "revealOuterHTML(this)");
+            } else if (link.getAttribute("type") === "url-text") { // url-text
+                text.innerHTML = link.innerHTML;
+            } else if (link.getAttribute("type") === "decode-url") { // decode-url
+                text.innerHTML = link.getAttribute("to");
+                text.classList.add("plain-og-text");
+            } else {
+                text.style.color = "var(--studio-red)";
+                text.innerHTML = link.innerHTML;
+            }
+            link.replaceWith(text);
+        });
+    } else {
+        container1.parentElement.style.justifyContent = "center";
+    }
 
-        document.querySelector(".desktop").style.display = "flex";
-        if (getParameter("is-iframe") !== "true") {
-            document.querySelector(".footer").style.display = null;
-            hideLoading();
-        }
-    });
+    if (isMapEnabled) {
+        renderMaps(parseMapsResult.maps);
+    }
+
+    document.querySelector(".desktop").style.display = "flex";
+    if (getParameter("is-iframe") !== "true") {
+        document.querySelector(".footer").style.display = null;
+        hideLoading();
+        window.loadFooterGIF && window.loadFooterGIF();
+    }
+}
+
+function renderArticle(src, containerClassName, container2ClassName) {
+    ajax(src, undefined, renderArticleParse);
 }
 
 const src = getParameter("src");
