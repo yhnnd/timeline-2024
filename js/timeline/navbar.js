@@ -650,6 +650,10 @@ function getParameter(name) {
     return null;
 }
 
+function goHome () {
+    window.open("index.html", "_self");
+}
+
 function initNavbar() {
     let navbar = document.querySelector("#navbar");
     const isPageOwnNavbarFound = Boolean(navbar);
@@ -661,6 +665,13 @@ function initNavbar() {
     button.innerText = "Go Back";
     button.setAttribute("onclick", "goBack()");
     navbar.prepend(button);
+
+    if (!window.location.pathname.endsWith("/index.html")) {
+        const btn2 = document.createElement("button");
+        btn2.innerText = "Home";
+        btn2.setAttribute("onclick", "goHome()");
+        navbar.prepend(btn2);
+    }
 
     const info = document.createElement("div");
     info.classList.add("info");
