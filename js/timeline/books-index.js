@@ -724,7 +724,7 @@ for (const book of window.books) {
         }
         calendarEvents.push({
             title: "Read " + Month + "." + MonthDay,
-            url: "book-reader.html?src=" + realUrl + "&fakeUrl=" + fakeUrl,
+            url: "javascript: openFile(\"book-reader.html?src=" + realUrl + "&fakeUrl=" + fakeUrl + "\");",
             start: Year + "-" + Month + "-" + MonthDay
         });
     }
