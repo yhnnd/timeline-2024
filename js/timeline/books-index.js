@@ -22,7 +22,8 @@ window.bookNames = [
     "致王震書2 (2024)",// 18
     "王震來信2 (2024)",// 19
     "出路 5 (2024)",// 20
-    "詩 (2024)"// 21
+    "詩 (2024)",// 21
+    "出路 6 (2025)",// 22
 ];
 
 window.books[1] = {};
@@ -634,9 +635,16 @@ window.books[21].indexList = [
     "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2024.09.09.txt"
 ];
 
+// 22 出路 6 (2025)
+window.books[22] = {};
+window.books[22].indexList = [
+    "@2025/yhnnd.wordpress.com/22-diary-2025-01-2025-12-出路6/2025.01.01.txt",
+];
+
 window.repositoryMap = {
     "@2023/": "https://yhnnd.github.io/timeline-public/docs/",
-    "@2024/": "../"
+    "@2024/": "../",
+    "@2025/": "https://yhnnd.github.io/timeline-2025/"
 };
 window.localRepositoryKey = "@2024/";
 
