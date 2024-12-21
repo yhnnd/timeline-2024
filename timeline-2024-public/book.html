@@ -97,12 +97,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
         hideTimelineLoading();
         isLoaded = true;
-        setInterval(() => {
-            if (isLoaded && document.querySelector(".loading").style.display !== 'none') {
-                hideTimelineLoading();
-                showMiniLoading();
-            }
-        }, 3000);
     }
 });
     </script>

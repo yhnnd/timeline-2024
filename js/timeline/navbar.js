@@ -251,10 +251,7 @@ function deepCopy(obj, maxLevel = 3, level = 0) {
 }
 
 function goBack() {
-    const loading = document.querySelector(".loading");
-    if (loading) {
-        loading.style.display = null;
-    }
+    showTimelineLoading && showTimelineLoading();
     if (window.location.pathname.endsWith("/book.html")) {
         window.open("index.html", "_self");
     } else if (window.location.pathname.endsWith("/index-articles.html")) {
@@ -789,12 +786,30 @@ function hideTimelineLoading (event) {
 }
 
 function showMiniLoading () {
+    [...document.getElementsByClassName("mini-loading")].forEach(e => {
+        e.remove();
+    });
     const miniLoading = document.createElement("div");
     miniLoading.classList.add("mini-loading");
+    const id = "mini-loading-" + getRandomString();
+    miniLoading.setAttribute("id", id);
     miniLoading.setAttribute("onselectstart", "return false;");
     miniLoading.innerHTML = "<div class='mini-loading-caption' onselectstart='return false;'>Still loading ...</div>";
     document.querySelector("body").append(miniLoading);
     setTimeout(() => {
-        document.querySelector("mini-loading").remove();
+        document.getElementById(id).querySelector(".mini-loading-caption").innerHTML = "Loading Time Out";
     }, 10000);
+}
+
+function showTimelineLoading () {
+    const loadingIndicator = document.querySelector(".loading");
+    if (loadingIndicator) {
+        loadingIndicator.style.display = null;
+        setTimeout(() => {
+            if (loadingIndicator.style.display !== 'none') {
+                hideTimelineLoading();
+                showMiniLoading();
+            }
+        }, 3000);
+    }
 }

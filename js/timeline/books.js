@@ -9,7 +9,7 @@ if (bookList.length) {
         if (i > 0) {
             const listItem = document.createElement("li");
             const link = document.createElement("a");
-            link.href = "book.html?book=" + i;
+            link.href = "javascript: openFile(\"book.html?book=" + i + "\");";
             link.innerHTML = "<span>" + i + "</span>";
             if (bookNames[i] === "致王震書") {
                 link.innerHTML += '&nbsp;<span class="rounded-circle" style="display: inline-block; width: 1rem; height: 1rem; background: var(--studio-blue-50); position: relative; top: 3px;"></span>';
@@ -46,7 +46,7 @@ function openFile(link) {
     if (!link) {
         return;
     }
-    document.querySelector(".loading").style.display = null;
+    showTimelineLoading && showTimelineLoading();
     window.open(link, "_self");
 }
 

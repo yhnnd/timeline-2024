@@ -447,9 +447,11 @@ function renderArticleParse (responseText, containerClassName, container2ClassNa
                 const repositoryUrl = window.repositoryMap[repositoryKey];
                 to = to.replace("../", repositoryUrl);
             }
-            if (to) {
-                window.open(to, "_self");
+            if (!to) {
+                return;
             }
+            showTimelineLoading && showTimelineLoading();
+            window.open(to, "_self");
         }
     }
 
