@@ -177,12 +177,18 @@ function searchKeywords(keywords, configs) {
     if (searchInfo.isReady) {
         resultWrapper.innerHTML = "";
         for (const item of articles) {
+            if (!item.text || !item.text.length) {
+                continue;
+            }
             item.text = item.text.split("\n").map(line => {
                 return line.split(" ").map(decode).join(" ");
             }).join("\n");
             let times = 0;
             let isMatched = false;
             for (const keyword of keywords) {
+                if (!keyword || !keyword.length) {
+                    continue;
+                }
                 if (!configs || !configs.type || configs.type === "text") {
                     if (item.text.includes(keyword)) {
                         isMatched = true;
