@@ -1,5 +1,5 @@
 // Thu Dec 07 2023
-function ajax(url, responseText, callback) {
+function ajax(url, responseText, callback, errorCallback) {
     if (responseText != undefined && callback && typeof callback === "function") {
         // short circuit.
         callback(responseText);
@@ -11,6 +11,13 @@ function ajax(url, responseText, callback) {
             callback(req.responseText);
         } else {
             console.log("loadData: no callback");
+        }
+    });
+    req.addEventListener("error", () => {
+        if (errorCallback && typeof errorCallback === "function") {
+            errorCallback(req);
+        } else {
+            console.log("loadData: no errorCallback");
         }
     });
     req.open("GET", url);

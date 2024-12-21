@@ -113,30 +113,38 @@ function initSearch(resultWrapper, configs) {
     searchInfo.isLoading = true;
     searchInfo.isReady = false;
     const infoDom = document.querySelector(".global-navbar .info") || document.querySelector("#navbar .info");
+
+    function searchLoading() {
+        if (++searchInfo.counter == articles.length) {
+            searchInfo.isLoading = false;
+            searchInfo.isReady = true;
+            infoDom.innerText = "Search Ready";
+            if (searchInfo.hasUnfinishedTask) {
+                if (searchInfo.keywords.length) {
+                    if (searchInfo.unfinishedTaskType === "searchKeywords") {
+                        searchKeywords(searchInfo.keywords, configs);
+                    } else if (searchInfo.unfinishedTaskType === "advancedSearch") {
+                        advancedSearch(searchInfo.keywords);
+                    }
+                }
+                searchInfo.hasUnfinishedTask = false;
+                searchInfo.keywords = [];
+            }
+        } else {
+            const indicator = "Search Loading " + searchInfo.counter + "/" + articles.length;
+            infoDom.innerText = indicator;
+            resultWrapper.innerText = indicator;
+        }
+    }
+
     for (const i in articles) {
         const url = articles[i].realUrl;
         ajax(url, articles[i]["text"], function (responseText) {
             articles[i].text = responseText;
-            if (++searchInfo.counter == articles.length) {
-                searchInfo.isLoading = false;
-                searchInfo.isReady = true;
-                infoDom.innerText = "Search Ready";
-                if (searchInfo.hasUnfinishedTask) {
-                    if (searchInfo.keywords.length) {
-                        if (searchInfo.unfinishedTaskType === "searchKeywords") {
-                            searchKeywords(searchInfo.keywords, configs);
-                        } else if (searchInfo.unfinishedTaskType === "advancedSearch") {
-                            advancedSearch(searchInfo.keywords);
-                        }
-                    }
-                    searchInfo.hasUnfinishedTask = false;
-                    searchInfo.keywords = [];
-                }
-            } else {
-                const indicator = "Search Loading " + searchInfo.counter + "/" + articles.length;
-                infoDom.innerText = indicator;
-                resultWrapper.innerText = indicator;
-            }
+            searchLoading();
+        }, function () {
+            articles[i].text = "";
+            searchLoading();
         });
     }
 }
