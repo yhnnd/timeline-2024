@@ -180,3 +180,24 @@ body[data-value-of-enable-navbar="true"] .reader {
     max-height: 100vh;
     overflow: hidden;
 }
+
+.mini-loading {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: black;
+    color: white;
+    width: 100vw;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mini-loading-caption {
+    font-size: 18px;
+    font-family: monospace;
+    color: white;
+    padding: 2px 20px;
+    border: 3px solid white;
+}

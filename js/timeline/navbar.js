@@ -771,7 +771,7 @@ async function runSyncFunctions() {
     return await resultFunction();
 }
 
-function hideLoading (event) {
+function hideTimelineLoading (event) {
     event && event.stopPropagation();
     const loading = document.querySelector(".loading");
     runSyncFunctions(function () {
@@ -786,4 +786,15 @@ function hideLoading (event) {
         loading.style.transition = null;
         loading.style.opacity = null;
     }, 1000);
+}
+
+function showMiniLoading () {
+    const miniLoading = document.createElement("div");
+    miniLoading.classList.add("mini-loading");
+    miniLoading.setAttribute("onselectstart", "return false;");
+    miniLoading.innerHTML = "<div class='mini-loading-caption' onselectstart='return false;'>Still loading ...</div>";
+    document.querySelector("body").append(miniLoading);
+    setTimeout(() => {
+        document.querySelector("mini-loading").remove();
+    }, 10000);
 }

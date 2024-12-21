@@ -38,7 +38,7 @@
             </div>
         </div>
     </div>
-    <div class="loading" onclick="hideLoading(event)">
+    <div class="loading" onclick="hideTimelineLoading(event)">
         <div id="skyside-shield-image"
         style="width: 100%; border: none; margin-bottom: 20px; display: flex; justify-content: center; background-color: black; align-items: center;">
             <img alt="" style="min-width: 355.55px; max-width: 355.55px; width: 355.55px; min-height: 200px; max-height: 200px; height: 200px;"
@@ -95,11 +95,12 @@ document.addEventListener("DOMContentLoaded", function() {
             document.body.appendChild(style);
         }
 
-        hideLoading();
+        hideTimelineLoading();
         isLoaded = true;
         setInterval(() => {
             if (isLoaded && document.querySelector(".loading").style.display !== 'none') {
-                hideLoading();
+                hideTimelineLoading();
+                showMiniLoading();
             }
         }, 3000);
     }
