@@ -1,5 +1,7 @@
 2024/12/29
 
+@base64("5pio5aSpMTLmnIgyOOaXpeaYr+aciOacq+WRqOWFre+8jOWFrOWPuOimgeW8uuWItuWKoOePre+8jOaIkeWboOS4uuWJjeS4gOWkqeayoeedoeWlve+8jOaJgOS7peS4iuWNiOivt+WBh+ayoeWOu+S4iuePre+8jOWcqOWutuedoeinieS6huOAguS4i+WNiOS4ieeCueWOu+eahOeOr+aZru+8jOaZmuS4iuWSjOWQjOS6i+aWueW/l+a4heOAgeS7u+mYv+W7uuOAgeatpuaWh+WNmuS4gOi1t+WOu+eOr+aZruS4gOWxgueahEtGQ+WQg+aZmumlreOAguaZmuS4iu+8jOWcqOW3peS9jeW+heWIsOW+iOaZmuaJjeaJk+i9puWbnuS4h+WutueBr+eBq+OAgg==");
+
 @base64("5rip5a2Q55Gc77yI5YWr54Kv77yJ5ZyoIFlvdVR1YmUg5pGE5b6S5pel6K6w6aKR6YGT5Y+R5biD5LqG5o+t6Zyy5aSn6ZmG57uf5oiY5Y+w5rm+55qE5b2x54mH5LiL6ZuG44CC");
 
 https://www.youtube.com/watch?v=ZCyWe3Ib7DI
