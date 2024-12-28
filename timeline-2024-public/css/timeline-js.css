@@ -21,7 +21,7 @@
 .timeline {
   border-left: 10px solid royalblue;
   margin-left: 30px;
-  height: 530px;
+  height: fit-content;
   width: 216px;
   background-color: white;
   transform: scaleY(.9724);
