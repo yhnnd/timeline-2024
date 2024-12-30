@@ -925,6 +925,8 @@ body[data-value-of-enable-hover-highlight-img="true"]:has([random-id="${randomId
 
     if (isMapEnabled) {
         renderMaps(parseMapsResult.maps);
+        /* 地图加载图片只加载一张，只有在用户调整窗口尺寸时地图才会加载所有图片，所以这里模拟用户调整窗口尺寸 */
+        window.dispatchEvent(new Event('resize'));
     }
 
     document.querySelector(".desktop").style.display = "flex";
