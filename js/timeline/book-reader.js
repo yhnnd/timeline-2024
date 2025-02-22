@@ -54,7 +54,7 @@ if (getParameter("is-iframe") !== "true") { // Loading image and footer video in
         if (!wrapper) {
             return;
         }
-        wrapper.innerHTML = `<img src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-08-03-diary-pics/animation-v4.gif" onclick="clickGIF(this);">`;
+        wrapper.innerHTML = `<img src="../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/pics-2024-08-03-diary-pics/animation-v4.gif" onclick="clickGIF(this);" loading="lazy">`;
     };
 
     window.clickGIF = function (img) {
