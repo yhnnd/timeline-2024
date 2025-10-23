@@ -356,18 +356,163 @@ function decodeOnline(fragment) {
     return result;
 }
 
+function parseTableLine(line) {
+    let tableCells = [], tmpout = "", tmpin = "", isOpen = false, n = 0, isQuoted = false;
+    // Read all {text} in table cells.
+    for (const char of line) {
+        if (isOpen === true) {
+            if (char === '"') {
+                isQuoted = !isQuoted;
+            }
+            if (isQuoted === false && char === "}") {
+                isOpen = false;
+                tableCells[n] = tmpin;
+                tmpin = "";
+            }
+        }
+        if (isOpen === true) {
+            tmpin += char;
+        } else {
+            tmpout += char;
+            if (char === ",") {
+                ++n;
+            }
+        }
+        if (char === "{" && isOpen === false) {
+            isOpen = true;
+            isQuoted = false;
+        }
+    }
+    const layers = tmpout.split(":").map(e => e.trim()).map(function(e) {
+        if (e.startsWith("[")) {
+            e = e.replace("[", "").replace("]", "");
+            return e.split(",").map(e => e.trim());
+        }
+        return e;
+    });
+    const getNode = function (query) {
+        const x = query.split(".");
+        let id = null, result = null;
+        for (let i = 0; i < x.length; i++) {
+            let z = x[i].split("#");
+            if (i == 0) {
+                result = document.createElement(z[0]);
+                if (z[0] == "script") {
+                    result.setAttribute("type", "text/javascript-unsafe");
+                }
+            } else {
+                result.classList.add(z[0]);
+            }
+            if (z.length > 1) {
+                id = z[1];
+            }
+        }
+        if (id) {
+            result.setAttribute("id", id);
+        }
+        return result;
+    };
+    let root = null;
+    let curr = null;
+    for (const e of layers) {
+        if (!curr) {
+            curr = getNode(e);
+            root = curr;
+        } else if (typeof e === "string") {
+            const tempNode = getNode(e);
+            const rand = ("" + Math.random()).split(".")[1];
+            tempNode.setAttribute("rand", rand);
+            curr.append(tempNode);
+            curr = curr.querySelector("[rand='" + rand + "']");
+            curr.removeAttribute("rand");
+        } else if (e instanceof Array) {
+            for (let i = 0; i < e.length; ++i) {
+                const p = e[i].split("=").map(u => u.trim());
+                const tempNode = getNode(p[0]);
+                const tableCell = tableCells[i] || "";
+                if (tableCell.length > 1 && tableCell.startsWith("\"") && tableCell.endsWith("\"")) {
+                    tempNode.innerText = tableCell.substring(1, tableCell.length - 1);
+                } else {
+                    tempNode.innerHTML = tableCell;
+                }
+                curr.append(tempNode);
+            }
+        }
+    }
+    return root;
+}
+
+function parseTable(lines) {
+    let root = null, head = null, body = null;
+    for (const line of lines) {
+        if (line.startsWith("table")) {
+            root = parseTableLine(line);
+        } else if (line.startsWith("thead")) {
+            head = parseTableLine(line);
+        } else if (line.startsWith("tbody")) {
+            body = parseTableLine(line);
+        } else if (line.startsWith("tr")) {
+            if (body) {
+                body.append(parseTableLine(line));
+            } else if (head) {
+                head.append(parseTableLine(line));
+            } else {
+                body = document.createElement("tbody");
+                body.append(parseTableLine(line));
+            }
+        }
+    }
+    if (!root) {
+        root = document.createElement("table");
+    }
+    root.append(head);
+    root.append(body);
+    return root;
+}
+
 function renderArticleParse (responseText, containerClassName, container2ClassName) {
     responseText = responseText.split("\n").map(line => {
         return line.split(" ").map(decode).join(" ");
     }).join("\n");
 
+    const weCardTables = [];
+    let hasWeCardTable = false;
+
     responseText = function (responseText) {
+        let tmp = [], isInTable = false;
+        return responseText.split("\n").map((line) => {
+            if (line === "@WeCardTable(\"begin\");") {
+                isInTable = true;
+            } else if (line === "@WeCardTable(\"end\");") {
+                const table = parseTable(tmp);
+                table.classList.add("wecard-table");
+                weCardTables.push({
+                    ogLines: tmp.map(l => l.replaceAll("<", "&lt;")),
+                    dom: table
+                });
+                hasWeCardTable = true;
+                tmp = [];
+                isInTable = false;
+            } else if (isInTable) {
+                tmp.push(line);
+            }
+            return line;
+        }).join("\n");
+    }(responseText);
+
+    const patternBdr = "@command(\"enable-border-recognition\")";
+    const isBorderEnabled = (localStorage.getItem("enable-border") === "true") || responseText.includes(patternBdr);
+    const patternVid = "@command(\"enable-video-recognition\")";
+    const isVideoEnabled = (localStorage.getItem("enable-at-sign-video") === "true") || responseText.includes(patternVid);
+
+    responseText = function (responseText) {
+        document.body.removeAttribute("data-line-width-maximum");
         return responseText.split("\n").map((line) => {
             if (line.trim().startsWith("{{") && line.trim().endsWith("}}") && localStorage.getItem("enable-delete-line") === "true") {
                 return line.replace("{{", '@command("delete-start")').replace("}}", '@command("delete-end")');
-            } else if (line === "<border>" && localStorage.getItem("enable-border") === "true") {
-                return '@command("border-start")';
-            } else if (line === "</border>" && localStorage.getItem("enable-border") === "true") {
+            } else if ((line === "<border>" || line.startsWith("<border ") && line.endsWith(">")) && isBorderEnabled) {
+                return line.replace("<border", '@command("border-start")');
+            } else if (line === "</border>" && isBorderEnabled) {
                 return '@command("border-end")';
             }
             if (line === "@command(\"line-width-maximum\")") {
@@ -375,6 +520,10 @@ function renderArticleParse (responseText, containerClassName, container2ClassNa
             }
             line = line.replaceAll("<link", '@command("link-start")');
             line = line.replaceAll("</link>", '@command("link-end")');
+            if (line.includes("<bubble") && line.includes("</bubble>")) {
+                line = line.replaceAll("<bubble", '@command("bubble-start")');
+                line = line.replaceAll("</bubble>", '@command("bubble-end")');
+            }
             return line;
         }).join("\n");
     }(responseText);
@@ -411,11 +560,52 @@ function renderArticleParse (responseText, containerClassName, container2ClassNa
 
     responseText = responseText.replaceAll("<", "&lt;");
 
+    if (isBorderEnabled) {
+        responseText = responseText.split("\n").map(line => {
+            if (line.includes(patternBdr)) {
+                return line.replace(patternBdr, "<span class='highlight-green'>" + patternBdr + "</span>");
+            }
+            return line;
+        }).join("\n");
+    }
+
+    if (hasWeCardTable) {
+        let isInTable = false;
+        responseText = responseText.split("\n").map(line => {
+            if (line === "@WeCardTable(\"begin\");") {
+                isInTable = true;
+            } else if (line === "@WeCardTable(\"end\");") {
+                isInTable = false;
+                const tableWrapper = document.createElement("div");
+                tableWrapper.classList.add("wecard-table-wrapper");
+                const table = weCardTables.shift();
+                if (localStorage.getItem("enable-dual-article-container") === "true") {
+                    const ogTableLines = document.createElement("div");
+                    ogTableLines.style.visibility = "hidden";
+                    ogTableLines.innerHTML = "<div>@WeCardTable(\"begin\");</div><div>" + table.ogLines.join("</div><div>") + "</div><div>@WeCardTable(\"end\");</div>";
+                    tableWrapper.append(ogTableLines);
+                }
+                tableWrapper.append(table.dom);
+                return tableWrapper.outerHTML + "<span class=\"hidden-in-container-1\">" + line + "</span>";
+            }
+            if (isInTable) {
+                return "<span class=\"hidden-in-container-1\">" + line + "</span>";
+            }
+            return line;
+        }).join("\n");
+    }
+
     if (localStorage.getItem("enable-img-recognition") === "true" || responseText.includes("@command(\"enable-image-recognition\")")) {
         responseText = responseText.split("\n").map(line => {
             if (line.startsWith("@image &lt;img ") && line.endsWith(">")) {
                 line = line.replace("@image &lt;img ", "<img ");
-                return insertStr(line, line.length - 1, " onclick=\"inspectImage(this.src)\"");
+                /* Support Images from other Repos */
+                if (line.includes("@")) {
+                    for (const [repositoryKey, repositoryUrl] of Object.entries(window.repositoryMap)) {
+                        line = line.replace(repositoryKey, repositoryUrl);
+                    }
+                }
+                return insertStr(line, line.length - 1, " onclick=\"inspectImage(this.src)\" loading=\"lazy\"");
             }
             if (line.startsWith("@div_start &lt;div") && line.endsWith(">")) {
                 return line.replace("@div_start &lt;div", "<div");
@@ -430,17 +620,26 @@ function renderArticleParse (responseText, containerClassName, container2ClassNa
         }).join("\n");
     }
 
+    responseText = responseText.replaceAll('@command("bubble-start")', '<div class="message-bubble"');
+    responseText = responseText.replaceAll('@command("bubble-end")', "</div>");
     responseText = responseText.replaceAll('@command("delete-start")', "<del>");
     responseText = responseText.replaceAll('@command("delete-end")', "</del>");
-    responseText = responseText.replaceAll('@command("border-start")', "<div class='has-border'>");
+    responseText = responseText.replaceAll('@command("border-start")', "<div class='has-border'");
     responseText = responseText.replaceAll('@command("border-end")', "\n</div>");
-    responseText = responseText.replaceAll('@command("link-start")', "<div class='link' type='link' onclick='openLink(event)'");
+    responseText = responseText.replaceAll('@command("link-start")', "<div class='link' onclick='openLink(event)'");
     responseText = responseText.replaceAll('@command("link-end")', "</div>");
     responseText = responseText.replaceAll("@command(\"line-width-maximum\")", "<span class='highlight-green'>@command(\"line-width-maximum\")</span>");
+    responseText = responseText.replaceAll("@command(\"small-seal-start\")", "<div class='small-seal-script'>");
+    responseText = responseText.replaceAll("@command(\"small-seal-end\")", "\n</div>");
 
     if (window.openLink === undefined) {
         window.openLink = function (event) {
-            let to = event.target.getAttribute('to');
+            let to = "";
+            if ((typeof event) === "string") {
+                to = event;
+            } else {
+                to = event.target.getAttribute('to');
+            }
             const fakeUrl = window.getParameter("fakeUrl");
             if (fakeUrl && !fakeUrl.startsWith(window.localRepositoryKey)) {
                 const repositoryKey = fakeUrl.split("/").shift() + "/";
@@ -514,8 +713,6 @@ function renderArticleParse (responseText, containerClassName, container2ClassNa
                 }
             }
         }
-        console.log(availableStartWiths);
-        console.log(availableDelimiters);
         responseText = responseText.split("\n").map(line => {
             const matched = [];
             const lineTrimmed = line.trim();
@@ -604,7 +801,7 @@ function renderArticleParse (responseText, containerClassName, container2ClassNa
         responseText = parseMapsResult.text;
     }
 
-    if (localStorage.getItem("enable-at-sign-video") === "true") {
+    if (isVideoEnabled) {
         responseText = responseText.split("\n").map(line => {
             if (line.startsWith("@video")) { // @video resources/35_1713060169.mp4 loop
                 const parameters = line.split(" ");
@@ -616,11 +813,13 @@ function renderArticleParse (responseText, containerClassName, container2ClassNa
                 }
                 const wrapperOpen = '<div class="video-wrapper">';
                 const covers = '<div class="backdrop-filter blur"></div><div class="backdrop-filter white"></div><div class="cover">' + line + '</div>';
-                const videoOpen = '<video width="100%" ' + parameters.join(" ") + ' style="width: 100%;">';
+                const videoOpen = '<video width="100%" ' + parameters.join(" ") + ' style="width: 100%;" loading="lazy">';
                 const source = '<source src="' + window.parseFakeUrl(src, { fakeUrl: getParameter("fakeUrl"), realUrl: getParameter("src") }) + '" type="video/' + fileType + '">'; // <source src="resources/35_1713060169.mp4" type="video/mp4">
                 const videoClose = '</video>';
                 const wrapperClose = '</div>';
                 return wrapperOpen + covers + videoOpen + source + videoClose + wrapperClose;
+            } else if (line.includes(patternVid)) {
+                return line.replace(patternVid, "<span class='highlight-green'>" + patternVid + "</span>");
             }
             return line;
         }).join("\n");
@@ -652,14 +851,16 @@ function renderArticleParse (responseText, containerClassName, container2ClassNa
         responseText = responseText.split("\n").map(line => {
             if (line.startsWith(decodeUrl) || line.startsWith(defaultDecodeUrl) || line.startsWith(decodeBase64Url) || line.startsWith(defaultDecodeBase64Url)) {
                 const span = document.createElement("span");
-                span.classList = "link";
-                span.setAttribute("type", "decode-url");
+                const randId = "rand-" + getRandomId();
+                span.setAttribute("random-id", randId);
+                span.classList = "decode-url-link";
                 span.setAttribute("onclick", "openLink(event)");
                 span.setAttribute("to", line);
                 span.style.width = "100%";
                 span.style.position = "relative";
                 const ogText = document.createElement("div");
                 ogText.classList = "og-text";
+                ogText.setAttribute("to", line);
                 ogText.innerHTML = line;
                 span.append(ogText);
                 const decryptedText = document.createElement("div");
@@ -672,13 +873,22 @@ function renderArticleParse (responseText, containerClassName, container2ClassNa
                 decryptedText.setAttribute("onclick", "openLink(event)");
                 decryptedText.setAttribute("to", line);
                 span.append(decryptedText);
+                setTimeout(() => {
+                    document.querySelectorAll("[random-id=\"" + randId + "\"]").forEach((span) => {
+                        const ogText = span.querySelector(".og-text,.plain-og-text");
+                        const decryptedText = span.querySelector(".decrypted-text");
+                        if (decryptedText.clientHeight > ogText.clientHeight) {
+                            decryptedText.style.position = "unset";
+                            ogText.style.position = "absolute";
+                        }
+                    });
+                }, 1000);
                 return span.outerHTML;
             } else if (line.includes("https://")) {
                 line = line.split(" ").map(segment => {
                     if (segment.startsWith("https://")) {
                         const span = document.createElement("span");
-                        span.classList = "link";
-                        span.setAttribute("type", "url-text");
+                        span.classList = "url-text-link";
                         span.setAttribute("onclick", "openLink(event)");
                         span.setAttribute("to", segment);
                         span.innerHTML = segment;
@@ -699,6 +909,8 @@ function renderArticleParse (responseText, containerClassName, container2ClassNa
         lines2 = lines1.map(line => {
             if (line === "<div class='has-border'>") {
                 return "<div class='has-border' data-line-number='" + (lineNumber++) + "'><div class='empty-line' data-line-number='" + (lineNumber++) + "'><br></div>";
+            } else if (line === "<div class='small-seal-script'>") {
+                return "<div class='small-seal-script' data-line-number='" + (lineNumber++) + "'><div class='empty-line' data-line-number='" + (lineNumber++) + "'><br></div>";
             } else if (line === "</div>") {
                 return line;
             } else if (line === '') {
@@ -759,11 +971,12 @@ function renderArticleParse (responseText, containerClassName, container2ClassNa
             return "<pre class=\"" + getClass() + "\" data-page-number=" + pageNumber + " data-page-info=\"" + linesPage[pageNumber++] + "\">" + page + "</pre>";
         }).join("");
     } else {
-        const pre = container1.getElementsByTagName("pre")[0];
+        const pre = document.createElement("pre");
         if (localStorage.getItem("enable-pre-width-fit-content") === "true" || responseText.includes("@command(\"enable-pre-width-fit-content\")")) {
             pre.classList.add("width-fit-content");
         }
         pre.innerHTML = responseText;
+        container1.innerHTML = pre.outerHTML;
     }
 
     if (getParameter("is-iframe") !== "true" && localStorage.getItem("enable-badge") === "true") {
@@ -795,13 +1008,7 @@ function renderArticleParse (responseText, containerClassName, container2ClassNa
         function getImageWrapper(img) {
             const imgWrapper = document.createElement("div");
             imgWrapper.classList = "img-wrapper";
-            imgWrapper.style.width = parseFloat(img.clientWidth) + "px";
-            imgWrapper.style.minWidth = parseFloat(img.clientWidth) + "px";
-            imgWrapper.style.maxWidth = parseFloat(img.clientWidth) + "px";
-            const height = (parseFloat(img.naturalHeight) * parseFloat(img.clientWidth) / parseFloat(img.naturalWidth)) + "px";
-            imgWrapper.style.height = height;
-            imgWrapper.style.minHeight = height;
-            imgWrapper.style.maxHeight = height;
+            imgWrapper.innerHTML = img.outerHTML;
             return imgWrapper;
         }
         let index = 0;
@@ -876,13 +1083,19 @@ body[data-value-of-enable-hover-highlight-img="true"]:has([random-id="${randomId
                 }
             });
         }
+        container2.querySelectorAll(".small-seal-script").forEach(b => {
+            if (localStorage.getItem("enable-line-split") === "true") {
+                b.querySelector(".empty-line:first-child").innerHTML = "@command(\"small-seal-start\")";
+                b.querySelector(".empty-line:last-child").innerHTML = "@command(\"small-seal-end\")";
+            } else {
+                b.innerHTML = "@command(\"small-seal-start\")" + b.innerHTML.replace(/\n$/, "") + "@command(\"small-seal-end\")";
+            }
+        });
         if (localStorage.getItem("enable-highlight-red") === "true" && container2.querySelector(".highlight-red")) {
             container2.querySelectorAll(".highlight-red").forEach(red => {
                 red.outerHTML = red.innerHTML;
             });
         }
-        // if (localStorage.getItem("enable-message-bubble") === "true" && container2.querySelector(".message-bubble")) {
-        // }
         if (isMapEnabled) {
             container2.querySelectorAll(".outer-wrapper").forEach(w => {
                 const t = document.createElement("div");
@@ -901,26 +1114,45 @@ body[data-value-of-enable-hover-highlight-img="true"]:has([random-id="${randomId
                 li.replaceWith(listItemNumberLines.shift());
             });
         }
-        container2.querySelectorAll(".link").forEach(link => {
+        container2.querySelectorAll(".link").forEach(link => { // <link to=''></link>
             const text = document.createElement("span");
-            if (link.getAttribute("type") === "link") { // <link to=''></link>
-                text.setAttribute("to", link.getAttribute("to"));
-                text.setAttribute("innerHTML", link.innerHTML);
-                text.innerHTML = link.innerHTML;
-                text.setAttribute("onclick", "revealOuterHTML(this)");
-            } else if (link.getAttribute("type") === "url-text") { // url-text
-                text.innerHTML = link.innerHTML;
-            } else if (link.getAttribute("type") === "decode-url") { // decode-url
-                text.innerHTML = link.getAttribute("to");
-                text.classList.add("plain-og-text");
-            } else {
-                text.style.color = "var(--studio-red)";
-                text.innerHTML = link.innerHTML;
-            }
+            text.classList.add("disabled-link");
+            text.setAttribute("to", link.getAttribute("to"));
+            text.setAttribute("innerHTML", link.innerHTML);
+            text.innerHTML = link.innerHTML;
+            text.setAttribute("onclick", "revealOuterHTML(this)");
+            link.replaceWith(text);
+        });
+        container2.querySelectorAll(".url-text-link").forEach(link => { // url-text-link
+            const text = document.createElement("span");
+            text.classList.add("disabled-url-text-link");
+            text.innerHTML = link.innerHTML;
+            link.replaceWith(text);
+        });
+        container2.querySelectorAll(".decode-url-link").forEach(link => { // decode-url-link
+            const text = document.createElement("span");
+            text.classList.add("disabled-decode-url-link");
+            text.setAttribute("random-id", link.getAttribute("random-id"));
+            text.innerHTML = link.innerHTML;
+            text.querySelector(".og-text").removeAttribute("to");
+            text.querySelector(".og-text").classList = "plain-og-text";
+            text.querySelector(".decrypted-text").removeAttribute("to");
+            text.querySelector(".decrypted-text").removeAttribute("onclick");
             link.replaceWith(text);
         });
     } else {
         container1.parentElement.style.justifyContent = "center";
+    }
+
+    if (hasWeCardTable && localStorage.getItem("enable-line-split") !== "true") {
+        document.querySelectorAll(".container-1 > pre").forEach(page => {
+            page.innerHTML = page.innerHTML.split("\n").filter(line => {
+                if (line.startsWith("<span class=\"hidden-in-container-1\">") && line.endsWith("</span>")) {
+                    return false;
+                }
+                return true;
+            }).join("\n");
+        });
     }
 
     if (isMapEnabled) {
@@ -943,7 +1175,24 @@ function renderArticle(src, containerClassName, container2ClassName) {
     });
 }
 
-const src = getParameter("src");
-if (src != undefined) {
-    renderArticle(src, "container-1", "container-2");
+function openFile(src) {
+    if (!src || !src.length) {
+        return;
+    }
+    if (src.endsWith(".html")) {
+        document.querySelector(".desktop").style.display = "none";
+        document.querySelector(".desktop-2").style.display = null;
+        document.querySelector(".desktop-2 iframe").setAttribute("src", src);
+        hideTimelineLoading();
+        const footer = document.querySelector(".footer");
+        if (footer) {
+            footer.style.display = "none";
+        }
+    } else {
+        document.querySelector(".desktop-2").style.display = "none";
+        renderArticle(src, "container-1", "container-2");
+    }
 }
+
+const src = getParameter("src");
+openFile(src);
