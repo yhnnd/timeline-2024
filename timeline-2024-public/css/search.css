@@ -18,6 +18,8 @@
 
 .search-bar>.search-keyword {
     margin-left: auto;
+    max-height: 2rem;
+    overflow-y: scroll;
 }
 
 .search-bar>.close-button {
@@ -157,33 +159,25 @@ pre {
     font-family: Menlo, Monaco, Consolas, "Courier New", "Microsoft YaHei", monospace;
 }
 
+.marker-wrapper,
+.marker {
+    font-size: unset;
+    font-style: unset;
+    font-weight: unset;
+    font-family: unset;
+}
+
 .marker {
     background-color: var(--studio-yellow-10);
-    outline: 2px solid var(--studio-red);
-    outline-offset: 2px;
-    outline-style: dashed;
-    font-style: normal;
-    font-family: Menlo, Monaco, Consolas, "Courier New", "Microsoft YaHei", monospace;
-    position: relative;
-    z-index: 32;
+    outline: 1px solid var(--studio-yellow-10);
+    outline-offset: 0;
+    outline-style: solid;
 }
 
 .marker-wrapper {
-    position: relative;
-    display: inline-block;
-    font-size: 16px;
-}
-
-.marker-wrapper::before {
-    display: inline-block;
-    content: '';
-    position: absolute;
-    z-index: 31;
-    left: -2px;
-    top: 0;
-    width: calc(100% + 4px);
-    height: 23px;
-    background: var(--studio-yellow-10);
+    outline: 2px solid var(--studio-red);
+    outline-offset: 1px;
+    outline-style: dashed;
 }
 
 .search>.search-result>.link>.text .thumbnail,
