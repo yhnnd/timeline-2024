@@ -144,6 +144,14 @@ function getRandomId() {
     return ("" + Math.random() * 10).split(".").join("").substring(0, 12) + "-" + (new Date()).getTime();
 }
 
+function toggleClass(target, className) {
+    if (target.classList.contains(className)) {
+        target.classList.remove(className);
+    } else {
+        target.classList.add(className);
+    }
+}
+
 function revealOuterHTML(target) {
     const to = target.getAttribute('to');
     target.style.color = "var(--studio-red)";
