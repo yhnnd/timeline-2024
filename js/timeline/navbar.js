@@ -612,6 +612,39 @@ display: none;
                     </div>
                 </div>
             </li>
+            <li>
+                <div class="settings-item">
+                    <div>
+                        <code>22</code>
+                        <span>Enable Cache</span>
+                    </div>
+                    <div class="ios-button" data-key="enable-cache">
+                        <div class="ios-button-circle"></div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="settings-item">
+                    <div>
+                        <code>23</code>
+                        <span>Enable Footer GIF</span>
+                    </div>
+                    <div class="ios-button" data-key="enable-footer-gif">
+                        <div class="ios-button-circle"></div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="settings-item">
+                    <div>
+                        <code>24</code>
+                        <span>Enable Cache for Search ⚠️</span>
+                    </div>
+                    <div class="ios-button" data-key="enable-cache-for-search">
+                        <div class="ios-button-circle"></div>
+                    </div>
+                </div>
+            </li>
         </ul>
     </li>
 </ul>`;
@@ -699,14 +732,6 @@ function initNavbar() {
         if (getParameter(key) === "true") {
             document.body.setAttribute(key, "true");
         }
-    }
-
-    if (window.location.hostname === "localhost") {
-        button2.style.marginRight = "200px";
-        setTimeout(() => {
-            button2.style.transition = "margin-right .3s ease";
-            button2.style.marginRight = "unset";
-        }, 2100);
     }
 }
 

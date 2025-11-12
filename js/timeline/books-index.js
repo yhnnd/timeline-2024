@@ -239,6 +239,10 @@ window.books[7].indexList = [
     "@2023/yhnnd.wordpress.com/7-diary-2018-12-2020-05-棕書2/2018.12.22.txt",
     "@2023/yhnnd.wordpress.com/7-diary-2018-12-2020-05-棕書2/2018.12.29.txt",
     "@2023/yhnnd.wordpress.com/7-diary-2018-12-2020-05-棕書2/2019.01.05.txt",
+    "@2023/yhnnd.wordpress.com/7-diary-2018-12-2020-05-棕書2/2019.02.18.txt",
+    "@2023/yhnnd.wordpress.com/7-diary-2018-12-2020-05-棕書2/2019.06.14.txt",
+    "@2023/yhnnd.wordpress.com/7-diary-2018-12-2020-05-棕書2/2019.11.30.txt",
+    "@2023/yhnnd.wordpress.com/7-diary-2018-12-2020-05-棕書2/2020.05.20.txt",
 ];
 
 window.books[8] = {};
@@ -698,6 +702,9 @@ window.books[22].indexList = [
     "@2025/yhnnd.wordpress.com/22-diary-2025-01-2025-12-出路6/2025.10.07.txt",
     "@2025/yhnnd.wordpress.com/22-diary-2025-01-2025-12-出路6/2025.10.08.txt",
     "@2025/yhnnd.wordpress.com/22-diary-2025-01-2025-12-出路6/2025.10.22.txt",
+    "@2025/yhnnd.wordpress.com/22-diary-2025-01-2025-12-出路6/2025.11.01.txt",
+    "@2025/yhnnd.wordpress.com/22-diary-2025-01-2025-12-出路6/2025.11.04.txt",
+    "@2025/yhnnd.wordpress.com/22-diary-2025-01-2025-12-出路6/2025.11.06.txt",
 ];
 
 window.repositoryMap = {

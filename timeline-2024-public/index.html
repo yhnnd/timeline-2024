@@ -45,21 +45,9 @@ function clicked(type, target) {
 
     <div style="min-height: calc(100vh - 420px);">
         <div class="flex flex-row px-6 bg-gray-800" id="navbar">
-            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'calendar')">
-                Calendar
-            </div>
-            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'books')">
-                Books
-            </div>
-            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'index')">
-                Index
-            </div>
-            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'tools')">
-                Tools
-            </div>
-            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'about')">
-                About
-            </div>
+            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'calendar')">Calendar</div>
+            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'books')">Books</div>
+            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'tools')">Tools</div>
         </div>
 
         <div class="tab" id="tab-calendar" style="display: none;">
@@ -207,13 +195,6 @@ function clicked(type, target) {
                     </ul>
                 </div>
             </div>
-        </div>
-
-        <div class="tab" id="tab-index" style="display: none;">
-            <div class="px-24 py-16 bg-gradient-to-r from-sky-400 via-blue-800 to-indigo-700">
-                <div class="text-white text-6xl">Index</div>
-                <p class="text-gray-300 text-2xl mt-2" onclick="openFile('book-reader.html?src=../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt&fakeUrl=@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt')">王老师，文字的力量是惊人的、可畏的。</p>
-            </div>
             <div class="row single-col">
                 <div class="col first">
                     <ul>
@@ -259,13 +240,6 @@ function clicked(type, target) {
                         </li>
                     </ul>
                 </div>
-            </div>
-        </div>
-
-        <div class="tab" id="tab-about" style="display: none;">
-            <div class="px-24 py-16 bg-gradient-to-r from-indigo-700 via-indigo-400 to-sky-900">
-                <div class="text-white text-6xl">About Us</div>
-                <p class="text-gray-300 text-2xl mt-2" onclick="openFile('book-reader.html?src=../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt&fakeUrl=@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt')">王老师，文字的力量是惊人的、可畏的。</p>
             </div>
             <div class="row single-col">
                 <div class="col first">
