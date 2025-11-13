@@ -25,7 +25,7 @@
 @utf("E68891E885B9E7979B");
 
 @utf("E6999AE4B88AE4B99DE782B9");
-@utf("E68891E58FABE5A68DE5A68DE69DA5E68891E5AEB6");
+@base64("5oiR5Y+r5aaN5aaNPGJ1YmJsZSBzdHlsZT0iYm9yZGVyOiAwO2ZvbnQtd2VpZ2h0OiBib2xkZXI7cGFkZGluZzogMDtiYWNrZ3JvdW5kOiB1bnNldDtjb2xvcjogcmVkOyI+KOiDoee0q+WmjSk8L2J1YmJsZT7mnaXmiJHlrrY=");
 @utf("E993B6E8A18CE58DA1E38081E5BEAEE4BFA1E38081E694AFE4BB98E5AE9DE983BDE6B2A1E992B1E4BA86");
 @utf("E68891E7BB99E8AEB8E5B08FE5BDA6E68993E794B5E8AF9DE8A681E4BA86<2000>E59D97E992B1");
 @utf("E68891E8BDACE7BB99E4BA86E5A68DE5A68D<800>E59D97E992B1");
@@ -33,3 +33,25 @@
 
 @utf("E58D8AE5A49C");
 @utf("E68891E794A8E6898BE69CBAE79C8BE4BF84E4B98CE68898E4BA89E588B0E5878CE699A8E59B9BE782B9");
+
+
+2024.08.28
+
+张琪妙来万家灯火找我，本来一次（一小时）是800块钱，张琪妙让我用支付宝给她转1600，她说做完之后多陪我聊一个小时再走，我用花呗分期给她支付宝转了1600，但是张琪妙给我撸射了之后她就起身要走。我不让她走，我说：“你刚才明明说好的我多给你转800块钱你就多陪我聊一会儿天，两个小时之后再走，现在才刚过去半小时，你他妈就要走，你要点脸吗？”
+
+张琪妙就开始胡搅蛮缠，又哭又闹，她给一个黄毛打电话，那个傻逼黄毛在电话里骂我，张口闭口都是“你妈逼”，我让那个傻逼黄毛把他的逼嘴放干净点。在张琪妙的手机里，这个傻逼黄毛让我下楼，我说：“我就不下去，你怎么不上来？你上来我就报警。”
+
+张琪妙说：“你报警我也报警，我是未成年。”
+
+我说：“你怎么证明你是未成年？”
+
+张琪妙趁我没挡住房间门，她开门就跑了。我下楼去找她，她给我发短信说她去报警了，我跑到汉庭酒店南边的公安局办事大厅，根本没看见张琪妙，这狗女人又耍我。我的腿被蚊子隔着裤子叮肿了，非常痒。
+
+张琪妙给我发短信照片，是她自己拍的自己的胳膊，她说我把她胳膊掐肿了。
+
+<div class="row">
+<img class="thumbnail-2x" src="../mobile-pics/Camera/IMG_20240902_241718.jpg" alt="">
+<img class="thumbnail-2x" src="../mobile-pics/Camera/IMG_20240902_241725.jpg" alt="">
+</div>
+
+@command("enable-image-recognition")
