@@ -98,6 +98,10 @@ pre .decode-url-link {
     background-image: repeating-linear-gradient(-45deg, var(--studio-gray-0), var(--studio-gray-0) 25px, transparent 25px, transparent 50px);
 }
 
+body[data-value-of-enable-no-backdrop="true"] .container-2 .iframe-cover {
+    background-image: repeating-linear-gradient(-45deg, var(--studio-gray-0), var(--studio-gray-0) 25px, white 25px, white 50px);
+}
+
 pre .name-link::before,
 pre .link::before,
 pre .url-text-link::before,
@@ -196,6 +200,16 @@ body[data-value-of-enable-hover-show-page-info="true"] .page:hover::before {
     border-bottom: 1px dashed black;
     text-align: right;
     background: linear-gradient(to right, white, lightgoldenrodyellow);
+}
+
+body[data-value-of-enable-hover-show-page-info="true"] .container-2 .page:hover::before {
+    left: unset;
+    right: -222px;
+    padding-left: 4px;
+    border-left: 1px dashed black;
+    border-right: unset;
+    text-align: left;
+    background: linear-gradient(to left, transparent, lightgoldenrodyellow);
 }
 
 body[data-value-of-enable-hover-show-page-info="true"] .page:not(:first-child):hover::before {
@@ -312,6 +326,11 @@ pre .thumbnail-2x {
     height: fit-content;
 }
 
+body[data-value-of-platform="MacIntel"][data-value-of-webbrowsername="safari"] pre .thumbnail,
+body[data-value-of-platform="MacIntel"][data-value-of-webbrowsername="safari"] pre .thumbnail-2x {
+    height: unset;
+}
+
 pre .row {
     display: flex;
 }
@@ -389,18 +408,16 @@ body[data-value-of-enable-no-backdrop="true"] .img-wrapper .backdrop-filter {
     display: none;
 }
 
-@media screen and (min-width: 1600px) {
-    body[data-value-of-enable-dual-article-container="true"] .left {
-        overflow-x: visible;
-        justify-content: end;
-    }
+body[data-value-of-enable-dual-article-container="true"] .left {
+    overflow-x: visible;
+    justify-content: end;
+}
 
-    body[data-value-of-enable-dual-article-container="true"] .right {
-        overflow-x: visible;
-        display: flex;
-        width: 100%;
-        justify-content: start;
-    }
+body[data-value-of-enable-dual-article-container="true"] .right {
+    overflow-x: visible;
+    display: flex;
+    width: 100%;
+    justify-content: start;
 }
 
 .badges .title {
@@ -428,6 +445,14 @@ body[data-value-of-enable-no-backdrop="true"] .img-wrapper .backdrop-filter {
     position: relative;
     display: inline-block;
     width: 100%;
+}
+
+.row.wrap {
+    flex-wrap: wrap;
+}
+
+.row.wrap > .svg-wrapper {
+    width: auto;
 }
 
 .video-wrapper video {
@@ -566,4 +591,38 @@ body[data-value-of-enable-dual-article-container="false"] .wecard-table-wrapper>
 
 .global-navbar {
     background: rgba(0, 0, 0, 0.67) !important;
+}
+
+body[data-value-of-platform="MacIntel"][data-value-of-webbrowsername="safari"] img[style*="width:fit-content"],
+body[data-value-of-platform="MacIntel"][data-value-of-webbrowsername="safari"] img[style*="width: fit-content"] {
+    width: unset!important;
+}
+
+body[data-value-of-platform="MacIntel"][data-value-of-webbrowsername="safari"] img[style*="height:fit-content"],
+body[data-value-of-platform="MacIntel"][data-value-of-webbrowsername="safari"] img[style*="height: fit-content"] {
+    height: unset!important;
+}
+
+body[is-iframe="true"] {
+    overflow-x: hidden;
+}
+
+/* iframe preview 中的滚动条 */
+body[is-iframe="true"]::-webkit-scrollbar {
+    width: 32px;
+}
+
+/* 滚动条轨道 */
+body[is-iframe="true"]::-webkit-scrollbar-track:hover {
+    background-color: rgba(0, 0, 0, .05);
+}
+
+/* 滚动条滑块 */
+body[is-iframe="true"]::-webkit-scrollbar-thumb {
+    background-color: white;
+    outline: 8px solid rgba(0, 0, 0, .2);
+}
+
+body[is-iframe="true"]::-webkit-scrollbar-thumb:hover {
+    outline: 7px solid rgba(0, 0, 0, .4);
 }

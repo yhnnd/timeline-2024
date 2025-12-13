@@ -76,6 +76,7 @@ body {
 .has-border {
     border: 1px solid black;
     padding: 2px 6px;
+    font-family: "Linux Libertine Font";
 }
 
 pre>.has-border {
@@ -135,7 +136,9 @@ pre del * {
 }
 
 .container-2 .message-bubble {
-    border-color: var(--studio-blue-0);
+    background-color: unset;
+    background-image: repeating-linear-gradient(-45deg, var(--studio-gray-0), var(--studio-gray-0) 25px, transparent 25px, transparent 50px);
+    border-color: var(--studio-gray-0);
 }
 
 .container-2 .message-bubble.message-from-god {
@@ -144,6 +147,17 @@ pre del * {
 
 .container-2 .message-bubble.my-message {
     border-color: var(--studio-green-0);
+}
+
+.container-2 .link-og-text {
+    color: var(--studio-red);
+}
+
+.container-2 .bubble-og-text {
+    display: inline;
+    word-break: break-all !important;
+    white-space: normal !important;
+    font-size: unset !important;
 }
 
 .w-fit-content {
@@ -240,4 +254,19 @@ pre del * {
     .page {
         border-color: transparent !important;
     }
+}
+
+@font-face {
+    font-family: "Linux Libertine Font";
+    src: url("./fonts/LinLibertine_Mah.ttf");
+}
+
+@font-face {
+    font-family: "small seal script";
+    src: url("./fonts/fangzhengxiaozhuan.TTF");
+}
+
+.small-seal-script {
+    font-family: "small seal script";
+    font-size: 2.5rem;
 }

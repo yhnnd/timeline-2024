@@ -5,22 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的回忆录</title>
     <script>
-function clicked(type, target) {
-    localStorage.setItem(type, target);
-    document.querySelectorAll("." + type).forEach(elem => {
-        if (elem.id !== type + "-" + target) {
-            elem.style.display = "none";
-        } else {
-            elem.style.display = null;
-            if (type === 'tab' && target === 'calendar') {
-                try {
-                    renderCalendar && renderCalendar();
-                } catch {
-                    console.log("clicked: renderCalendar is not defined.");
-                }
-            }
+function tabClicked(value) {
+    localStorage.setItem("tab", value);
+    document.querySelectorAll(".tab").forEach(e => {
+        e.classList[(e.id !== "tab-" + value) ? "remove" : "add"]("focus");
+    });
+    document.querySelectorAll(".tab-content").forEach(e => {
+        e.style.display = (e.id !== "tab-content-" + value) ? "none" : null;
+    });
+    if (value === 'calendar') {
+        try {
+            renderCalendar && renderCalendar();
+        } catch {
+            console.log("tabClicked: renderCalendar is not defined.");
         }
-    })
+    }
 }
     </script>
     <link rel="stylesheet" href="css/colors.css">
@@ -45,12 +44,12 @@ function clicked(type, target) {
 
     <div style="min-height: calc(100vh - 420px);">
         <div class="flex flex-row px-6 bg-gray-800" id="navbar">
-            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'calendar')">Calendar</div>
-            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'books')">Books</div>
-            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer" onclick="clicked('tab', 'tools')">Tools</div>
+            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 cursor-pointer tab" id="tab-calendar" onclick="tabClicked('calendar')">Calendar</div>
+            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 cursor-pointer tab" id="tab-books" onclick="tabClicked('books')">Books</div>
+            <div class="flex flex-col px-6 xl:px-12 py-4 text-white text-2xl hover:bg-gray-700 cursor-pointer tab" id="tab-tools" onclick="tabClicked('tools')">Tools</div>
         </div>
 
-        <div class="tab" id="tab-calendar" style="display: none;">
+        <div class="tab-content" id="tab-content-calendar" style="display: none;">
             <div class="px-24 py-16 bg-gradient-to-r from-sky-900 via-sky-700 to-sky-400">
                 <div class="text-white text-6xl">Calendar</div>
                 <p class="text-gray-300 text-2xl mt-2" onclick="openFile('book-reader.html?src=../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt&fakeUrl=@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt')">王老师，文字的力量是惊人的、可畏的。</p>
@@ -60,7 +59,7 @@ function clicked(type, target) {
             </div>
         </div>
 
-        <div class="tab" id="tab-books" style="display: none;">
+        <div class="tab-content" id="tab-content-books" style="display: none;">
             <div class="px-24 py-16 bg-gradient-to-r from-sky-700 via-sky-400 to-blue-800">
                 <div class="text-white text-6xl">Books</div>
                 <p class="text-gray-300 text-2xl mt-2" onclick="openFile('book-reader.html?src=../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt&fakeUrl=@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt')">王老师，文字的力量是惊人的、可畏的。</p>
@@ -86,11 +85,12 @@ function clicked(type, target) {
                 </script>
                 <div class="col first">
                     <ul>
-                        <div class="display-min-width-1200px" style="position: relative;">
-                            <div style="position: absolute; width: 0; right: -1px; top: -30px;">
-                                <div class='sidebar-container'>
-                                    <div class='sidebar rotate'>
-                                        <div class=timeline id=timeline></div>
+                        <div class="hover-detecting-area-container" style="position: relative;">
+                            <div class="hover-detecting-area"></div>
+                            <div class="sidebar-container-absolute-position">
+                                <div class="sidebar-container">
+                                    <div class="sidebar rotate">
+                                        <div class="timeline" id="timeline"></div>
                                     </div>
                                 </div>
                             </div>
@@ -100,6 +100,10 @@ function clicked(type, target) {
                             <ul class="book-list">
                             </ul>
                         </li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <ul>
                         <li>
                             <span>快捷链接</span>
                             <ul>
@@ -194,9 +198,7 @@ function clicked(type, target) {
                         </li>
                     </ul>
                 </div>
-            </div>
-            <div class="row single-col">
-                <div class="col first">
+                <div class="col">
                     <ul>
                         <li>
                             索引
@@ -221,7 +223,7 @@ function clicked(type, target) {
             </div>
         </div>
 
-        <div class="tab" id="tab-tools" style="display: none;">
+        <div class="tab-content" id="tab-content-tools" style="display: none;">
             <div class="px-24 py-16 bg-gradient-to-r from-blue-800 via-indigo-700 to-indigo-400">
                 <div class="text-white text-6xl">Tools</div>
                 <p class="text-gray-300 text-2xl mt-2" onclick="openFile('book-reader.html?src=../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt&fakeUrl=@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt')">王老师，文字的力量是惊人的、可畏的。</p>
@@ -267,6 +269,49 @@ function clicked(type, target) {
                     </script>
                 </div>
             </div>
+            <div class="row single-col">
+                <div class="col first">
+                    <div style="margin: 1rem;">Repository Map</div>
+                    <pre style="margin: 1rem;" class="dataset" data-inner-html="printConf(window.repositoryMap)"></pre>
+                </div>
+            </div>
+<script>
+function printConf(obj) {
+    if (typeof obj === "string") {
+        return `<div class="entry"><span class="bubble red">${obj}</span></div>`;
+    }
+    return Object.entries(obj).map(e => `<div class="entry"><span class="bubble red">${e[0]}</span><span class="bubble green" style="max-width: 360px;">${e[1]}</span></div>`).join("");
+}
+</script>
+<style>
+.dataset { font-size: 13px; }
+.dataset > .entry { margin: 7.5px 0; }
+.dataset > .entry > :not(:first-child) { margin-left: 6px; }
+.dataset > .entry > * {
+    white-space: nowrap;
+    overflow: scroll;
+}
+.dataset > .entry > *::-webkit-scrollbar { display: none; }
+.bubble {
+    display: inline-block;
+    color: var(--studio-blue-60);
+    background-color: var(--studio-blue-0);
+    border: 1px solid var(--studio-blue-50);
+    padding: 4px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.bubble.red {
+    color: var(--studio-pink-60);
+    background-color: var(--studio-pink-0);
+    border-color: var(--studio-pink-50);
+}
+.bubble.green {
+    color: var(--studio-green-60);
+    background-color: var(--studio-green-0);
+    border-color: var(--studio-green-50);
+}
+</style>
         </div>
     </div>
 
@@ -404,25 +449,27 @@ function quitInspectImage() {
 function renderCalendar() {
     const calendarEl = document.getElementsByClassName('calendar')[0];
     const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        initialDate: '2024-07-11',
+        initialView: "multiMonthYear",
+        initialDate: sessionStorage.getItem("calendar-initial-date") || "2024-07-11",
+        multiMonthMaxColumns: 2,
         headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'multiMonthYear,dayGridMonth'
+            left: "prev,next",
+            center: "title",
+            right: "today"
+        },
+        buttonText: {
+            today: "Latest Year"
         },
         events: window.calendarEvents || []
     });
     calendar.render();
+    document.querySelector(".fc-today-button").addEventListener("click", function() {
+        sessionStorage.removeItem("calendar-initial-date");
+    });
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    const tab = localStorage.getItem('tab');
-    if (tab) {
-        clicked('tab', tab);
-    } else {
-        clicked('tab', 'books');
-    }
+    tabClicked(localStorage.getItem('tab') || "books");
     hideTimelineLoading();
 });
     </script>
@@ -441,19 +488,41 @@ ul ul {
     margin-block-end: 0px;
 }
 
+.book-list>li,
+.article-list>li {
+    height: 25px;
+}
+
 .calendar-wrapper {
     font-size: 14px;
-    width: min(512px, 100vw);
-    margin: 20px auto 20px auto;
-    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 
 .calendar {
-    width: 100%;
+    margin: 20px;
+    width: min(calc(2 * 512px), calc(100% - 40px));
+}
+
+.fc .fc-view-harness {
+    height: auto!important;
+}
+
+.fc .fc-view-harness-active > .fc-view {
+    position: static!important;
 }
 
 .fc .fc-button {
     padding: 4px 8px;
+}
+
+.fc .fc-today-button[disabled] {
+    visibility: hidden;
 }
 
 .row {
