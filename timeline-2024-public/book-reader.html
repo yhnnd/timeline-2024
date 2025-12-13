@@ -29,13 +29,13 @@
     <div class="desktop" style="display: none; width: 100%; gap: 20px;">
         <div class="left" style="display: flex; width: 100%; justify-content: end;">
             <div class="buttons-previous-and-next no-print" style="position: relative;">
-                <div style="position: absolute;left: -360px;top: 20px;">
+                <div style="position: absolute;left: -150px;top: 20px;white-space: nowrap;">
                     <button onclick="gotoPrevious()">previous</button>
                     <button onclick="gotoNext()">next</button>
                 </div>
             </div>
             <div class="buttons-previous-and-next no-print" style="position: relative;">
-                <div style="position: absolute;left: -360px;bottom: 20px;">
+                <div style="position: absolute;left: 0;bottom: 20px;white-space: nowrap;">
                     <button onclick="gotoPrevious()">previous</button>
                     <button onclick="gotoNext()">next</button>
                 </div>
@@ -111,7 +111,7 @@ function gotoPrevious() {
             const {fakeUrl, realUrl} = book.indexList[i];
             if (realUrl === currentArticle.realUrl || fakeUrl === currentArticle.fakeUrl) {
                 if (i > 0) {
-                    window.open("book-reader.html?src=" + book.indexList[i - 1].realUrl + "&fakeUrl=" + book.indexList[i - 1].fakeUrl + "&from=" + getParameter("from"), "_self");
+                    window.open("book-reader.html?fakeUrl=" + book.indexList[i - 1].fakeUrl + "&from=" + getParameter("from"), "_self");
                 }
             }
         }
@@ -131,7 +131,7 @@ function gotoNext() {
             const {fakeUrl, realUrl} = book.indexList[i];
             if (realUrl === currentArticle.realUrl || fakeUrl === currentArticle.fakeUrl) {
                 if (i < book.indexList.length - 1) {
-                    window.open("book-reader.html?src=" + book.indexList[i + 1].realUrl + "&fakeUrl=" + book.indexList[i + 1].fakeUrl + "&from=" + getParameter("from"), "_self");
+                    window.open("book-reader.html?fakeUrl=" + book.indexList[i + 1].fakeUrl + "&from=" + getParameter("from"), "_self");
                 }
             }
         }

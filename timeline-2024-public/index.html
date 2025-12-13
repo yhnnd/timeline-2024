@@ -52,7 +52,7 @@ function tabClicked(value) {
         <div class="tab-content" id="tab-content-calendar" style="display: none;">
             <div class="px-24 py-16 bg-gradient-to-r from-sky-900 via-sky-700 to-sky-400">
                 <div class="text-white text-6xl">Calendar</div>
-                <p class="text-gray-300 text-2xl mt-2" onclick="openFile('book-reader.html?src=../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt&fakeUrl=@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt')">王老师，文字的力量是惊人的、可畏的。</p>
+                <p class="text-gray-300 text-2xl mt-2" onclick="openFile('book-reader.html?fakeUrl=@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt')">王老师，文字的力量是惊人的、可畏的。</p>
             </div>
             <div class="calendar-wrapper">
                 <div class='calendar'></div>
@@ -62,7 +62,7 @@ function tabClicked(value) {
         <div class="tab-content" id="tab-content-books" style="display: none;">
             <div class="px-24 py-16 bg-gradient-to-r from-sky-700 via-sky-400 to-blue-800">
                 <div class="text-white text-6xl">Books</div>
-                <p class="text-gray-300 text-2xl mt-2" onclick="openFile('book-reader.html?src=../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt&fakeUrl=@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt')">王老师，文字的力量是惊人的、可畏的。</p>
+                <p class="text-gray-300 text-2xl mt-2" onclick="openFile('book-reader.html?fakeUrl=@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt')">王老师，文字的力量是惊人的、可畏的。</p>
             </div>
             <div class="row single-col">
                 <div style="display: flex; justify-content: center; align-items: center; margin: auto; margin-bottom: 20px;">
@@ -226,7 +226,7 @@ function tabClicked(value) {
         <div class="tab-content" id="tab-content-tools" style="display: none;">
             <div class="px-24 py-16 bg-gradient-to-r from-blue-800 via-indigo-700 to-indigo-400">
                 <div class="text-white text-6xl">Tools</div>
-                <p class="text-gray-300 text-2xl mt-2" onclick="openFile('book-reader.html?src=../yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt&fakeUrl=@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt')">王老师，文字的力量是惊人的、可畏的。</p>
+                <p class="text-gray-300 text-2xl mt-2" onclick="openFile('book-reader.html?fakeUrl=@2024/yhnnd.wordpress.com/20-diary-2024-07-2024-12-出路5/2024.07.30.txt')">王老师，文字的力量是惊人的、可畏的。</p>
             </div>
             <div class="row single-col">
                 <div class="col first">
@@ -258,21 +258,25 @@ function tabClicked(value) {
                         最新的文章:
                         <span class="highlight-green" data-inner-html="getLatestArticleLink()"></span>
                     </div>
-                    <script>
-                        function getLatestArticleLink() {
-                            const { fakeUrl, realUrl } = deepCopy(window.books).pop().indexList.pop();
-                            const url = "book-reader.html?src=" + realUrl + "&fakeUrl=" + fakeUrl;
-                            const bookName = "<span>" + deepCopy(bookNames).pop() + "</span>";
-                            const articleTitle = "<span class='badge' onclick='openFile(" + JSON.stringify(url) + ")'>" + fakeUrl.split("/").pop() + "</span>";
-                            return "<span>" + bookName + "&nbsp;/&nbsp;" + articleTitle + "</span>";
-                        }
-                    </script>
+<script>
+function getLatestArticleLink() {
+    const { fakeUrl, realUrl } = deepCopy(window.books).pop().indexList.pop();
+    const url = "book-reader.html?fakeUrl=" + fakeUrl;
+    const bookName = "<span>" + deepCopy(bookNames).pop() + "</span>";
+    const articleTitle = "<span class='badge' onclick='openFile(" + JSON.stringify(url) + ")'>" + fakeUrl.split("/").pop() + "</span>";
+    return "<span>" + bookName + "&nbsp;/&nbsp;" + articleTitle + "</span>";
+}
+</script>
                 </div>
             </div>
             <div class="row single-col">
                 <div class="col first">
                     <div style="margin: 1rem;">Repository Map</div>
                     <pre style="margin: 1rem;" class="dataset" data-inner-html="printConf(window.repositoryMap)"></pre>
+                </div>
+                <div class="col">
+                    <div style="margin: 1rem;">Local Repository Key</div>
+                    <pre style="margin: 1rem;" class="dataset" data-inner-html="printConf(window.localRepositoryKey)"></pre>
                 </div>
             </div>
 <script>

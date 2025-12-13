@@ -99,7 +99,9 @@ window.books[3].indexList = [
     "@2023/yhnnd.wordpress.com/3-diary-2015-04-2020-06-散逸1/2019.03.06.txt",
     "@2023/yhnnd.wordpress.com/3-diary-2015-04-2020-06-散逸1/2019.03.07.txt",
     "@2023/yhnnd.wordpress.com/3-diary-2015-04-2020-06-散逸1/2019.03.08.txt",
-    "@2023/yhnnd.wordpress.com/3-diary-2015-04-2020-06-散逸1/2019.04.01.txt"
+    "@2023/yhnnd.wordpress.com/3-diary-2015-04-2020-06-散逸1/2019.04.01.txt",
+    "@2023/yhnnd.wordpress.com/3-diary-2015-04-2020-06-散逸1/2019.04.12.txt",
+    "@2023/yhnnd.wordpress.com/3-diary-2015-04-2020-06-散逸1/2019.04.13.txt"
 ];
 
 window.books[4] = {};
@@ -667,7 +669,28 @@ window.books[21].indexList = [
     "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2024.11.27.txt",
     "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2024.12.19.txt",
     "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.03.30.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.04.09.txt",
     "@2024/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.04.16.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.05.13.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.05.24.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.06.08.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.06.10.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.06.11.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.06.12.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.06.14.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.06.17-1.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.06.17-2.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.06.19.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.06.25-1.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.06.25-2.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.06.25-3.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.06.26-1.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.06.26-2.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.07.01.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.07.02.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.07.04.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.07.08.txt",
+    "@2025/yhnnd.wordpress.com/21-poems-2013-06-2024-12-詩/2025.07.17.txt",
 ];
 
 // 22 出路 6 (2025)
@@ -705,6 +728,9 @@ window.books[22].indexList = [
     "@2025/yhnnd.wordpress.com/22-diary-2025-01-2025-12-出路6/2025.11.01.txt",
     "@2025/yhnnd.wordpress.com/22-diary-2025-01-2025-12-出路6/2025.11.04.txt",
     "@2025/yhnnd.wordpress.com/22-diary-2025-01-2025-12-出路6/2025.11.06.txt",
+    "@2025/yhnnd.wordpress.com/22-diary-2025-01-2025-12-出路6/2025.11.22.txt",
+    "@2025/yhnnd.wordpress.com/22-diary-2025-01-2025-12-出路6/2025.12.03.txt",
+    "@2025/yhnnd.wordpress.com/22-diary-2025-01-2025-12-出路6/2025.12.13.txt",
 ];
 
 window.repositoryMap = {
@@ -714,27 +740,43 @@ window.repositoryMap = {
 };
 window.localRepositoryKey = "@2024/";
 
-window.parseFakeUrl = function (line, configs) {
-    let repository = "";
-    if (configs.fakeUrl) {
-        for (const [key, value] of Object.entries(window.repositoryMap)) {
+window.getRepository = function (configs) {
+    let repository = { key: "", value: "" };
+    const repositoryMap = window.repositoryMap, htmlRepositoryMap = window.htmlRepositoryMap;
+    if (configs?.fakeUrl) {
+        for (const [key, value] of Object.entries(repositoryMap)) {
             if (configs.fakeUrl.startsWith(key)) {
-                repository = value;
+                repository = {key, value};
                 break;
             }
         }
-    } else if (configs.realUrl) {
-        for (const [key, value] of Object.entries(window.repositoryMap)) {
+    } else if (configs?.realUrl) {
+        for (const [key, value] of Object.entries(repositoryMap)) {
             if (configs.realUrl.startsWith(value)) {
-                repository = value;
+                repository = {key, value};
                 break;
             }
         }
     }
-    if (!repository) {
-        return line;
+    if (repository.key && configs?.isGetHtmlRepository) {
+        repository.value = htmlRepositoryMap[repository.key];
     }
-    return line.replace("../", repository);
+    return repository;
+}
+
+window.parseFakeUrl = function (line, configs) {
+    const baseRepository = window.getRepository(configs);
+    if (line.startsWith("../")) {
+        return line.replace("../", baseRepository?.value);
+    }
+    if (line.startsWith(baseRepository.key)) {
+        return line.replace(baseRepository.key, baseRepository.value);
+    }
+    const lineRepository = window.getRepository({fakeUrl: line});
+    if (lineRepository.value) {
+        return line.replace(lineRepository.key, lineRepository.value);
+    }
+    return line;
 }
 
 function parseRepository(book) {
@@ -756,11 +798,33 @@ for (let i = 1; i < window.books.length; ++i) {
     parseRepository(window.books[i]);
 }
 
-// [{
-//     title: 'Read 05.21',
-//     url: 'book-reader.html?src=../yhnnd.wordpress.com/17-diary-2024-01-2024-12-出路4/2024.05.21.txt',
-//     start: '2024-05-21'
-// }]
+function getArticleDateByFakeUrl (fakeUrl) {
+    const filename = fakeUrl.split("/").pop();
+    const segments = filename.split(".");
+    let Year = 0, Month = 0, MonthDay = 0;
+    if (segments.length > 3) {
+        Year = segments[0];
+        Month = segments[1];
+        if (segments[2].includes("-")) {
+            segments[2] = segments[2].split("-")[0];
+        }
+        MonthDay = segments[2];
+    } else if(segments[0].includes("-")) {
+        const fragments = segments[0].split("-");
+        if (fragments.length >= 3) {
+            Year = fragments[0];
+            Month = fragments[1];
+            MonthDay = fragments[2];
+        }
+    }
+    return {Year, Month, MonthDay};
+}
+
+function openFileByCalendar(url, d) {
+    if (!url) {return}
+    openFile(url);
+    d && sessionStorage.setItem("calendar-initial-date", d);
+}
 
 const calendarEvents = [];
 for (const book of window.books) {
@@ -768,37 +832,14 @@ for (const book of window.books) {
         continue;
     }
     for (const {fakeUrl, realUrl} of book.indexList) {
-        const filename = fakeUrl.split("/").pop();
-        const segments = filename.split(".");
-        let Year = 0, Month = 0, MonthDay = 0;
-        if (segments.length > 3) {
-            Year = segments[0];
-            Month = segments[1];
-            if (segments[2].includes("-")) {
-                segments[2] = segments[2].split("-")[0];
-            }
-            MonthDay = segments[2];
-        } else if(segments[0].includes("-")) {
-            const fragments = segments[0].split("-");
-            if (fragments.length >= 3) {
-                Year = fragments[0];
-                Month = fragments[1];
-                MonthDay = fragments[2];
-            } else {
-                continue;
-            }
-        } else {
-            continue;
-        }
+        const {Year, Month, MonthDay} = getArticleDateByFakeUrl(fakeUrl);
+        if (!Year || !Month || !MonthDay) {continue}
         if (isNaN(parseInt(Year)) || isNaN(parseInt(Month)) || isNaN(parseInt(MonthDay))) {
-            continue;
-        }
-        if (!(parseInt(Year) > 0 && parseInt(Month) > 0 && parseInt(MonthDay) > 0)) {
             continue;
         }
         calendarEvents.push({
             title: "Read " + Month + "." + MonthDay,
-            url: "javascript: openFile(\"book-reader.html?src=" + realUrl + "&fakeUrl=" + fakeUrl + "\");",
+            url: `javascript: openFileByCalendar("book-reader.html?fakeUrl=${fakeUrl}", "${[Year, Month, MonthDay].join("-")}");`,
             start: Year + "-" + Month + "-" + MonthDay
         });
     }

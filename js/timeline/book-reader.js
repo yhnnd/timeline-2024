@@ -556,7 +556,7 @@ function renderArticleParse (responseText, containerClassName, container2ClassNa
                         isAbortLoadingImgs = true;
                     }
                 }
-                return "@image " + window.parseFakeUrl(line, { fakeUrl: getParameter("fakeUrl"), realUrl: getParameter("src") });
+                return "@image " + line;
             }
             if (line.startsWith("<svg") && line.endsWith("</svg>")) {
                 return "@svg_start " + line.replace(/<\/svg>$/, "@svg_end");
@@ -612,12 +612,11 @@ function renderArticleParse (responseText, containerClassName, container2ClassNa
         responseText = responseText.split("\n").map(line => {
             if (line.startsWith("@image &lt;img ") && line.endsWith(">")) {
                 line = line.replace("@image &lt;img ", "<img ");
-                /* Support Images from other Repos */
-                if (line.includes("@")) {
-                    for (const [repositoryKey, repositoryUrl] of Object.entries(window.repositoryMap)) {
-                        line = line.replace(repositoryKey, repositoryUrl);
-                    }
-                }
+                /* Support Articles that use Images from other Repos */
+                line = line.replace(/src\s*=\s*(["'])(.*?)\1/gi, (_, quote, fakeSrc) => {
+                    const realSrc = window.parseFakeUrl(fakeSrc, { fakeUrl: getParameter("fakeUrl"), realUrl: getParameter("src") });
+                    return `src=${quote}${realSrc}${quote}`;
+                });
                 return insertStr(line, line.length - 1, " onclick=\"inspectImage(this.src)\" loading=\"lazy\"");
             }
             if (line.startsWith("@svg_start &lt;svg") && line.endsWith("@svg_end")) {
@@ -1324,4 +1323,17 @@ function openFile(src) {
 }
 
 const src = getParameter("src");
-openFile(src);
+if (src) {
+    window.currentArticle = {"realUrl": src};
+    openFile(src);
+} else {
+    const fakeUrl = getParameter("fakeUrl");
+    if (fakeUrl) {
+        const realUrl = window.parseFakeUrl(fakeUrl, {fakeUrl});
+        window.currentArticle = {"realUrl": realUrl, "fakeUrl": fakeUrl};
+        openFile(realUrl);
+    }
+}
+if (window.setPreviousAndNextButtonEnabledStatus && typeof (window.setPreviousAndNextButtonEnabledStatus) === "function") {
+    window.setPreviousAndNextButtonEnabledStatus();
+}
