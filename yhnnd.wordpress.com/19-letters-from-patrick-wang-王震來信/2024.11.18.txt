@@ -123,3 +123,5 @@ Patrick
 @utf("<2024>E5B9B4<9>E69C88<3>E697A5E4BA8EE6A2A8E59BADE4B880E5A4A7<7>E7BB84");
 
 @utf("E6B3A8E291A03A"); "盲"，原文误，应为"忙"。
+
+@command("line-width-maximum")
