@@ -1,4 +1,4 @@
-@command("line-width-maximum")
+@command("enable-pre-width-fit-content")
 page 1
 2024年7月25日 王震 来信
 

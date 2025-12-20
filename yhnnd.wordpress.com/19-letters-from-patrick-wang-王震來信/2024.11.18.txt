@@ -124,4 +124,4 @@ Patrick
 
 @utf("E6B3A8E291A03A"); "盲"，原文误，应为"忙"。
 
-@command("pre-width-fit-content")
+@command("enable-pre-width-fit-content")
